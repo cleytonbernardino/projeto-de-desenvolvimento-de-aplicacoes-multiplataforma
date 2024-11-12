@@ -6,7 +6,12 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
     {
         private readonly UserDao dao = new();
         private readonly PenaltyDao daoPenalty = new();
+        private List<PenaltyDao.Penalty> penaltiesToBeAdded = [];
+        private List<PenaltyDao.Penalty> penaltiesToBeUpdated = [];
+        private List<int> penaltiesToBeRemoved = [];
         private bool editMode = false;
+
+        // LEMBRAR DE CORRIGIR OS ERROS GRAMATICAL E REFINAR O CODIGO
 
         public frmPessoa()
         {
@@ -47,6 +52,21 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             mkbCNH.Texts = dao.CNH;
             mkbCPF.Enabled = false;
             mkbCNH.Enabled = false;
+            LoadLtvPenalty();
+        }
+
+        private void LoadLtvPenalty()
+        {
+            ListViewItem lvItem;
+            List<PenaltyDao.Penalty> penalties = daoPenalty.List(dao.Id);
+
+            foreach (PenaltyDao.Penalty penalty in penalties)
+            {
+                lvItem = new ListViewItem(penalty.Id.ToString());
+                lvItem.SubItems.Add(penalty.Name);
+                lvItem.SubItems.Add(penalty.Cost.ToString());
+                ltvPenalty.Items.Add(lvItem);
+            }
         }
 
         private string formatCpf()
@@ -106,46 +126,120 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             return true;
         }
 
-        private void AddPenalty(string name, float value)
+        private bool IsPenaltySelected()
         {
-            ListViewItem lvt = new(name);
-            lvt.SubItems.Add(value.ToString());
+            if (ltvPenalty.SelectedItems.Count <= 0)
+            {
+                MessageBox.Show("Selecione um item primeiro", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            return true;
+        }
 
-            ltvtxtPenalty.Items.Add(lvt);
-            return;
+        private void AddPenalty()
+        {
+            string name = txtPenaltyType.Texts;
+            double cost;
+            try
+            {
+                if (string.IsNullOrEmpty(name)) throw new Exception("Valor Invalido");
+                cost = double.Parse(txtPenaltyValue.Texts);
+            }
+            catch
+            {
+                MessageBox.Show("Insira um valor valido!", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            ListViewItem lvt = new("Não Salvo");
+            lvt.SubItems.Add(name);
+            lvt.SubItems.Add(cost.ToString());
+
+            PenaltyDao.Penalty penalty = new();
+            penalty.OwnerId = dao.Id;
+            penalty.Name = name;
+            penalty.Cost = cost;
+
+            ltvPenalty.Items.Add(lvt);
+            penaltiesToBeAdded.Add(penalty);
+
+            txtPenaltyType.Texts = "";
+            txtPenaltyValue.Texts = "";
+            txtPenaltyType.Focus();
+        }
+
+        private void EditPenalty()
+        {
+            string name = txtPenaltyType.Texts;
+            double cost;
+
+            try
+            {
+                if (string.IsNullOrEmpty(name)) throw new Exception("Valor Invalido");
+                cost = double.Parse(txtPenaltyValue.Texts);
+            } catch
+            {
+                MessageBox.Show("Insira um valor valido!", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            ltvPenalty.SelectedItems[1].Text = name;
+            ltvPenalty.SelectedItems[2].Text = cost.ToString();
+
+            try
+            {
+                int id = int.Parse(ltvPenalty.SelectedItems[0].Text);
+                PenaltyDao.Penalty penalty = new();
+                penalty.Id = id;
+                penalty.Name = name;
+                penalty.Cost = cost;
+                penaltiesToBeUpdated.Add(penalty);
+            } catch
+            {
+                return;
+            }
+        }
+
+        private void RemovePenalty()
+        {
+            if (!IsPenaltySelected()) return;
+            try
+            {
+                int id = int.Parse(ltvPenalty.SelectedItems[0].Text);
+                penaltiesToBeRemoved.Add(id);
+            }
+            catch
+            {
+                //Não fazer nada
+            }
+            int ltvIndex = ltvPenalty.SelectedItems[0].Index;
+            ltvPenalty.Items.RemoveAt(ltvIndex);
+        }
+
+        private void CommitPenalty()
+        {
+            if (penaltiesToBeAdded.Count > 0)
+            {
+                daoPenalty.Save(penaltiesToBeAdded);
+                penaltiesToBeAdded.Clear();
+            }
+            if (penaltiesToBeRemoved.Count > 0)
+            {
+                daoPenalty.Delete(penaltiesToBeRemoved);
+                penaltiesToBeRemoved.Clear();
+            }
+            if (penaltiesToBeUpdated.Count > 0)
+            {
+                daoPenalty.Update(penaltiesToBeUpdated);
+                penaltiesToBeUpdated.Clear();
+            }
+            ltvPenalty.Clear();
+            LoadLtvPenalty();
         }
 
         private float GetBalance()
         {
             return (float)1;
-        }
-
-        private void LoadPenalty()
-        {
-            return;
-        }
-
-        private void SavePenalty()
-        {
-            PenaltyDao.Penalty penalty = new();
-            List<PenaltyDao.Penalty> penaltyList = new();
-            ListView.ListViewItemCollection items = ltvtxtPenalty.Items;
-
-            foreach (ListViewItem item in items)
-            {
-                try
-                {
-                    penalty.OwnerId = dao.Id;
-                    penalty.Name = item.SubItems[0].Text;
-                    penalty.Value = float.Parse(item.SubItems[1].ToString());
-
-                    penaltyList.Add(penalty);
-                } catch
-                {
-                    throw new Exception("Uma penalidade não é um valor validado, Apenas numeros são aceitos");
-                }
-            }
-            daoPenalty.Save(penaltyList);
         }
 
         private void Save()
@@ -171,6 +265,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 dao.CPF = formatCpf();
                 dao.Save();
             }
+            CommitPenalty();
             MessageBox.Show("Salvo com sucesso", "Mensagem");
         }
 
@@ -197,27 +292,25 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnPenaltyAdd_Click(object sender, EventArgs e)
         {
-            string penalidadeNome = txtPenaltyType.Texts;
-            float penalidadeValor;
-            try
-            {
-                penalidadeValor = float.Parse(txtPenaltyValue.Texts);
-            }
-            catch
-            {
-                penalidadeValor = 243;
-                //MessageBox.Show("Insira um valor Validado para a penalidade");
-                //return;
-            }
+            AddPenalty();
+        }
 
-            //if (String.IsNullOrEmpty(penalidadeNome))
-            //{
-            //    MessageBox.Show("Insira um noem valido para a penalidade");
-            //    return;
-            //}
+        private void adicionarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddPenalty();
+        }
 
-            AddPenalty(penalidadeNome, penalidadeValor);
-            GetBalance();
+        private void apagarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemovePenalty();
+        }
+
+        private void editarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!IsPenaltySelected()) return;
+            txtPenaltyType.Texts = ltvPenalty.SelectedItems[1].Text;
+            txtPenaltyValue.Texts = ltvPenalty.SelectedItems[2].Text;
+            EditPenalty();
         }
     }
 }

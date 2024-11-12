@@ -1,6 +1,6 @@
 ﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
-    partial class formLogin
+    partial class frmLogin
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formLogin));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLogin));
             lblSignIn = new Label();
             txtUsername = new CustomControls.CustomTextBox();
             txtPassword = new CustomControls.CustomTextBox();
@@ -57,10 +57,12 @@
             txtUsername.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtUsername.Location = new Point(460, 258);
             txtUsername.Margin = new Padding(4);
+            txtUsername.MaxLenght = 32767;
             txtUsername.MultLine = false;
             txtUsername.Name = "txtUsername";
             txtUsername.Padding = new Padding(7);
             txtUsername.PasswordChar = false;
+            txtUsername.PlaceHolder = "admin";
             txtUsername.Size = new Size(317, 36);
             txtUsername.TabIndex = 1;
             txtUsername.Texts = "";
@@ -75,10 +77,12 @@
             txtPassword.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtPassword.Location = new Point(460, 335);
             txtPassword.Margin = new Padding(4);
+            txtPassword.MaxLenght = 32767;
             txtPassword.MultLine = false;
             txtPassword.Name = "txtPassword";
             txtPassword.Padding = new Padding(7);
             txtPassword.PasswordChar = true;
+            txtPassword.PlaceHolder = "admin";
             txtPassword.Size = new Size(270, 36);
             txtPassword.TabIndex = 2;
             txtPassword.Texts = "";
@@ -127,7 +131,7 @@
             lblLogo.Text = "Localiza Seminovos";
             lblLogo.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // formLogin
+            // frmLogin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -139,7 +143,7 @@
             Controls.Add(txtUsername);
             Controls.Add(lblSignIn);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "formLogin";
+            Name = "frmLogin";
             Text = "Localiza Seminovos | Login";
             ResumeLayout(false);
             PerformLayout();

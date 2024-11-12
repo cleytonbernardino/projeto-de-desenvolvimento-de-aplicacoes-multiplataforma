@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPessoa));
             lblFirstName = new Label();
             txtFirstName = new CustomControls.CustomTextBox();
@@ -46,9 +47,14 @@
             lblDateOfBirth = new Label();
             dtpDateOfBirth = new DateTimePicker();
             lblPenalty = new Label();
-            ltvtxtPenalty = new ListView();
+            ltvPenalty = new ListView();
+            columnHeader3 = new ColumnHeader();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
+            cmsPenalty = new ContextMenuStrip(components);
+            adicionarToolStripMenuItem = new ToolStripMenuItem();
+            editarToolStripMenuItem = new ToolStripMenuItem();
+            apagarToolStripMenuItem = new ToolStripMenuItem();
             txtPenaltyType = new CustomControls.CustomTextBox();
             btnPenaltyAdd = new CustomControls.CustomButton();
             listView2 = new ListView();
@@ -57,7 +63,9 @@
             btnRentalRecordAdd = new CustomControls.CustomButton();
             txtEmail = new CustomControls.CustomTextBox();
             lblEmail = new Label();
+            btnEditPenalty = new CustomControls.CustomButton();
             panel1.SuspendLayout();
+            cmsPenalty.SuspendLayout();
             SuspendLayout();
             // 
             // lblFirstName
@@ -300,26 +308,59 @@
             lblPenalty.TabIndex = 11;
             lblPenalty.Text = "Penalidades";
             // 
-            // ltvtxtPenalty
+            // ltvPenalty
             // 
-            ltvtxtPenalty.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2 });
-            ltvtxtPenalty.FullRowSelect = true;
-            ltvtxtPenalty.Location = new Point(12, 338);
-            ltvtxtPenalty.Name = "ltvtxtPenalty";
-            ltvtxtPenalty.Size = new Size(430, 254);
-            ltvtxtPenalty.TabIndex = 12;
-            ltvtxtPenalty.UseCompatibleStateImageBehavior = false;
-            ltvtxtPenalty.View = View.Details;
+            ltvPenalty.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader1, columnHeader2 });
+            ltvPenalty.ContextMenuStrip = cmsPenalty;
+            ltvPenalty.FullRowSelect = true;
+            ltvPenalty.Location = new Point(12, 338);
+            ltvPenalty.Name = "ltvPenalty";
+            ltvPenalty.Size = new Size(441, 254);
+            ltvPenalty.TabIndex = 12;
+            ltvPenalty.UseCompatibleStateImageBehavior = false;
+            ltvPenalty.View = View.Details;
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "ID";
+            columnHeader3.Width = 90;
             // 
             // columnHeader1
             // 
             columnHeader1.Text = "Motivo";
-            columnHeader1.Width = 300;
+            columnHeader1.Width = 250;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Valor";
-            columnHeader2.Width = 100;
+            columnHeader2.Width = 110;
+            // 
+            // cmsPenalty
+            // 
+            cmsPenalty.Items.AddRange(new ToolStripItem[] { adicionarToolStripMenuItem, editarToolStripMenuItem, apagarToolStripMenuItem });
+            cmsPenalty.Name = "cmsPenalty";
+            cmsPenalty.Size = new Size(126, 70);
+            // 
+            // adicionarToolStripMenuItem
+            // 
+            adicionarToolStripMenuItem.Name = "adicionarToolStripMenuItem";
+            adicionarToolStripMenuItem.Size = new Size(125, 22);
+            adicionarToolStripMenuItem.Text = "Adicionar";
+            adicionarToolStripMenuItem.Click += adicionarToolStripMenuItem_Click;
+            // 
+            // editarToolStripMenuItem
+            // 
+            editarToolStripMenuItem.Name = "editarToolStripMenuItem";
+            editarToolStripMenuItem.Size = new Size(125, 22);
+            editarToolStripMenuItem.Text = "Editar";
+            editarToolStripMenuItem.Click += editarToolStripMenuItem_Click;
+            // 
+            // apagarToolStripMenuItem
+            // 
+            apagarToolStripMenuItem.Name = "apagarToolStripMenuItem";
+            apagarToolStripMenuItem.Size = new Size(125, 22);
+            apagarToolStripMenuItem.Text = "Apagar";
+            apagarToolStripMenuItem.Click += apagarToolStripMenuItem_Click;
             // 
             // txtPenaltyType
             // 
@@ -444,11 +485,30 @@
             lblEmail.TabIndex = 24;
             lblEmail.Text = "Email";
             // 
+            // btnEditPenalty
+            // 
+            btnEditPenalty.BackColor = Color.White;
+            btnEditPenalty.BackgroudColor = Color.White;
+            btnEditPenalty.BorderColor = Color.PaleVioletRed;
+            btnEditPenalty.BorderRadius = 40;
+            btnEditPenalty.BorderSize = 0;
+            btnEditPenalty.FlatAppearance.BorderSize = 0;
+            btnEditPenalty.FlatStyle = FlatStyle.Flat;
+            btnEditPenalty.ForeColor = Color.Black;
+            btnEditPenalty.Location = new Point(342, 245);
+            btnEditPenalty.Name = "btnEditPenalty";
+            btnEditPenalty.Size = new Size(100, 40);
+            btnEditPenalty.TabIndex = 25;
+            btnEditPenalty.Text = "Editar";
+            btnEditPenalty.TextColor = Color.Black;
+            btnEditPenalty.UseVisualStyleBackColor = false;
+            // 
             // frmPessoa
             // 
             AutoScaleDimensions = new SizeF(8F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1024, 604);
+            Controls.Add(btnEditPenalty);
             Controls.Add(lblEmail);
             Controls.Add(txtEmail);
             Controls.Add(btnRentalRecordAdd);
@@ -457,7 +517,7 @@
             Controls.Add(lblRentalRecord);
             Controls.Add(btnPenaltyAdd);
             Controls.Add(txtPenaltyType);
-            Controls.Add(ltvtxtPenalty);
+            Controls.Add(ltvPenalty);
             Controls.Add(lblPenalty);
             Controls.Add(dtpDateOfBirth);
             Controls.Add(lblDateOfBirth);
@@ -476,6 +536,7 @@
             Text = "Cadastrar Usuario";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            cmsPenalty.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -499,7 +560,7 @@
         private Label lblBalanceText;
         private Label lblBalanceValue;
         private Label lblPenalty;
-        private ListView ltvtxtPenalty;
+        private ListView ltvPenalty;
         private CustomControls.CustomTextBox txtPenaltyType;
         private CustomControls.CustomButton btnPenaltyAdd;
         private CustomControls.CustomButton customButton2;
@@ -512,5 +573,11 @@
         private Label lblEmail;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
+        private ContextMenuStrip cmsPenalty;
+        private ToolStripMenuItem adicionarToolStripMenuItem;
+        private ToolStripMenuItem editarToolStripMenuItem;
+        private ToolStripMenuItem apagarToolStripMenuItem;
+        private CustomControls.CustomButton btnEditPenalty;
     }
 }

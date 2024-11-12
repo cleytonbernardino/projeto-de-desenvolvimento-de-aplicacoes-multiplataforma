@@ -1,8 +1,8 @@
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
-    public partial class formLogin : Form
+    public partial class frmLogin : Form
     {
-        public formLogin()
+        public frmLogin()
         {
             InitializeComponent();
         }
