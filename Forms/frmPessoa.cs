@@ -1,4 +1,5 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
+using ProjetoDesenvolvimentoAplicacoesMultplataforma.Utils;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
@@ -74,56 +75,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             string cpf = mkbCPF.Texts;
             cpf = cpf.Replace(".", "").Replace("-", "");
             return cpf;
-        }
-
-        // Colocar o nome dessa função em inglês
-        // DESAFIO deixa esse codigo menor BEM menos, isso vai me ajudar com a logica de programação
-        private bool VerificaCPF()
-        {
-            string cpf = formatCpf();
-            int num, i, mult;
-            int firstDigit = 0;
-            int secondDigit = 0;
-
-            mult = 1;
-            for (i = 0; i < (cpf.Length - 2); i++)
-            {
-                try
-                {
-                    num = int.Parse(cpf.Substring(i, 1));
-                    firstDigit += num * mult;
-                    mult++;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao validar o cpf: " + ex.Message, "MENSAGEM DE DEBUG");
-                    return false;
-                }
-            }
-            firstDigit = firstDigit % 11;
-            if (firstDigit >= 10) firstDigit = 0;
-
-            mult = 0;
-            for (i = 0; i < (cpf.Length - 1); i++)
-            {
-                try
-                {
-                    num = int.Parse(cpf.Substring(i, 1));
-                    secondDigit += num * mult;
-                    mult++;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao validar o cpf: " + ex.Message, "MENSAGEM DE DEBUG");
-                    return false;
-                }
-            }
-            secondDigit = secondDigit % 11;
-            if (secondDigit >= 10) secondDigit = 0;
-
-            string cpfVerficado = cpf.Substring(0, 9) + firstDigit + secondDigit;
-            if (cpfVerficado != cpf) return false;
-            return true;
         }
 
         private bool IsPenaltySelected()
@@ -257,12 +208,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             }
             else
             {
-                if (!(VerificaCPF()))
+                string cpf = formatCpf();
+                if (!Validations.IsCpfValid(cpf))
                 {
                     MessageBox.Show("CPF Invalido", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
-                dao.CPF = formatCpf();
+                dao.CPF = cpf;
                 dao.Save();
             }
             CommitPenalty();

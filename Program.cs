@@ -1,5 +1,3 @@
-using ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls;
-
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     internal static class Program
