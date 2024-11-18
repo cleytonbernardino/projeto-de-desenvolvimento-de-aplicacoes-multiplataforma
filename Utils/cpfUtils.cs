@@ -1,6 +1,6 @@
 ﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Utils
 {
-    internal class Validations
+    internal class cpfUtils
     {
         private static int CalculateCheckDigit(string cpf, bool firstDigit)
         {
@@ -35,6 +35,11 @@
 
             if (cpfVerified != cpf) return false;
             return true;
+        }
+
+        public static string ToCpf(string cpf)
+        {
+            return cpf.Replace(".", "").Replace("-", "");
         }
     }
 }

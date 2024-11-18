@@ -3,9 +3,9 @@ using System.Data.SqlClient;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
-    internal class PenaltyDao
+    internal class ViolationDao
     {
-        private readonly string ConnectionString = "Data Source=LAPTOP-9AQEBANA;Initial Catalog=ProjetoSemestral;Integrated Security=True;Encrypt=True";
+        private readonly string _connectionString = "Data Source=LAPTOP-9AQEBANA;Initial Catalog=ProjetoSemestral;Integrated Security=True;Encrypt=True";
 
         private readonly string save = "INSERT INTO tbl_penalty (" +
             "OwnerId, Name, Cost) VALUES (" +
@@ -14,23 +14,21 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         private readonly string update = "UPDATE tbl_penalty SET " +
             "Name=@Name, Cost=@Cost WHERE Id=@Id";
 
-        private readonly string list = "SELECT * FROM tbl_penalty WHERE OwnerId=@OwnerId;";
+        private readonly string select = "SELECT * FROM tbl_penalty WHERE OwnerId=@OwnerId;";
 
         private readonly string delete = "DELETE FROM tbl_penalty WHERE id=@id;";
 
         public class Penalty
         {
-            private string name = "";
-
             public int Id { get; set; }
             public int OwnerId { get; set; }
-            public string Name { get => name; set =>  name = value; }
+            public string Name { get; set; } = "";
             public double Cost { get; set; }
         }
 
-        public PenaltyDao()
+        public ViolationDao()
         {
-            using (SqlConnection conn = new(ConnectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
                 conn.Open();
                 string comand = "IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_penalty' AND schema_id = SCHEMA_ID('dbo'))" +
@@ -52,7 +50,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
         public bool Save(List<Penalty> penalty)
         {
-            using (SqlConnection conn = new(ConnectionString)) 
+            using (SqlConnection conn = new(_connectionString)) 
             {
                 using (SqlCommand cmd = new(save, conn))
                 {
@@ -66,6 +64,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         try
                         {
                             cmd.ExecuteNonQuery();
+                            cmd.Parameters.Clear();
                         }
                         catch (Exception ex)
                         {
@@ -80,7 +79,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
         public bool Update(List<Penalty> penaltys) 
         {
-            using (SqlConnection conn = new(ConnectionString)) 
+            using (SqlConnection conn = new(_connectionString)) 
             {
                 using (SqlCommand cmd = new(update, conn))
                 {
@@ -93,6 +92,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                             cmd.Parameters.AddWithValue("@Name", penalty.Name);
                             cmd.Parameters.AddWithValue("@Cost", penalty.Cost);
                             cmd.ExecuteNonQuery();
+                            cmd.Parameters.Clear();
                         }
                     }
                     catch (Exception ex)
@@ -105,13 +105,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public List<Penalty> List(int ownerId)
+        public List<Penalty> Select(int ownerId)
         {
             List<Penalty> penaltyList = new();
 
-            using (SqlConnection conn = new(ConnectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
-                using (SqlCommand cmd = new(list, conn))
+                using (SqlCommand cmd = new(select, conn))
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@OwnerId", ownerId);
@@ -133,7 +133,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
         public bool Delete(List<int> ids)
         {
-            using (SqlConnection conn = new(ConnectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
                 using (SqlCommand cmd = new(delete, conn))
                 {
@@ -144,6 +144,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         {
                             cmd.Parameters.AddWithValue("@id", id);
                             cmd.ExecuteNonQuery();
+                            cmd.Parameters.Clear();
                         }
                         return true;
                     } catch (Exception ex)

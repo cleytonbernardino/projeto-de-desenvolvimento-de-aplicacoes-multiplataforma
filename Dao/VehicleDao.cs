@@ -1,12 +1,15 @@
-﻿using System.Data;
+﻿using Microsoft.VisualBasic.FileIO;
+using System.Data;
 using System.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Xml;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
     internal class VehicleDao
     {
         // String de conexão
-        readonly string connectionString = @"Data Source=LAPTOP-9AQEBANA;Initial Catalog=ProjetoSemestral;Integrated Security=True;Encrypt=True";
+        private readonly string _connectionString = @"Data Source=LAPTOP-9AQEBANA;Initial Catalog=ProjetoSemestral;Integrated Security=True;Encrypt=True";
 
         // Comando Select
         private const string select = "SELECT * FROM tbl_vehicle WHERE id=@id;";
@@ -50,41 +53,44 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         public bool Licensed { get; set; }
         public DateTime ModelYear { get; set; }
 
+        private class Vehicle // WIP
+        {
+            public int Id { get; set; }
+            public string LicensePlate { get; set; }
+            public string Brand { get; set; }
+            public string Model { get; set; }
+            public string ChassiNUmber { get; set; }
+        }
+
         // Refazer isso para deixar somente que ele crie a tabela ao inves de copiar o django
         private void InitBD()
         {
-            string fileName = "vehicle"; // Nome dos arquivos sql
-            Int16 fileNumber = 1; // Número do arquivo
-            string filePath = @"C:\Users\cleyt\source\repos\ProjetoDesenvolvimentoAplicacoesMultplataforma\Migrations\"; //Caminho dos arquivo
-            string fullPath = ""; // Caminho completo do arquivo
-            string sqlScript = ""; // script sql
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            string command = "IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_user' AND schema_id = SCHEMA_ID('dbo'))" +
+                "BEGIN\n" +
+                "CREATE TABLE [dbo].[tbl_user] (" +
+                    "[id]                INT IDENTITY(1,1) PRIMARY KEY NOT NULL," +
+                    "[License_plate]     NCHAR(7)  UNIQUE NOT NULL," +
+                    "[Brand] VARCHAR(25) NOT NULL," +
+                    "[Model]             VARCHAR(55)  NOT NULL," +
+                    "[Model_year]        DATE NOT NULL," +
+                    "[Chassis_number]    NCHAR(17)    NOT NULL," +
+                    "[Renavam]           NCHAR(11)    NOT NULL," +
+                    "[Color]             VARCHAR(25)  NOT NULL," +
+                    "[Fuel_type]         VARCHAR(15)  NOT NULL," +
+                    "[Mileage]           INT NOT NULL," +
+                    "[OBS]               VARCHAR(255) NULL," +
+	                "[Direction]         VARCHAR(15)  NOT NULL," +
+                    "[Air_conditioning]  BIT DEFAULT 0 NOT NULL," +
+                    "[Electric_windows]  BIT DEFAULT 0 NOT NULL," +
+                    "[Electric_locks]    BIT DEFAULT 0 NOT NULL," +
+                    "[Licensed]          BIT DEFAULT 0 NOT NULL,;" +
+                "END;";
+            using (SqlConnection conn = new(_connectionString))
             {
-                try
+                using (SqlCommand cmd = new(command, conn))
                 {
                     conn.Open();
-                    while (true)
-                    {
-                        fullPath = filePath + fileName + fileNumber + ".sql";
-                        try
-                        {
-                            sqlScript = File.ReadAllText(fullPath);
-                            using (SqlCommand cmd = new SqlCommand(sqlScript, conn))
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                            fileNumber++;
-                        }
-                        catch (Exception ex)
-                        {
-                            break;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao Conectar ao banco de dados: " + ex.Message, "Erro");
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -99,7 +105,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         {
             if (Id <= 0) return false;
 
-            using (SqlConnection conn = new(connectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
                 using (SqlCommand cmd = new(select, conn))
                 {
@@ -138,7 +144,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         public DataTable Listar()
         {
             DataTable dt = new DataTable();
-            using (SqlConnection conn = new(connectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
                 conn.Open();
                 using(SqlCommand cmd = new SqlCommand(list, conn))
@@ -154,7 +160,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         {
             DataTable dt = new DataTable();
             SqlDataAdapter da;
-            using (SqlConnection conn = new(connectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
                 //conn.Open();
                 using (SqlCommand cmd = new(serch, conn))
@@ -170,7 +176,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
         public int Save()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 try
                 {
@@ -208,7 +214,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         {
             if (Id == 0) return -1;
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(update, conn))
@@ -247,7 +253,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         /// <returns>Retorna a quantidade de linhas afetadas (-1 é o retorno de um erro).</returns>
         public bool Delete()
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(delete, conn))

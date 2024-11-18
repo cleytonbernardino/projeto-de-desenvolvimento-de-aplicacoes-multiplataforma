@@ -1,10 +1,10 @@
-﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
+﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Services;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmUsers : Form
     {
-        private readonly UserDao dao = new();
+        private readonly UserService service = new();
 
         public frmUsers()
         {
@@ -26,7 +26,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void LoadDgv()
         {
             BindingSource data = new();
-            data.DataSource = dao.List();
+            data.DataSource = service.ListUsers();
 
             dgvUsers.DataSource = data;
             dgvUsers.Columns[0].Visible = false;
@@ -35,7 +35,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void UpdateDgv()
         {
             BindingSource data = new();
-            data.DataSource = dao.Search(txtSearch.Texts);
+            data.DataSource = service.GetUsersByName(txtSearch.Texts);
 
             dgvUsers.DataSource = data;
             dgvUsers.Columns[0].Visible = false;
@@ -46,19 +46,19 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             int id = GetId();
             if (id == -1) return;
 
-            Form frm = new frmPessoa(id);
+            Form frm = new frmUser(id);
             frm.Show();
         }
 
         private void DeleteUser()
         {
-            dao.Id = GetId();
-            if (dao.Id == -1) return;
+            int id = GetId();
+            if (id == -1) return;
 
             DialogResult = MessageBox.Show("Deseja mesmo apagar esse usuario? Essa operação é irreversivel", "CUIDADO", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (DialogResult == DialogResult.Yes)
             {
-                dao.Delete();
+                service.Delete(id);
             }
         }
 
@@ -80,7 +80,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Form frm = new frmPessoa();
+            Form frm = new frmUser();
             frm.Show();
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
-    partial class frmPessoa
+    partial class frmUser
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPessoa));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUser));
             lblFirstName = new Label();
             txtFirstName = new CustomControls.CustomTextBox();
             txtLastName = new CustomControls.CustomTextBox();
@@ -46,8 +46,8 @@
             lblCNH = new Label();
             lblDateOfBirth = new Label();
             dtpDateOfBirth = new DateTimePicker();
-            lblPenalty = new Label();
-            ltvPenalty = new ListView();
+            lblViolation = new Label();
+            ltvViolation = new ListView();
             columnHeader3 = new ColumnHeader();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
@@ -55,15 +55,15 @@
             adicionarToolStripMenuItem = new ToolStripMenuItem();
             editarToolStripMenuItem = new ToolStripMenuItem();
             apagarToolStripMenuItem = new ToolStripMenuItem();
-            txtPenaltyType = new CustomControls.CustomTextBox();
-            btnPenaltyAdd = new CustomControls.CustomButton();
+            txtViolationType = new CustomControls.CustomTextBox();
+            btnViolationAdd = new CustomControls.CustomButton();
             listView2 = new ListView();
             lblRentalRecord = new Label();
-            txtPenaltyValue = new CustomControls.CustomTextBox();
+            txtViolationValue = new CustomControls.CustomTextBox();
             btnRentalRecordAdd = new CustomControls.CustomButton();
             txtEmail = new CustomControls.CustomTextBox();
             lblEmail = new Label();
-            btnEditPenalty = new CustomControls.CustomButton();
+            btnEditViolation = new CustomControls.CustomButton();
             panel1.SuspendLayout();
             cmsPenalty.SuspendLayout();
             SuspendLayout();
@@ -299,26 +299,28 @@
             dtpDateOfBirth.Size = new Size(127, 25);
             dtpDateOfBirth.TabIndex = 10;
             // 
-            // lblPenalty
+            // lblViolation
             // 
-            lblPenalty.AutoSize = true;
-            lblPenalty.Location = new Point(18, 268);
-            lblPenalty.Name = "lblPenalty";
-            lblPenalty.Size = new Size(96, 17);
-            lblPenalty.TabIndex = 11;
-            lblPenalty.Text = "Penalidades";
+            lblViolation.AutoSize = true;
+            lblViolation.Location = new Point(18, 268);
+            lblViolation.Name = "lblViolation";
+            lblViolation.Size = new Size(80, 17);
+            lblViolation.TabIndex = 11;
+            lblViolation.Text = "Violações";
             // 
-            // ltvPenalty
+            // ltvViolation
             // 
-            ltvPenalty.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader1, columnHeader2 });
-            ltvPenalty.ContextMenuStrip = cmsPenalty;
-            ltvPenalty.FullRowSelect = true;
-            ltvPenalty.Location = new Point(12, 338);
-            ltvPenalty.Name = "ltvPenalty";
-            ltvPenalty.Size = new Size(441, 254);
-            ltvPenalty.TabIndex = 12;
-            ltvPenalty.UseCompatibleStateImageBehavior = false;
-            ltvPenalty.View = View.Details;
+            ltvViolation.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader1, columnHeader2 });
+            ltvViolation.ContextMenuStrip = cmsPenalty;
+            ltvViolation.Enabled = false;
+            ltvViolation.FullRowSelect = true;
+            ltvViolation.Location = new Point(12, 338);
+            ltvViolation.Name = "ltvViolation";
+            ltvViolation.Size = new Size(441, 254);
+            ltvViolation.TabIndex = 12;
+            ltvViolation.UseCompatibleStateImageBehavior = false;
+            ltvViolation.View = View.Details;
+            ltvViolation.DoubleClick += ltvPenalty_DoubleClick;
             // 
             // columnHeader3
             // 
@@ -362,47 +364,50 @@
             apagarToolStripMenuItem.Text = "Apagar";
             apagarToolStripMenuItem.Click += apagarToolStripMenuItem_Click;
             // 
-            // txtPenaltyType
+            // txtViolationType
             // 
-            txtPenaltyType.BackColor = Color.White;
-            txtPenaltyType.BorderColor = Color.DeepSkyBlue;
-            txtPenaltyType.BorderFocusColor = Color.AliceBlue;
-            txtPenaltyType.BorderSize = 2;
-            txtPenaltyType.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPenaltyType.Location = new Point(18, 295);
-            txtPenaltyType.Margin = new Padding(4);
-            txtPenaltyType.MaxLenght = 32767;
-            txtPenaltyType.MultLine = false;
-            txtPenaltyType.Name = "txtPenaltyType";
-            txtPenaltyType.Padding = new Padding(7);
-            txtPenaltyType.PasswordChar = false;
-            txtPenaltyType.PlaceHolder = "Tipo da penalidade";
-            txtPenaltyType.Size = new Size(204, 36);
-            txtPenaltyType.TabIndex = 13;
-            txtPenaltyType.Texts = "";
-            txtPenaltyType.UnderlineStyle = false;
+            txtViolationType.BackColor = Color.White;
+            txtViolationType.BorderColor = Color.DeepSkyBlue;
+            txtViolationType.BorderFocusColor = Color.AliceBlue;
+            txtViolationType.BorderSize = 2;
+            txtViolationType.Enabled = false;
+            txtViolationType.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtViolationType.Location = new Point(18, 295);
+            txtViolationType.Margin = new Padding(4);
+            txtViolationType.MaxLenght = 32767;
+            txtViolationType.MultLine = false;
+            txtViolationType.Name = "txtViolationType";
+            txtViolationType.Padding = new Padding(7);
+            txtViolationType.PasswordChar = false;
+            txtViolationType.PlaceHolder = "Tipo da violação";
+            txtViolationType.Size = new Size(204, 36);
+            txtViolationType.TabIndex = 13;
+            txtViolationType.Texts = "";
+            txtViolationType.UnderlineStyle = false;
             // 
-            // btnPenaltyAdd
+            // btnViolationAdd
             // 
-            btnPenaltyAdd.BackColor = Color.White;
-            btnPenaltyAdd.BackgroudColor = Color.White;
-            btnPenaltyAdd.BorderColor = Color.PaleVioletRed;
-            btnPenaltyAdd.BorderRadius = 40;
-            btnPenaltyAdd.BorderSize = 0;
-            btnPenaltyAdd.FlatAppearance.BorderSize = 0;
-            btnPenaltyAdd.FlatStyle = FlatStyle.Flat;
-            btnPenaltyAdd.ForeColor = Color.Black;
-            btnPenaltyAdd.Location = new Point(342, 291);
-            btnPenaltyAdd.Name = "btnPenaltyAdd";
-            btnPenaltyAdd.Size = new Size(100, 40);
-            btnPenaltyAdd.TabIndex = 15;
-            btnPenaltyAdd.Text = "Adicionar";
-            btnPenaltyAdd.TextColor = Color.Black;
-            btnPenaltyAdd.UseVisualStyleBackColor = false;
-            btnPenaltyAdd.Click += btnPenaltyAdd_Click;
+            btnViolationAdd.BackColor = Color.White;
+            btnViolationAdd.BackgroudColor = Color.White;
+            btnViolationAdd.BorderColor = Color.PaleVioletRed;
+            btnViolationAdd.BorderRadius = 40;
+            btnViolationAdd.BorderSize = 0;
+            btnViolationAdd.Enabled = false;
+            btnViolationAdd.FlatAppearance.BorderSize = 0;
+            btnViolationAdd.FlatStyle = FlatStyle.Flat;
+            btnViolationAdd.ForeColor = Color.Black;
+            btnViolationAdd.Location = new Point(342, 291);
+            btnViolationAdd.Name = "btnViolationAdd";
+            btnViolationAdd.Size = new Size(100, 40);
+            btnViolationAdd.TabIndex = 15;
+            btnViolationAdd.Text = "Adicionar";
+            btnViolationAdd.TextColor = Color.Black;
+            btnViolationAdd.UseVisualStyleBackColor = false;
+            btnViolationAdd.Click += btnPenaltyAdd_Click;
             // 
             // listView2
             // 
+            listView2.Enabled = false;
             listView2.Location = new Point(557, 338);
             listView2.Name = "listView2";
             listView2.Size = new Size(430, 254);
@@ -418,25 +423,26 @@
             lblRentalRecord.TabIndex = 16;
             lblRentalRecord.Text = "Registro de Aluguel";
             // 
-            // txtPenaltyValue
+            // txtViolationValue
             // 
-            txtPenaltyValue.BackColor = Color.White;
-            txtPenaltyValue.BorderColor = Color.DeepSkyBlue;
-            txtPenaltyValue.BorderFocusColor = Color.AliceBlue;
-            txtPenaltyValue.BorderSize = 2;
-            txtPenaltyValue.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPenaltyValue.Location = new Point(230, 295);
-            txtPenaltyValue.Margin = new Padding(4);
-            txtPenaltyValue.MaxLenght = 32767;
-            txtPenaltyValue.MultLine = false;
-            txtPenaltyValue.Name = "txtPenaltyValue";
-            txtPenaltyValue.Padding = new Padding(7);
-            txtPenaltyValue.PasswordChar = false;
-            txtPenaltyValue.PlaceHolder = "Valor";
-            txtPenaltyValue.Size = new Size(105, 36);
-            txtPenaltyValue.TabIndex = 21;
-            txtPenaltyValue.Texts = "";
-            txtPenaltyValue.UnderlineStyle = false;
+            txtViolationValue.BackColor = Color.White;
+            txtViolationValue.BorderColor = Color.DeepSkyBlue;
+            txtViolationValue.BorderFocusColor = Color.AliceBlue;
+            txtViolationValue.BorderSize = 2;
+            txtViolationValue.Enabled = false;
+            txtViolationValue.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtViolationValue.Location = new Point(230, 295);
+            txtViolationValue.Margin = new Padding(4);
+            txtViolationValue.MaxLenght = 32767;
+            txtViolationValue.MultLine = false;
+            txtViolationValue.Name = "txtViolationValue";
+            txtViolationValue.Padding = new Padding(7);
+            txtViolationValue.PasswordChar = false;
+            txtViolationValue.PlaceHolder = "Valor";
+            txtViolationValue.Size = new Size(105, 36);
+            txtViolationValue.TabIndex = 21;
+            txtViolationValue.Texts = "";
+            txtViolationValue.UnderlineStyle = false;
             // 
             // btnRentalRecordAdd
             // 
@@ -445,6 +451,7 @@
             btnRentalRecordAdd.BorderColor = Color.PaleVioletRed;
             btnRentalRecordAdd.BorderRadius = 40;
             btnRentalRecordAdd.BorderSize = 0;
+            btnRentalRecordAdd.Enabled = false;
             btnRentalRecordAdd.FlatAppearance.BorderSize = 0;
             btnRentalRecordAdd.FlatStyle = FlatStyle.Flat;
             btnRentalRecordAdd.ForeColor = Color.Black;
@@ -485,40 +492,40 @@
             lblEmail.TabIndex = 24;
             lblEmail.Text = "Email";
             // 
-            // btnEditPenalty
+            // btnEditViolation
             // 
-            btnEditPenalty.BackColor = Color.White;
-            btnEditPenalty.BackgroudColor = Color.White;
-            btnEditPenalty.BorderColor = Color.PaleVioletRed;
-            btnEditPenalty.BorderRadius = 40;
-            btnEditPenalty.BorderSize = 0;
-            btnEditPenalty.FlatAppearance.BorderSize = 0;
-            btnEditPenalty.FlatStyle = FlatStyle.Flat;
-            btnEditPenalty.ForeColor = Color.Black;
-            btnEditPenalty.Location = new Point(342, 245);
-            btnEditPenalty.Name = "btnEditPenalty";
-            btnEditPenalty.Size = new Size(100, 40);
-            btnEditPenalty.TabIndex = 25;
-            btnEditPenalty.Text = "Editar";
-            btnEditPenalty.TextColor = Color.Black;
-            btnEditPenalty.UseVisualStyleBackColor = false;
+            btnEditViolation.BackColor = Color.White;
+            btnEditViolation.BackgroudColor = Color.White;
+            btnEditViolation.BorderColor = Color.PaleVioletRed;
+            btnEditViolation.BorderRadius = 40;
+            btnEditViolation.BorderSize = 0;
+            btnEditViolation.FlatAppearance.BorderSize = 0;
+            btnEditViolation.FlatStyle = FlatStyle.Flat;
+            btnEditViolation.ForeColor = Color.Black;
+            btnEditViolation.Location = new Point(342, 291);
+            btnEditViolation.Name = "btnEditViolation";
+            btnEditViolation.Size = new Size(100, 40);
+            btnEditViolation.TabIndex = 25;
+            btnEditViolation.Text = "Editar";
+            btnEditViolation.TextColor = Color.Black;
+            btnEditViolation.UseVisualStyleBackColor = false;
+            btnEditViolation.Visible = false;
+            btnEditViolation.Click += btnEditPenalty_Click;
             // 
-            // frmPessoa
+            // frmUser
             // 
             AutoScaleDimensions = new SizeF(8F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1024, 604);
-            Controls.Add(btnEditPenalty);
             Controls.Add(lblEmail);
             Controls.Add(txtEmail);
             Controls.Add(btnRentalRecordAdd);
-            Controls.Add(txtPenaltyValue);
+            Controls.Add(txtViolationValue);
             Controls.Add(listView2);
             Controls.Add(lblRentalRecord);
-            Controls.Add(btnPenaltyAdd);
-            Controls.Add(txtPenaltyType);
-            Controls.Add(ltvPenalty);
-            Controls.Add(lblPenalty);
+            Controls.Add(txtViolationType);
+            Controls.Add(ltvViolation);
+            Controls.Add(lblViolation);
             Controls.Add(dtpDateOfBirth);
             Controls.Add(lblDateOfBirth);
             Controls.Add(mkbCNH);
@@ -530,8 +537,10 @@
             Controls.Add(lblLastName);
             Controls.Add(txtFirstName);
             Controls.Add(lblFirstName);
+            Controls.Add(btnViolationAdd);
+            Controls.Add(btnEditViolation);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Name = "frmPessoa";
+            Name = "frmUser";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Cadastrar Usuario";
             panel1.ResumeLayout(false);
@@ -559,15 +568,15 @@
         private DateTimePicker dtpDateOfBirth;
         private Label lblBalanceText;
         private Label lblBalanceValue;
-        private Label lblPenalty;
-        private ListView ltvPenalty;
-        private CustomControls.CustomTextBox txtPenaltyType;
-        private CustomControls.CustomButton btnPenaltyAdd;
+        private Label lblViolation;
+        private ListView ltvViolation;
+        private CustomControls.CustomTextBox txtViolationType;
+        private CustomControls.CustomButton btnViolationAdd;
         private CustomControls.CustomButton customButton2;
         private CustomControls.CustomTextBox customTextBox4;
         private ListView listView2;
         private Label lblRentalRecord;
-        private CustomControls.CustomTextBox txtPenaltyValue;
+        private CustomControls.CustomTextBox txtViolationValue;
         private CustomControls.CustomButton btnRentalRecordAdd;
         private CustomControls.CustomTextBox txtEmail;
         private Label lblEmail;
@@ -578,6 +587,6 @@
         private ToolStripMenuItem adicionarToolStripMenuItem;
         private ToolStripMenuItem editarToolStripMenuItem;
         private ToolStripMenuItem apagarToolStripMenuItem;
-        private CustomControls.CustomButton btnEditPenalty;
+        private CustomControls.CustomButton btnEditViolation;
     }
 }

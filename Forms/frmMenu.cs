@@ -5,8 +5,6 @@
         public frmMenu()
         {
             InitializeComponent();
-            //OpenForm(new frmUsers());
-            new frmPessoa(2).Show();
         }
 
         private void OpenForm(Form frm)
