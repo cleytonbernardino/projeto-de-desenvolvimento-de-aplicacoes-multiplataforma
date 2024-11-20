@@ -65,9 +65,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         // Refazer isso para deixar somente que ele crie a tabela ao inves de copiar o django
         private void InitBD()
         {
-            string command = "IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_user' AND schema_id = SCHEMA_ID('dbo'))" +
+            string command = "IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_vehicle' AND schema_id = SCHEMA_ID('dbo'))" +
                 "BEGIN\n" +
-                "CREATE TABLE [dbo].[tbl_user] (" +
+                "CREATE TABLE [dbo].[tbl_vehicle] (" +
                     "[id]                INT IDENTITY(1,1) PRIMARY KEY NOT NULL," +
                     "[License_plate]     NCHAR(7)  UNIQUE NOT NULL," +
                     "[Brand] VARCHAR(25) NOT NULL," +
@@ -83,8 +83,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     "[Air_conditioning]  BIT DEFAULT 0 NOT NULL," +
                     "[Electric_windows]  BIT DEFAULT 0 NOT NULL," +
                     "[Electric_locks]    BIT DEFAULT 0 NOT NULL," +
-                    "[Licensed]          BIT DEFAULT 0 NOT NULL,;" +
-                "END;";
+                    "[Licensed]          BIT DEFAULT 0 NOT NULL" +
+                "); END;";
             using (SqlConnection conn = new(_connectionString))
             {
                 using (SqlCommand cmd = new(command, conn))

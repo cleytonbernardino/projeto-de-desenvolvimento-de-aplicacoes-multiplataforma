@@ -122,7 +122,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             return dt;
         }
 
-        public DataTable List()
+        public DataTable ListUsers()
         {
             DataTable dt = new();
             SqlDataAdapter da;

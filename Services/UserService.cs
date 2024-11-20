@@ -52,7 +52,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 
         public DataTable ListUsers()
         {
-            return _dao.List();
+            return _dao.ListUsers();
         }
 
         public User GetUserById(int id)
