@@ -187,13 +187,21 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 txtLastName.Texts,
                 txtEmail.Texts,
                 mkbCPF.Texts,
-                mkbCNH.Texts,
+                mkbCNH.Texts.Substring(3, 9), // Ignora os zeros, talvez mudar no banco de dados para suportar
                 dtpDateOfBirth.Value,
                 violations,
                 _violationToBeRemoved
             );
-
-            if (id == -1) MessageBox.Show("Não foi possivel salvar", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (id == -2)
+            {
+                MessageBox.Show("CPF INCORRETO", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (id == -1)
+            {
+                MessageBox.Show("Não foi possivel salvar", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             MessageBox.Show("Salvo com sucesso", "Sucesso");
             if (id > 0)
             {

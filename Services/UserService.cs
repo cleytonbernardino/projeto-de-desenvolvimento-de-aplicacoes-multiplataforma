@@ -35,11 +35,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             if (id == 0)
             {
                 string cpfOnlyDigits = cpfUtils.ToCpf(cpf);
-                if (cpfUtils.IsCpfValid(cpfOnlyDigits)) 
-                {
-                    MessageBox.Show("CPF INCORRETO"); // Mudar isso para a view está no lugar errado
-                    return -1;
-                }
+                if (!cpfUtils.IsCpfValid(cpfOnlyDigits)) return -2;
+                user.CPF = cpfOnlyDigits;
                 return _dao.Save(user);
             }
 

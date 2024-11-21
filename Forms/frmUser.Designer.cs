@@ -268,7 +268,7 @@
             mkbCNH.Padding = new Padding(7);
             mkbCNH.Size = new Size(232, 36);
             mkbCNH.TabIndex = 8;
-            mkbCNH.TextMask = "000000000";
+            mkbCNH.TextMask = "000000000000";
             mkbCNH.Texts = "";
             mkbCNH.UnderlineStyle = false;
             // 

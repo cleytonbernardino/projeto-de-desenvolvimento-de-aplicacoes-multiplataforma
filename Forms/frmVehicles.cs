@@ -1,18 +1,19 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
+using ProjetoDesenvolvimentoAplicacoesMultplataforma.Services;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmVehicles : Form
     {
         // Classe Dao
-        private readonly VehicleDao dao = new();
+        private readonly VehicleService service = new();
 
         public frmVehicles()
         {
             InitializeComponent();
         }
 
-        private int getId()
+        private int GetId()
         {
             if (dgvVehicle.Rows.Count == 0)
             {
@@ -32,7 +33,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         {
             BindingSource data = new();
 
-            data.DataSource = dao.Listar();
+            data.DataSource = service.GetAllVehicles();
             dgvVehicle.DataSource = data;
             dgvVehicle.Columns[0].Visible = false;
         }
@@ -41,8 +42,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         {
             BindingSource data = new();
 
-            dao.LicensePlate = txtSearch.Texts;
-            data.DataSource = dao.Search();
+            string licensePlate = txtSearch.Texts;
+            data.DataSource = service.GetVehiclesByPlate(licensePlate);
             dgvVehicle.DataSource = data;
         }
 
@@ -53,7 +54,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void dgvVehicle_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            int id = getId();
+            int id = GetId();
             if (id == -1) return;
             frmVehicle frm = new(id);
             frm.Show();
@@ -83,7 +84,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            int id = getId();
+            int id = GetId();
             if (id == -1) return;
             frmVehicle frm = new(id);
             frm.Show();
@@ -91,14 +92,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            int id = getId();
+            int id = GetId();
             if (id == -1) return;
 
             DialogResult resp =  MessageBox.Show("Deseja mesmo excluir esse veiculo? Essa operação é inreversivel", "CUIDADO", MessageBoxButtons.YesNoCancel);
             if (resp == DialogResult.No || resp == DialogResult.Cancel) return;
 
-            dao.Id = id;
-            dao.Delete();
+            service.DeleteVehicleById(id);
         }
     }
 }

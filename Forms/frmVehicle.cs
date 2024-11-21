@@ -1,11 +1,12 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
+using ProjetoDesenvolvimentoAplicacoesMultplataforma.Services;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmVehicle : Form
     {
-        private readonly VehicleDao dao = new();
-        private bool editMode = false;
+        private readonly VehicleService service = new();
+        private int _id = 0;
 
         private string direction = "mechanic";
 
@@ -17,44 +18,39 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         public frmVehicle(int id)
         {
             InitializeComponent();
-            ChangeToEditMode();
-            LoadVehicle(id);
+            InitializeEditMode(id);
         }
 
-        private void ChangeToEditMode()
+        private void InitializeEditMode(int id)
         {
-            editMode = true;
             this.Text = "Editar Veículo";
-        }
+            Vehicle? vehicle = service.GetVehicleById(id);
 
-        private void LoadVehicle(int id)
-        {
-            dao.Id = id;
-            if (!dao.Select())
+            if (vehicle is null)
             {
                 MessageBox.Show("Erro ao exibir os dados do veículo", "Erro");
                 this.Dispose();
             }
-            txtLicensePlate.Texts = dao.LicensePlate;
-            txtChassiNumber.Texts = dao.ChassiNumber;
-            txtColor.Texts = dao.Color;
-            txtModel.Texts = dao.Model;
-            mkbRenavam.Texts = dao.Renavam;
+            txtLicensePlate.Texts = vehicle.LicensePlate;
+            txtChassiNumber.Texts = vehicle.ChassiNumber;
+            txtColor.Texts = vehicle.Color;
+            txtModel.Texts = vehicle.Model;
+            mkbRenavam.Texts = vehicle.Renavam;
             //txtObs
-            cbxBrand.Text = dao.Brand;
-            cbxFuelType.Text = dao.FuelType;
+            cbxBrand.Text = vehicle.Brand;
+            cbxFuelType.Text = vehicle.FuelType;
 
-            nupMileage.Value = dao.Mileage;
+            nupMileage.Value = vehicle.Mileage;
 
-            cbAr.Checked = dao.AirConditioning;
-            cbEletricGlass.Checked = dao.EletricWindows;
-            cbEletricLocks.Checked = dao.EletricLocks;
+            cbAr.Checked = vehicle.AirConditioning;
+            cbEletricGlass.Checked = vehicle.EletricWindows;
+            cbEletricLocks.Checked = vehicle.EletricLocks;
             //cbKey.Checked = dao.ke
-            cbLincense.Checked = dao.Licensed;
+            cbLincense.Checked = vehicle.Licensed;
 
-            dtpModelYear.Value = dao.ModelYear;
+            dtpModelYear.Value = vehicle.ModelYear;
 
-            switch (dao.Direction)
+            switch (vehicle.Direction)
             {
                 case "hydraulics":
                     rbHydraulics.Checked = true;
@@ -153,56 +149,50 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         // Ações dos botões
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // Strings
-            dao.LicensePlate = txtLicensePlate.Texts;
-            dao.Brand = cbxBrand.Text;
-            dao.Renavam = mkbRenavam.Texts;
-            dao.Model = txtModel.Texts;
-            dao.ChassiNumber = txtChassiNumber.Texts;
-            dao.Color = txtColor.Texts;
-            dao.FuelType = cbxFuelType.Text;
-            dao.Direction = direction;
-            dao.Obs = txtObs.Texts;
-
-            // Int
-            dao.Mileage = int.Parse(nupMileage.Value.ToString());
-
-            // Boolean
-            dao.Licensed = cbLincense.Checked;
-            dao.AirConditioning = cbAr.Checked;
-            dao.EletricWindows = cbEletricGlass.Checked;
-            dao.EletricLocks = cbEletricLocks.Checked;
-
-            // Model Year
-            dao.ModelYear = dtpModelYear.Value;
-
-            int rows;
-            if (editMode)
+            Vehicle vehicle = new()
             {
-                rows = dao.Update();
-            } else
-            {
-                rows = dao.Save();
-                ChangeToEditMode();
-            }
-            if (rows == -1) 
+                Id = _id,
+                LicensePlate = txtLicensePlate.Texts,
+                Brand = cbxBrand.Text,
+                Renavam = mkbRenavam.Texts,
+                Model = txtModel.Texts,
+                ChassiNumber = txtChassiNumber.Texts,
+                Color = txtColor.Texts,
+                FuelType = cbxFuelType.Text,
+                Direction = direction,
+                Obs = txtObs.Texts,
+                Mileage = int.Parse(nupMileage.Value.ToString()),
+                Licensed = cbLincense.Checked,
+                AirConditioning = cbAr.Checked,
+                EletricWindows = cbEletricGlass.Checked,
+                EletricLocks = cbEletricLocks.Checked,
+                ModelYear = dtpModelYear.Value,
+            };
+
+            int id = service.Save(vehicle);
+            if (id == -1)
             {
                 MessageBox.Show("Erro ao realizar essa tarefa.", "Erro");
                 return;
+            }
+            else if (id > 0)
+            {
+                this.Text = "Editar Veículo";
+                _id = id;
             }
             MessageBox.Show("Ação realizada com sucesso.");
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            DialogResult resp = MessageBox.Show("Deseja mesmo excluir esse veiculo?", "Cuidado", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (resp == DialogResult.No) return; 
+            DialogResult resp = MessageBox.Show("Deseja mesmo excluir esse veiculo?", "Cuidado", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+            if (resp != DialogResult.Yes) return; 
 
-            if (dao.Id == 0)
+            if (_id == 0)
             {
                 this.Dispose();
             }
-            if(!dao.Delete()) MessageBox.Show("Naõ foi possivel excluir", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if(service.DeleteVehicleById(_id)) MessageBox.Show("Naõ foi possivel excluir", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             this.Dispose();
         }
 

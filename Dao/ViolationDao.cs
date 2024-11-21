@@ -1,11 +1,11 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
     internal class ViolationDao
     {
-        private readonly string _connectionString = "Data Source=LAPTOP-9AQEBANA;Initial Catalog=ProjetoSemestral;Integrated Security=True;Encrypt=True";
+        private readonly string _connectionString = DotNetEnv.Env.GetString("Connection_String");
 
         private readonly string save = "INSERT INTO tbl_penalty (" +
             "OwnerId, Name, Cost) VALUES (" +

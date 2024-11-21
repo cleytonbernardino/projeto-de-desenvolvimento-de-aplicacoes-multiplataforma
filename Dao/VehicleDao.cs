@@ -1,15 +1,12 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Data.SqlClient;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
     internal class VehicleDao
     {
         // String de conexão
-        private readonly string _connectionString = @"Data Source=LAPTOP-9AQEBANA;Initial Catalog=ProjetoSemestral;Integrated Security=True;Encrypt=True";
+        private readonly string _connectionString = DotNetEnv.Env.GetString("Connection_String");
 
         // Comando Select
         private const string select = "SELECT * FROM tbl_vehicle WHERE id=@id;";
@@ -35,33 +32,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         // Comando Delete
         private const string delete = "DELETE FROM tbl_vehicle WHERE id=@id;";
 
-        // Public var
-        public int Id { get; set; }
-        public string LicensePlate { get; set; }
-        public string Brand { get; set; }
-        public string Model { get; set; }
-        public string ChassiNumber { get; set; }
-        public string Color { get; set; }
-        public string FuelType { get; set; }
-        public string Obs { get; set; }
-        public string Direction { get; set; }
-        public string Renavam { get; set; }
-        public int Mileage { get; set; }
-        public bool AirConditioning { get; set; }
-        public bool EletricWindows { get; set; }
-        public bool EletricLocks { get; set; }
-        public bool Licensed { get; set; }
-        public DateTime ModelYear { get; set; }
-
-        private class Vehicle // WIP
-        {
-            public int Id { get; set; }
-            public string LicensePlate { get; set; }
-            public string Brand { get; set; }
-            public string Model { get; set; }
-            public string ChassiNUmber { get; set; }
-        }
-
         // Refazer isso para deixar somente que ele crie a tabela ao inves de copiar o django
         private void InitBD()
         {
@@ -69,6 +39,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 "BEGIN\n" +
                 "CREATE TABLE [dbo].[tbl_vehicle] (" +
                     "[id]                INT IDENTITY(1,1) PRIMARY KEY NOT NULL," +
+                    "[Rented_by]         INT NULL," +
+                    "[Rental_expiration] DATE NULL," +
                     "[License_plate]     NCHAR(7)  UNIQUE NOT NULL," +
                     "[Brand] VARCHAR(25) NOT NULL," +
                     "[Model]             VARCHAR(55)  NOT NULL," +
@@ -101,10 +73,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             InitBD();
         }
 
-        public bool Select()
+        public Vehicle? Select(int id)
         {
-            if (Id <= 0) return false;
-
             using (SqlConnection conn = new(_connectionString))
             {
                 using (SqlCommand cmd = new(select, conn))
@@ -112,30 +82,30 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     conn.Open();
                     try
                     {
-                        cmd.Parameters.AddWithValue("@id", Id);
+                        cmd.Parameters.AddWithValue("@id", id);
                         SqlDataReader reader =  cmd.ExecuteReader();
-                        reader.Read();
-
-                        LicensePlate = reader.GetString("License_plate");
-                        Brand = reader.GetString("Brand");
-                        Model = reader.GetString("Model");
-                        ModelYear = reader.GetDateTime("Model_year");
-                        ChassiNumber = reader.GetString("Chassis_number");
-                        Renavam = reader.GetString("Renavam");
-                        Color = reader.GetString("Color");
-                        FuelType = reader.GetString("Fuel_type");
-                        Mileage = reader.GetInt32("Mileage");
-                        AirConditioning = reader.GetBoolean("Air_conditioning");
-                        EletricWindows = reader.GetBoolean("Electric_windows");
-                        EletricLocks = reader.GetBoolean("Electric_locks");
-                        Licensed = reader.GetBoolean("Licensed");
-                        Direction = reader.GetString("Direction");
-                        return true;
+                        if (!reader.Read()) return null;
+                        return new Vehicle() {
+                            LicensePlate = reader.GetString("License_plate"),
+                            Brand = reader.GetString("Brand"),
+                            Model = reader.GetString("Model"),
+                            ModelYear = reader.GetDateTime("Model_year"),
+                            ChassiNumber = reader.GetString("Chassis_number"),
+                            Renavam = reader.GetString("Renavam"),
+                            Color = reader.GetString("Color"),
+                            FuelType = reader.GetString("Fuel_type"),
+                            Mileage = reader.GetInt32("Mileage"),
+                            AirConditioning = reader.GetBoolean("Air_conditioning"),
+                            EletricWindows = reader.GetBoolean("Electric_windows"),
+                            EletricLocks = reader.GetBoolean("Electric_locks"),
+                            Licensed = reader.GetBoolean("Licensed"),
+                            Direction = reader.GetString("Direction"),
+                        };
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Erro: " + ex.Message);
-                        return false;
+                        return null;
                     }
                 }
             }
@@ -156,17 +126,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             return dt;
         }
 
-        public DataTable Search()
+        public DataTable Search(string licensePlate)
         {
             DataTable dt = new DataTable();
             SqlDataAdapter da;
             using (SqlConnection conn = new(_connectionString))
             {
-                //conn.Open();
                 using (SqlCommand cmd = new(serch, conn))
                 {
                     conn.Open();
-                    cmd.Parameters.AddWithValue("@License_plate", LicensePlate + "%");
+                    cmd.Parameters.AddWithValue("@License_plate", licensePlate + "%");
                     da = new SqlDataAdapter(cmd);
                     da.Fill(dt);
                 }
@@ -174,69 +143,67 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             return dt;
         }
 
-        public int Save()
+        public int Save(Vehicle vehicle)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
-                try
+                using (SqlCommand cmd = new(insert, conn))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(insert, conn))
+                    cmd.Parameters.AddWithValue("@License_plate", vehicle.LicensePlate);
+                    cmd.Parameters.AddWithValue("@Brand", vehicle.Brand);
+                    cmd.Parameters.AddWithValue("@Model", vehicle.Model);
+                    cmd.Parameters.AddWithValue("@Model_year", vehicle.ModelYear);
+                    cmd.Parameters.AddWithValue("@Chassis_number", vehicle.ChassiNumber);
+                    cmd.Parameters.AddWithValue("@Renavam", vehicle.Renavam);
+                    cmd.Parameters.AddWithValue("@Color", vehicle.Color);
+                    cmd.Parameters.AddWithValue("@Fuel_type", vehicle.FuelType);
+                    cmd.Parameters.AddWithValue("@Mileage", vehicle.Mileage);
+                    cmd.Parameters.AddWithValue("@Air_conditioning", vehicle.AirConditioning);
+                    cmd.Parameters.AddWithValue("@Electric_windows", vehicle.EletricWindows);
+                    cmd.Parameters.AddWithValue("@Electric_locks", vehicle.EletricLocks);
+                    cmd.Parameters.AddWithValue("@Licensed", vehicle.Licensed);
+                    cmd.Parameters.AddWithValue("@Direction", vehicle.Direction);
+
+                    try
                     {
-                        cmd.Parameters.AddWithValue("@License_plate", LicensePlate);
-                        cmd.Parameters.AddWithValue("@Brand", Brand);
-                        cmd.Parameters.AddWithValue("@Model", Model);
-                        cmd.Parameters.AddWithValue("@Model_year", ModelYear);
-                        cmd.Parameters.AddWithValue("@Chassis_number", ChassiNumber);
-                        cmd.Parameters.AddWithValue("@Renavam", Renavam);
-                        cmd.Parameters.AddWithValue("@Color", Color);
-                        cmd.Parameters.AddWithValue("@Fuel_type", FuelType);
-                        cmd.Parameters.AddWithValue("@Mileage", Mileage);
-                        cmd.Parameters.AddWithValue("@Air_conditioning", AirConditioning);
-                        cmd.Parameters.AddWithValue("@Electric_windows", EletricWindows);
-                        cmd.Parameters.AddWithValue("@Electric_locks", EletricLocks);
-                        cmd.Parameters.AddWithValue("@Licensed", Licensed);
-                        cmd.Parameters.AddWithValue("@Direction", Direction);
-                        
-                        Id = (int)cmd.ExecuteScalar();
-                        return Id;
+                        return (int)cmd.ExecuteScalar();
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro: " + ex.Message);
-                    return -1;
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Erro: " + ex.Message, "Messagem de DEBUG(vehicleDao|Save)");
+                        return -1;
+                    }
                 }
             }
         }
 
-        public int Update()
+        public int Update(Vehicle vehicle)
         {
-            if (Id == 0) return -1;
-
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(update, conn))
+                using (SqlCommand cmd = new(update, conn))
                 {
-                    cmd.Parameters.AddWithValue("@id", Id);
-                    cmd.Parameters.AddWithValue("@License_plate", LicensePlate);
-                    cmd.Parameters.AddWithValue("@Brand", Brand);
-                    cmd.Parameters.AddWithValue("@Model", Model);
-                    cmd.Parameters.AddWithValue("@Model_year", ModelYear);
-                    cmd.Parameters.AddWithValue("@Chassis_number", ChassiNumber);
-                    cmd.Parameters.AddWithValue("@Renavam", Renavam);
-                    cmd.Parameters.AddWithValue("@Color", Color);
-                    cmd.Parameters.AddWithValue("@Fuel_type", FuelType);
-                    cmd.Parameters.AddWithValue("@Mileage", Mileage);
-                    cmd.Parameters.AddWithValue("@Air_conditioning", AirConditioning);
-                    cmd.Parameters.AddWithValue("@Electric_windows", EletricWindows);
-                    cmd.Parameters.AddWithValue("@Electric_locks", EletricLocks);
-                    cmd.Parameters.AddWithValue("@Licensed", Licensed);
-                    cmd.Parameters.AddWithValue("@Direction", Direction);
+                    conn.Open();
+                    cmd.Parameters.AddWithValue("@id", vehicle.Id);
+                    cmd.Parameters.AddWithValue("@License_plate", vehicle.LicensePlate);
+                    cmd.Parameters.AddWithValue("@Brand", vehicle.Brand);
+                    cmd.Parameters.AddWithValue("@Model", vehicle.Model);
+                    cmd.Parameters.AddWithValue("@Model_year", vehicle.ModelYear);
+                    cmd.Parameters.AddWithValue("@Chassis_number", vehicle.ChassiNumber);
+                    cmd.Parameters.AddWithValue("@Renavam", vehicle.Renavam);
+                    cmd.Parameters.AddWithValue("@Color", vehicle.Color);
+                    cmd.Parameters.AddWithValue("@Fuel_type", vehicle.FuelType);
+                    cmd.Parameters.AddWithValue("@Mileage", vehicle.Mileage);
+                    cmd.Parameters.AddWithValue("@Air_conditioning", vehicle.AirConditioning);
+                    cmd.Parameters.AddWithValue("@Electric_windows", vehicle.EletricWindows);
+                    cmd.Parameters.AddWithValue("@Electric_locks", vehicle.EletricLocks);
+                    cmd.Parameters.AddWithValue("@Licensed", vehicle.Licensed);
+                    cmd.Parameters.AddWithValue("@Direction", vehicle.Direction);
                     try
                     {
-                        return cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
+                        return 0;
                     }
                     catch (Exception ex)
                     {
@@ -247,20 +214,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        /// <summary>
-        /// Remove o veiculo da placa atual, é nessario definir uma lincense_plate antes
-        /// </summary>
-        /// <returns>Retorna a quantidade de linhas afetadas (-1 é o retorno de um erro).</returns>
-        public bool Delete()
+        public bool Delete(int id)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new(_connectionString))
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(delete, conn))
+                using (SqlCommand cmd = new(delete, conn))
                 {
+                    conn.Open();
+                    cmd.Parameters.AddWithValue("@id", id);
                     try
                     {
-                        cmd.Parameters.AddWithValue("@id", Id);
                         cmd.ExecuteNonQuery();
                         return true;
                     }
@@ -272,6 +235,28 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 }
             }
         }
+
+    }
+    public class Vehicle
+    {
+        public int Id { get; set; }
+        public int RentedBy { get; set; }
+        public DateTime RentalExpiration { get; set; }
+        public string LicensePlate { get; set; } = string.Empty;
+        public string Brand { get; set; } = string.Empty;
+        public string Model { get; set; } = string.Empty;
+        public string ChassiNumber { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
+        public string FuelType { get; set; } = string.Empty;
+        public string Obs { get; set; } = string.Empty;
+        public string Direction { get; set; } = string.Empty;
+        public string Renavam { get; set; } = string.Empty;
+        public int Mileage { get; set; }
+        public bool AirConditioning { get; set; }
+        public bool EletricWindows { get; set; }
+        public bool EletricLocks { get; set; }
+        public bool Licensed { get; set; }
+        public DateTime ModelYear { get; set; }
 
     }
 }

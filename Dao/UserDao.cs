@@ -1,17 +1,16 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
     internal class UserDao
     {
-        private readonly string _connectionString = @"Data Source=LAPTOP-9AQEBANA;Initial Catalog=ProjetoSemestral;Integrated Security=True;Encrypt=True";
+        private readonly string _connectionString = DotNetEnv.Env.GetString("Connection_String");
 
         private readonly string insert = "INSERT INTO tbl_user (" +
             "First_name, Last_name, Email, Balance, Date_of_birth, CPF, CNH" +
             ") OUTPUT INSERTED.ID " + 
             "VALUES (@First_name, @Last_name, @Email, @Balance, @Date_of_birth, @CPF, @CNH);";
-            //"SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
         private readonly string update = "UPDATE tbl_user SET " +
             "First_name=@First_name, Last_name=@Last_name, Email=@Email, Balance=@Balance, Date_of_birth=@Date_of_birth" +
