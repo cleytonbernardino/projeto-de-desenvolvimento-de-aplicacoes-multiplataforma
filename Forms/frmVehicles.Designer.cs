@@ -29,46 +29,22 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVehicles));
-            dgvVehicle = new DataGridView();
             txtSearch = new CustomControls.CustomTextBox();
             btnAdd = new CustomControls.CustomButton();
             btnSearch = new CustomControls.CustomButton();
             btnEdit = new CustomControls.CustomButton();
-            btnDelete = new CustomControls.CustomButton();
             tmrSearch = new System.Windows.Forms.Timer(components);
             label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)dgvVehicle).BeginInit();
+            btnRent = new CustomControls.CustomButton();
+            ltvVehicle = new ListView();
+            chId = new ColumnHeader();
+            chModel = new ColumnHeader();
+            chLicensePlate = new ColumnHeader();
+            chBrand = new ColumnHeader();
+            chColor = new ColumnHeader();
+            chRented = new ColumnHeader();
             SuspendLayout();
-            // 
-            // dgvVehicle
-            // 
-            dgvVehicle.AllowUserToAddRows = false;
-            dgvVehicle.AllowUserToDeleteRows = false;
-            dgvVehicle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dgvVehicle.BackgroundColor = SystemColors.ControlLightLight;
-            dgvVehicle.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Window;
-            dataGridViewCellStyle1.Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle1.Padding = new Padding(5);
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
-            dgvVehicle.DefaultCellStyle = dataGridViewCellStyle1;
-            dgvVehicle.Location = new Point(5, 99);
-            dgvVehicle.Margin = new Padding(5);
-            dgvVehicle.MultiSelect = false;
-            dgvVehicle.Name = "dgvVehicle";
-            dgvVehicle.ReadOnly = true;
-            dgvVehicle.ScrollBars = ScrollBars.Vertical;
-            dgvVehicle.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvVehicle.Size = new Size(905, 407);
-            dgvVehicle.TabIndex = 1;
-            dgvVehicle.CellContentDoubleClick += dgvVehicle_CellContentDoubleClick;
-            dgvVehicle.Layout += dgvVehicle_Layout;
             // 
             // txtSearch
             // 
@@ -87,7 +63,7 @@
             txtSearch.Padding = new Padding(7);
             txtSearch.PasswordChar = false;
             txtSearch.PlaceHolder = "Digite a placa a ser pesquisada aqui.";
-            txtSearch.Size = new Size(531, 36);
+            txtSearch.Size = new Size(547, 36);
             txtSearch.TabIndex = 2;
             txtSearch.Texts = "";
             txtSearch.UnderlineStyle = true;
@@ -162,29 +138,6 @@
             btnEdit.UseVisualStyleBackColor = false;
             btnEdit.Click += btnEdit_Click;
             // 
-            // btnDelete
-            // 
-            btnDelete.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnDelete.BackColor = Color.FromArgb(235, 146, 149);
-            btnDelete.BackgroudColor = Color.FromArgb(235, 146, 149);
-            btnDelete.BorderColor = Color.PaleVioletRed;
-            btnDelete.BorderRadius = 40;
-            btnDelete.BorderSize = 0;
-            btnDelete.FlatAppearance.BorderSize = 0;
-            btnDelete.FlatAppearance.MouseOverBackColor = Color.Red;
-            btnDelete.FlatStyle = FlatStyle.Flat;
-            btnDelete.ForeColor = Color.Black;
-            btnDelete.Image = (Image)resources.GetObject("btnDelete.Image");
-            btnDelete.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDelete.Location = new Point(741, 51);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(150, 40);
-            btnDelete.TabIndex = 6;
-            btnDelete.Text = "Apagar";
-            btnDelete.TextColor = Color.Black;
-            btnDelete.UseVisualStyleBackColor = false;
-            btnDelete.Click += btnDelete_Click;
-            // 
             // tmrSearch
             // 
             tmrSearch.Interval = 900;
@@ -194,23 +147,92 @@
             // 
             label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(234, 63);
+            label1.Location = new Point(212, 63);
             label1.Name = "label1";
             label1.Size = new Size(344, 17);
             label1.TabIndex = 7;
             label1.Text = "Colocar Cores Melhores para esse botões ->";
             // 
+            // btnRent
+            // 
+            btnRent.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRent.BackColor = Color.FromArgb(110, 189, 244);
+            btnRent.BackgroudColor = Color.FromArgb(110, 189, 244);
+            btnRent.BorderColor = Color.PaleVioletRed;
+            btnRent.BorderRadius = 40;
+            btnRent.BorderSize = 0;
+            btnRent.FlatAppearance.BorderSize = 0;
+            btnRent.FlatAppearance.MouseOverBackColor = Color.FromArgb(87, 149, 194);
+            btnRent.FlatStyle = FlatStyle.Flat;
+            btnRent.ForeColor = Color.Black;
+            btnRent.Image = (Image)resources.GetObject("btnRent.Image");
+            btnRent.ImageAlign = ContentAlignment.MiddleLeft;
+            btnRent.Location = new Point(741, 51);
+            btnRent.Name = "btnRent";
+            btnRent.Size = new Size(150, 40);
+            btnRent.TabIndex = 8;
+            btnRent.Text = "Alugar";
+            btnRent.TextColor = Color.Black;
+            btnRent.UseVisualStyleBackColor = false;
+            btnRent.Click += btnRent_Click;
+            // 
+            // ltvVehicle
+            // 
+            ltvVehicle.Activation = ItemActivation.TwoClick;
+            ltvVehicle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            ltvVehicle.Columns.AddRange(new ColumnHeader[] { chId, chModel, chLicensePlate, chBrand, chColor, chRented });
+            ltvVehicle.FullRowSelect = true;
+            ltvVehicle.GridLines = true;
+            ltvVehicle.Location = new Point(9, 97);
+            ltvVehicle.MultiSelect = false;
+            ltvVehicle.Name = "ltvVehicle";
+            ltvVehicle.Size = new Size(898, 405);
+            ltvVehicle.TabIndex = 9;
+            ltvVehicle.UseCompatibleStateImageBehavior = false;
+            ltvVehicle.View = View.Details;
+            ltvVehicle.DoubleClick += ltvVehicle_DoubleClick;
+            // 
+            // chId
+            // 
+            chId.Text = "Id";
+            chId.Width = 96;
+            // 
+            // chModel
+            // 
+            chModel.Text = "Modelo";
+            chModel.Width = 239;
+            // 
+            // chLicensePlate
+            // 
+            chLicensePlate.Text = "Placa";
+            chLicensePlate.Width = 239;
+            // 
+            // chBrand
+            // 
+            chBrand.Text = "Marca";
+            chBrand.Width = 239;
+            // 
+            // chColor
+            // 
+            chColor.Text = "Color";
+            chColor.Width = 144;
+            // 
+            // chRented
+            // 
+            chRented.Text = "Alugado";
+            chRented.Width = 239;
+            // 
             // frmVehicles
             // 
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(915, 510);
+            Controls.Add(ltvVehicle);
+            Controls.Add(btnRent);
             Controls.Add(label1);
-            Controls.Add(btnDelete);
             Controls.Add(btnEdit);
             Controls.Add(btnSearch);
             Controls.Add(btnAdd);
             Controls.Add(txtSearch);
-            Controls.Add(dgvVehicle);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
@@ -220,19 +242,24 @@
             Padding = new Padding(5);
             ShowInTaskbar = false;
             Text = "frmVehicleTable";
-            ((System.ComponentModel.ISupportInitialize)dgvVehicle).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private DataGridView dgvVehicle;
         private CustomControls.CustomTextBox txtSearch;
         private CustomControls.CustomButton btnAdd;
         private CustomControls.CustomButton btnSearch;
         private CustomControls.CustomButton btnEdit;
-        private CustomControls.CustomButton btnDelete;
         private System.Windows.Forms.Timer tmrSearch;
         private Label label1;
+        private CustomControls.CustomButton btnRent;
+        private ColumnHeader chId;
+        private ColumnHeader chModel;
+        private ColumnHeader chLicensePlate;
+        private ColumnHeader chBrand;
+        private ColumnHeader chColor;
+        private ColumnHeader chRented;
+        private ListView ltvVehicle;
     }
 }

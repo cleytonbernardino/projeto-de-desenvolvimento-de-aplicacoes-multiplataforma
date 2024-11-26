@@ -7,7 +7,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
     {
         private readonly VehicleDao _dao = new();
 
-        public DataTable GetAllVehicles()
+        // Colocar filtros
+        public List<Vehicle> GetAllVehicles()
         {
             return _dao.Listar();
         }
@@ -18,14 +19,14 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             return _dao.Select(id);
         }
 
-        public DataTable GetVehiclesByPlate(string licensePlate)
+        public List<Vehicle> GetVehiclesByPlate(string licensePlate)
         {
             return _dao.Search(licensePlate);
         }
 
         public int Save(Vehicle vehicle)
         {
-            if (vehicle.Id != 0) return _dao.Save(vehicle);
+            if (vehicle.Id == 0) return _dao.Save(vehicle);
             return _dao.Update(vehicle);
         }
 

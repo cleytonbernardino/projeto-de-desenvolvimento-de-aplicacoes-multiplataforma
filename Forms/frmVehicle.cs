@@ -166,7 +166,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 AirConditioning = cbAr.Checked,
                 EletricWindows = cbEletricGlass.Checked,
                 EletricLocks = cbEletricLocks.Checked,
-                ModelYear = dtpModelYear.Value,
+                ModelYear = dtpModelYear.Value.Date,
             };
 
             int id = service.Save(vehicle);

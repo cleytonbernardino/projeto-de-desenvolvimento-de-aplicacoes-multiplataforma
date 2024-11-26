@@ -18,14 +18,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
         private readonly string delete = "DELETE FROM tbl_penalty WHERE id=@id;";
 
-        public class Penalty
-        {
-            public int Id { get; set; }
-            public int OwnerId { get; set; }
-            public string Name { get; set; } = "";
-            public double Cost { get; set; }
-        }
-
         public ViolationDao()
         {
             using (SqlConnection conn = new(_connectionString))
@@ -48,14 +40,14 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public bool Save(List<Penalty> penalty)
+        public bool Save(List<Violation> penalty)
         {
             using (SqlConnection conn = new(_connectionString)) 
             {
                 using (SqlCommand cmd = new(save, conn))
                 {
                     conn.Open();
-                    foreach (Penalty item in penalty)
+                    foreach (Violation item in penalty)
                     {
                         cmd.Parameters.AddWithValue("@OwnerId", item.OwnerId);
                         cmd.Parameters.AddWithValue("@Name", item.Name);
@@ -77,7 +69,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public bool Update(List<Penalty> penaltys) 
+        public bool Update(List<Violation> penaltys) 
         {
             using (SqlConnection conn = new(_connectionString)) 
             {
@@ -86,7 +78,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     try
                     {
                         conn.Open();
-                        foreach (Penalty penalty in penaltys)
+                        foreach (Violation penalty in penaltys)
                         {
                             cmd.Parameters.AddWithValue("@Id", penalty.Id);
                             cmd.Parameters.AddWithValue("@Name", penalty.Name);
@@ -105,9 +97,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public List<Penalty> Select(int ownerId)
+        public List<Violation> Select(int ownerId)
         {
-            List<Penalty> penaltyList = new();
+            List<Violation> penaltyList = new();
 
             using (SqlConnection conn = new(_connectionString))
             {
@@ -119,7 +111,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
                     while (reader.Read())
                     {
-                        Penalty penalty = new();
+                        Violation penalty = new();
                         penalty.Id = reader.GetInt32("id");
                         penalty.Name = reader.GetString("Name");
                         penalty.Cost = reader.GetDouble("Cost");
@@ -155,5 +147,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 }
             }
         }
+    }
+
+    public class Violation
+    {
+        public int Id { get; set; }
+        public int OwnerId { get; set; }
+        public string Name { get; set; } = "";
+        public double Cost { get; set; }
     }
 }

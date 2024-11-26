@@ -205,7 +205,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         public required DateTime BirtyDay { get; set; }
         public required string CPF { get; set; }
         public required string CNH { get; set; }
-        public float Balance { get; set; }
+        public double Balance { get; set; }
         public string? Password { get; set; } // Fazer mudaça para salvar a senha em hash, e não usar string
     }
 }

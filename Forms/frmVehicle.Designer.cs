@@ -314,6 +314,7 @@
             txtObs.Name = "txtObs";
             txtObs.Padding = new Padding(7);
             txtObs.PasswordChar = false;
+            txtObs.PlaceHolder = "";
             txtObs.Size = new Size(993, 112);
             txtObs.TabIndex = 18;
             txtObs.Texts = "";
@@ -364,6 +365,7 @@
             txtColor.Name = "txtColor";
             txtColor.Padding = new Padding(7);
             txtColor.PasswordChar = false;
+            txtColor.PlaceHolder = "";
             txtColor.Size = new Size(229, 36);
             txtColor.TabIndex = 14;
             txtColor.Texts = "";
@@ -418,6 +420,7 @@
             txtChassiNumber.Name = "txtChassiNumber";
             txtChassiNumber.Padding = new Padding(7);
             txtChassiNumber.PasswordChar = false;
+            txtChassiNumber.PlaceHolder = "";
             txtChassiNumber.Size = new Size(351, 36);
             txtChassiNumber.TabIndex = 10;
             txtChassiNumber.Texts = "";
@@ -464,6 +467,7 @@
             txtModel.Name = "txtModel";
             txtModel.Padding = new Padding(7);
             txtModel.PasswordChar = false;
+            txtModel.PlaceHolder = "";
             txtModel.Size = new Size(275, 36);
             txtModel.TabIndex = 6;
             txtModel.Texts = "";
@@ -513,6 +517,7 @@
             txtLicensePlate.Name = "txtLicensePlate";
             txtLicensePlate.Padding = new Padding(7);
             txtLicensePlate.PasswordChar = false;
+            txtLicensePlate.PlaceHolder = "";
             txtLicensePlate.Size = new Size(843, 36);
             txtLicensePlate.TabIndex = 1;
             txtLicensePlate.Texts = "";
@@ -531,10 +536,10 @@
             // 
             tabPage2.Controls.Add(groupBox1);
             tabPage2.Controls.Add(gpbInsecure);
-            tabPage2.Location = new Point(4, 24);
+            tabPage2.Location = new Point(4, 26);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1011, 494);
+            tabPage2.Size = new Size(1011, 492);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Seguro e Manutenção";
             tabPage2.UseVisualStyleBackColor = true;
@@ -547,7 +552,7 @@
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(234, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(774, 488);
+            groupBox1.Size = new Size(774, 486);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Manutenção";
@@ -594,7 +599,7 @@
             gpbInsecure.Dock = DockStyle.Left;
             gpbInsecure.Location = new Point(3, 3);
             gpbInsecure.Name = "gpbInsecure";
-            gpbInsecure.Size = new Size(231, 488);
+            gpbInsecure.Size = new Size(231, 486);
             gpbInsecure.TabIndex = 0;
             gpbInsecure.TabStop = false;
             gpbInsecure.Text = "Informações de Seguro";

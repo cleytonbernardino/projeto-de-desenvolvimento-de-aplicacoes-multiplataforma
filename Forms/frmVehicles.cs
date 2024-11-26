@@ -1,68 +1,66 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
+using ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms;
 using ProjetoDesenvolvimentoAplicacoesMultplataforma.Services;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmVehicles : Form
     {
-        // Classe Dao
         private readonly VehicleService service = new();
 
         public frmVehicles()
         {
             InitializeComponent();
+            LoadLtvVehicles();
         }
 
-        private int GetId()
+        public void AdjustltvVehicleColumns(object? sender, EventArgs e)
         {
-            if (dgvVehicle.Rows.Count == 0)
+            int maxWidth = ltvVehicle.Width;
+            chId.Width =            (int) Math.Round(0.08 * maxWidth);
+            chModel.Width =         (int) Math.Round(0.20 * maxWidth);
+            chLicensePlate.Width =  (int) Math.Round(0.20 * maxWidth);
+            chColor.Width =         (int) Math.Round(0.12 * maxWidth);
+            chBrand.Width =         (int) Math.Round(0.20 * maxWidth);
+            chRented.Width =        (int) Math.Round(0.20 * maxWidth);
+        }
+
+        private void LoadLtvVehicles(string search = "")
+        {
+            List<Vehicle> vehicles;
+            if (string.IsNullOrEmpty(search))
             {
-                MessageBox.Show("Selecione um veiculo primeiro", "Alerta");
-                return -1;
+                vehicles = service.GetVehiclesByPlate(search);
             }
-            try
+            else
             {
-                return int.Parse(dgvVehicle.SelectedCells[0].Value.ToString());
-            } catch
-            {
-                return -1;
+                vehicles = service.GetAllVehicles();
             }
-        }
+            ltvVehicle.Items.Clear();
+            foreach (Vehicle vehicle in vehicles)
+            {
+                ListViewItem item = new();
+                item.Text = vehicle.Id.ToString();
+                item.SubItems.Add(vehicle.Model);
+                item.SubItems.Add(vehicle.LicensePlate);
+                item.SubItems.Add(vehicle.Brand); // Trocar isso para mostrar a validade do aluguel se tiver
+                item.SubItems.Add(vehicle.Color);
+                if (vehicle.RentedBy == 0)
+                {
+                    item.SubItems.Add("Não alugado");
+                }
+                else
+                {
+                    item.SubItems.Add("Alugado");
+                }
 
-        private void loadVehicles()
-        {
-            BindingSource data = new();
-
-            data.DataSource = service.GetAllVehicles();
-            dgvVehicle.DataSource = data;
-            dgvVehicle.Columns[0].Visible = false;
-        }
-
-        private void UpdateDgv()
-        {
-            BindingSource data = new();
-
-            string licensePlate = txtSearch.Texts;
-            data.DataSource = service.GetVehiclesByPlate(licensePlate);
-            dgvVehicle.DataSource = data;
-        }
-
-        private void dgvVehicle_Layout(object sender, LayoutEventArgs e)
-        {
-            loadVehicles();
-        }
-
-        private void dgvVehicle_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int id = GetId();
-            if (id == -1) return;
-            frmVehicle frm = new(id);
-            frm.Show();
+                ltvVehicle.Items.Add(item);
+            }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            UpdateDgv();
+            LoadLtvVehicles(txtSearch.Texts);
         }
 
         private void txtSearch__TextChanged(object sender, EventArgs e)
@@ -72,7 +70,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void tmrSearch_Tick(object sender, EventArgs e)
         {
-            UpdateDgv();
+            LoadLtvVehicles(txtSearch.Texts);
             tmrSearch.Stop();
         }
 
@@ -84,21 +82,25 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            int id = GetId();
-            if (id == -1) return;
+            if (ltvVehicle.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Selecione um veiculo primeiro", "Alerta");
+                return;
+            }
+            int id = int.Parse(ltvVehicle.SelectedItems[0].Text);
             frmVehicle frm = new(id);
             frm.Show();
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnRent_Click(object sender, EventArgs e)
         {
-            int id = GetId();
-            if (id == -1) return;
+            frmRented frm = new();
+            frm.Show(); // Mudar para dialog dps
+        }
 
-            DialogResult resp =  MessageBox.Show("Deseja mesmo excluir esse veiculo? Essa operação é inreversivel", "CUIDADO", MessageBoxButtons.YesNoCancel);
-            if (resp == DialogResult.No || resp == DialogResult.Cancel) return;
-
-            service.DeleteVehicleById(id);
+        private void ltvVehicle_DoubleClick(object sender, EventArgs e)
+        {
+            btnEdit.PerformClick();
         }
     }
 }

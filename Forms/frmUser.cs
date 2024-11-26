@@ -47,6 +47,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             btnViolationAdd.Enabled = true;
             listView2.Enabled = true;
             btnRentalRecordAdd.Enabled = true;
+
+            ptbAddBalance.Visible = true;
             LoadLtvViolation();
         }
 
@@ -54,9 +56,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         {
             ltvViolation.Items.Clear();
             ListViewItem lvItem;
-            List<ViolationDao.Penalty> violations = _service.GetPenaltysByOwnerId(_id);
+            List<Violation> violations = _service.GetPenaltysByOwnerId(_id);
 
-            foreach (ViolationDao.Penalty violation in violations)
+            foreach (Violation violation in violations)
             {
                 lvItem = new ListViewItem(violation.Id.ToString());
                 lvItem.SubItems.Add(violation.Name);
@@ -109,10 +111,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             txtViolationType.Focus();
         }
 
-        private List<ViolationDao.Penalty> SaveViolations()
+        private List<Violation> SaveViolations()
         {
             int id;
-            List<ViolationDao.Penalty> violationsList = new();
+            List<Violation> violationsList = new();
 
             foreach (ListViewItem violationItem in ltvViolation.Items)
             {
@@ -125,13 +127,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                     id = 0;
                 }
 
-                ViolationDao.Penalty violation = new()
-                        {
-                            Id = id,
-                            OwnerId = _id,
-                            Name = violationItem.SubItems[1].Text,
-                            Cost = float.Parse(violationItem.SubItems[2].Text),
-                        };
+                Violation violation = new()
+                {
+                    Id = id,
+                    OwnerId = _id,
+                    Name = violationItem.SubItems[1].Text,
+                    Cost = float.Parse(violationItem.SubItems[2].Text),
+                };
                 violationsList.Add(violation);
             }
             return violationsList;
@@ -180,7 +182,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void Save()
         {
-            List<ViolationDao.Penalty> violations = SaveViolations();
+            List<Violation> violations = SaveViolations();
             int id = _service.Save(
                 _id,
                 txtFirstName.Texts,
@@ -188,6 +190,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 txtEmail.Texts,
                 mkbCPF.Texts,
                 mkbCNH.Texts.Substring(3, 9), // Ignora os zeros, talvez mudar no banco de dados para suportar
+                double.Parse(lblBalanceValue.Text),
                 dtpDateOfBirth.Value,
                 violations,
                 _violationToBeRemoved
@@ -263,6 +266,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         {
             if (!IsViolationSelected(false)) return;
             LoadViolationToEdit();
+        }
+
+        private void ptbAddBalance_Click(object sender, EventArgs e)
+        {
+            Forms.MessageBox.BalanceToBeAdd balanceDialog = new();
+            if (balanceDialog.ShowDialog() == DialogResult.Cancel) return;
+
+            double balance = double.Parse(lblBalanceValue.Text);
+            balance += balanceDialog.Value;
+            lblBalanceValue.Text = balance.ToString();
         }
     }
 }

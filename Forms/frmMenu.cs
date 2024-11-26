@@ -2,6 +2,8 @@
 {
     public partial class frmMenu : Form
     {
+        public event EventHandler? ResizedWindow;
+
         public frmMenu()
         {
             InitializeComponent();
@@ -42,6 +44,7 @@
             pcbRestore.Visible = true;
             pcbMaximize.Visible = false;
             this.WindowState = FormWindowState.Maximized;
+            ResizedWindow?.Invoke(this, EventArgs.Empty);
         }
 
         private void pcbRestore_Click(object sender, EventArgs e)
@@ -49,6 +52,7 @@
             pcbRestore.Visible = false;
             pcbMaximize.Visible = true;
             this.WindowState = FormWindowState.Normal;
+            ResizedWindow?.Invoke(this, EventArgs.Empty);
         }
 
         private void pcbMinimize_Click(object sender, EventArgs e)
@@ -58,7 +62,8 @@
 
         private void btnVehicleList_Click(object sender, EventArgs e)
         {
-            Form frm = new frmVehicles();
+            frmVehicles frm = new();
+            ResizedWindow += frm.AdjustltvVehicleColumns;
             OpenForm(frm);
         }
 

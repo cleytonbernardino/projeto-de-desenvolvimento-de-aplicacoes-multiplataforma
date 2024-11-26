@@ -9,28 +9,29 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         private readonly string _connectionString = DotNetEnv.Env.GetString("Connection_String");
 
         // Comando Select
-        private const string select = "SELECT * FROM tbl_vehicle WHERE id=@id;";
+        private const string _select = "SELECT * FROM tbl_vehicle WHERE id=@id;";
 
         // Comando List
-        private const string list = "SELECT id, License_plate as Placa, Mileage, Color, Brand, Model, Renavam FROM tbl_vehicle";
+        private const string _list = "SELECT id, License_plate, Mileage, Color, Brand, Model, Rented_by, Rental_expiration FROM tbl_vehicle";
 
         // Comando List com like
-        private const string serch = "SELECT License_plate as Placa, Mileage, Color, Brand, Model, Renavam FROM tbl_vehicle WHERE License_plate LIKE @License_plate";
+        private const string _search = "SELECT id, License_plate, Mileage, Color, Brand, Model, Rented_by, Rental_expiration FROM tbl_vehicle" +
+            " WHERE License_plate LIKE @License_plate";
 
         // Comando Insert
-        private const string insert = "INSERT INTO tbl_vehicle (" +
+        private const string _insert = "INSERT INTO tbl_vehicle (" +
             "License_plate, Brand, Model, Model_year, Chassis_number, Renavam, Color, Fuel_type, Mileage, Air_conditioning, Electric_windows, Electric_locks, Licensed, Direction" +
             ") VALUES (@License_plate, @Brand, @Model, @Model_year, @Chassis_number, @Renavam, @Color, @Fuel_type, @Mileage, @Air_conditioning, @Electric_windows, @Electric_locks, @Licensed, @Direction);" +
             "SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
         // Comando Update
-        private const string update = "UPDATE tbl_vehicle SET " +
+        private const string _update = "UPDATE tbl_vehicle SET " +
             "License_plate=@License_plate, Brand=@Brand, Model=@Model, Model_year=@Model_year, Chassis_number=@Chassis_number, Renavam=@Renavam, Color=@Color, Fuel_type=@Fuel_type," +
             "Mileage=@Mileage, Air_conditioning=@Air_conditioning, Electric_windows=@Electric_windows, Electric_locks=@Electric_locks, Licensed=@Licensed, Direction=@Direction " +
             "WHERE id=@id";
 
         // Comando Delete
-        private const string delete = "DELETE FROM tbl_vehicle WHERE id=@id;";
+        private const string _delete = "DELETE FROM tbl_vehicle WHERE id=@id;";
 
         // Refazer isso para deixar somente que ele crie a tabela ao inves de copiar o django
         private void InitBD()
@@ -77,7 +78,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         {
             using (SqlConnection conn = new(_connectionString))
             {
-                using (SqlCommand cmd = new(select, conn))
+                using (SqlCommand cmd = new(_select, conn))
                 {
                     conn.Open();
                     try
@@ -111,43 +112,70 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public DataTable Listar()
+        public List<Vehicle> Listar()
         {
-            DataTable dt = new DataTable();
+            List<Vehicle> vehicles = new();
             using (SqlConnection conn = new(_connectionString))
             {
-                conn.Open();
-                using(SqlCommand cmd = new SqlCommand(list, conn))
+                using(SqlCommand cmd = new(_list, conn))
                 {
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    da.Fill(dt);
+                    conn.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int rentedBy = reader.GetInt32("Rented_by");
+                        Vehicle vehicle = new()
+                        {
+                            Id = reader.GetInt32("id"),
+                            RentedBy = rentedBy,
+                            LicensePlate = reader.GetString("License_plate"),
+                            Color = reader.GetString("Color"),
+                            Brand = reader.GetString("Brand"),
+                            Model = reader.GetString("Model"),
+                        };
+                        if (rentedBy > 0) vehicle.RentalExpiration = reader.GetDateTime("Rental_expiration");
+                        vehicles.Add(vehicle);
+                    }
                 }
             }
-            return dt;
+            return vehicles;
         }
 
-        public DataTable Search(string licensePlate)
+        public List<Vehicle> Search(string licensePlate)
         {
-            DataTable dt = new DataTable();
-            SqlDataAdapter da;
+            List<Vehicle> vehicles = new();
             using (SqlConnection conn = new(_connectionString))
             {
-                using (SqlCommand cmd = new(serch, conn))
+                using (SqlCommand cmd = new(_search, conn))
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@License_plate", licensePlate + "%");
-                    da = new SqlDataAdapter(cmd);
-                    da.Fill(dt);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int rentedBy = reader.GetInt32("Rented_by");
+                        Vehicle vehicle = new()
+                        {
+                            Id = reader.GetInt32("id"),
+                            RentedBy = rentedBy,
+                            LicensePlate = reader.GetString("License_plate"),
+                            Color = reader.GetString("Color"),
+                            Brand = reader.GetString("Brand"),
+                            Model = reader.GetString("Model"),
+                        };
+                        if (rentedBy > 0) vehicle.RentalExpiration = reader.GetDateTime("Rental_expiration");
+                        vehicles.Add(vehicle);
+                    }
                 }
             }
-            return dt;
+            return vehicles;
         }
 
         public int Save(Vehicle vehicle)
         {
             using (SqlConnection conn = new(_connectionString))
             {
-                using (SqlCommand cmd = new(insert, conn))
+                using (SqlCommand cmd = new(_insert, conn))
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@License_plate", vehicle.LicensePlate);
@@ -182,7 +210,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         {
             using (SqlConnection conn = new(_connectionString))
             {
-                using (SqlCommand cmd = new(update, conn))
+                using (SqlCommand cmd = new(_update, conn))
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@id", vehicle.Id);
@@ -218,7 +246,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         {
             using (SqlConnection conn = new(_connectionString))
             {
-                using (SqlCommand cmd = new(delete, conn))
+                using (SqlCommand cmd = new(_delete, conn))
                 {
                     conn.Open();
                     cmd.Parameters.AddWithValue("@id", id);

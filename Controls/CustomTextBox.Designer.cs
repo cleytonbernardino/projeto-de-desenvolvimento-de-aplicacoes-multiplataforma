@@ -41,6 +41,7 @@
             textBox.TabIndex = 0;
             textBox.TextChanged += textBox_TextChanged;
             textBox.Enter += textBox_Enter;
+            textBox.KeyPress += textBox_KeyPress;
             textBox.Leave += textBox_Leave;
             textBox.MouseEnter += textBox_MouseEnter;
             textBox.MouseLeave += textBox_MouseLeave;

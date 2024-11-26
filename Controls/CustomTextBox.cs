@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
+
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
 {
@@ -28,6 +21,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
         }
         // Events
         public event EventHandler _TextChanged;
+        public event KeyPressEventHandler _KeyPress;
 
 
         // Properties
@@ -36,6 +30,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
 
         [Category("Additional Features")]
         public bool MultLine { get => textBox.Multiline; set => textBox.Multiline = value; }
+        [Category("Additional Features")]
+        public bool ReadOnly { get => textBox.ReadOnly; set => textBox.ReadOnly = value; }
 
         [Category("Additional Features")]
         public int MaxLenght { get => textBox.MaxLength; set => textBox.MaxLength = value; }
@@ -140,7 +136,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
         }
 
         [Category("Additional Features")]
-        public string PlaceHolder { 
+        public string PlaceHolder
+        {
             get => textBox.PlaceholderText;
             set
             {
@@ -158,7 +155,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
             using (Pen penBorder = new Pen(borderColor, borderSize))
             {
                 penBorder.Alignment = System.Drawing.Drawing2D.PenAlignment.Inset;
-                
+
                 if (isFocused)
                 {
                     penBorder.Color = borderFocusColor;
@@ -205,13 +202,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
             }
         }
 
-        private void textBox_TextChanged(object sender, EventArgs e)
-        {
-            if (_TextChanged != null)
-            {
-                _TextChanged(sender, e);
-            }
-        }
+        private void textBox_TextChanged(object sender, EventArgs e) => _TextChanged?.Invoke(sender, e);
+        private void textBox_KeyPress(object sender, KeyPressEventArgs e) => _KeyPress?.Invoke(sender, e);
 
         private void textBox_MouseEnter(object sender, EventArgs e)
         {
@@ -234,6 +226,5 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
             isFocused = false;
             this.Invalidate();
         }
-
     }
 }

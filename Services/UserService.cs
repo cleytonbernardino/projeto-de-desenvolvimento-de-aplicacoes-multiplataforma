@@ -16,9 +16,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             string email,
             string cpf,
             string cnh,
+            double balance,
             DateTime birtyDay,
-            List<ViolationDao.Penalty> penaltiesToBeAdded,
-            List<int> penaltiesToBeRemoved
+            List<Violation> violations,
+            List<int> violationsToBeRemoved
         )
         {
             User user = new()
@@ -30,7 +31,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
                 BirtyDay = birtyDay,
                 CPF = cpf,
                 CNH = cnh,
-                Balance = 0
+                Balance = balance
             };
             if (id == 0)
             {
@@ -41,7 +42,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             }
 
             SavePenalty(
-                penaltiesToBeAdded, penaltiesToBeRemoved
+                violations, violationsToBeRemoved
             );
             _dao.Update(user);
             return 0;
@@ -62,7 +63,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             return _dao.Search(name);
         }
 
-        public List<ViolationDao.Penalty> GetPenaltysByOwnerId(int ownerId)
+        public List<Violation> GetPenaltysByOwnerId(int ownerId)
         {
             return _daoPenalty.Select(ownerId);
         }
@@ -72,18 +73,33 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             return _dao.Delete(id);
         }
 
-        private void SavePenalty(
-            List<ViolationDao.Penalty> violations,
+        public double GetNewBalance(int id, List<Violation> violations)
+        {
+            User user = GetUserById(id);
+            if (user == null) throw new Exception("User not exist");
+            if (violations.Count > 0) return 0;
+
+            double amount = user.Balance;
+            foreach (Violation violation in violations)
+            {
+                amount -= violation.Cost;
+            }
+            return amount;
+        }
+
+    private void SavePenalty(
+            List<Violation> violations,
             List<int> violationsToBeRemoved
         )
         {
-            List<ViolationDao.Penalty> violationsToBeAdded = new();
-            List<ViolationDao.Penalty> violationsToBeUpdated = new();
+            List<Violation> violationsToBeAdded = new();
+            List<Violation> violationsToBeUpdated = new();
             if (violations.Count > 0)
             {
-                foreach (ViolationDao.Penalty violation in violations)
+                foreach (Violation violation in violations)
                 {
-                    if (violation.Id != 0) {
+                    if (violation.Id != 0)
+                    {
                         violationsToBeUpdated.Add(violation);
                         continue;
                     };

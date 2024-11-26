@@ -35,6 +35,7 @@
             txtLastName = new CustomControls.CustomTextBox();
             lblLastName = new Label();
             panel1 = new Panel();
+            ptbAddBalance = new PictureBox();
             lblBalanceValue = new Label();
             lblBalanceText = new Label();
             btnClose = new CustomControls.CustomButton();
@@ -65,6 +66,7 @@
             lblEmail = new Label();
             btnEditViolation = new CustomControls.CustomButton();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ptbAddBalance).BeginInit();
             cmsPenalty.SuspendLayout();
             SuspendLayout();
             // 
@@ -80,8 +82,8 @@
             // txtFirstName
             // 
             txtFirstName.BackColor = Color.White;
-            txtFirstName.BorderColor = Color.DeepSkyBlue;
-            txtFirstName.BorderFocusColor = Color.AliceBlue;
+            txtFirstName.BorderColor = Color.SeaGreen;
+            txtFirstName.BorderFocusColor = Color.PaleGreen;
             txtFirstName.BorderSize = 2;
             txtFirstName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtFirstName.Location = new Point(91, 60);
@@ -95,13 +97,13 @@
             txtFirstName.Size = new Size(316, 36);
             txtFirstName.TabIndex = 1;
             txtFirstName.Texts = "";
-            txtFirstName.UnderlineStyle = false;
+            txtFirstName.UnderlineStyle = true;
             // 
             // txtLastName
             // 
             txtLastName.BackColor = Color.White;
-            txtLastName.BorderColor = Color.DeepSkyBlue;
-            txtLastName.BorderFocusColor = Color.AliceBlue;
+            txtLastName.BorderColor = Color.SeaGreen;
+            txtLastName.BorderFocusColor = Color.PaleGreen;
             txtLastName.BorderSize = 2;
             txtLastName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtLastName.Location = new Point(532, 60);
@@ -115,7 +117,7 @@
             txtLastName.Size = new Size(455, 36);
             txtLastName.TabIndex = 3;
             txtLastName.Texts = "";
-            txtLastName.UnderlineStyle = false;
+            txtLastName.UnderlineStyle = true;
             // 
             // lblLastName
             // 
@@ -129,6 +131,7 @@
             // panel1
             // 
             panel1.BackColor = Color.SeaGreen;
+            panel1.Controls.Add(ptbAddBalance);
             panel1.Controls.Add(lblBalanceValue);
             panel1.Controls.Add(lblBalanceText);
             panel1.Controls.Add(btnClose);
@@ -139,6 +142,18 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1024, 53);
             panel1.TabIndex = 4;
+            // 
+            // ptbAddBalance
+            // 
+            ptbAddBalance.Cursor = Cursors.Hand;
+            ptbAddBalance.Image = (Image)resources.GetObject("ptbAddBalance.Image");
+            ptbAddBalance.Location = new Point(129, 5);
+            ptbAddBalance.Name = "ptbAddBalance";
+            ptbAddBalance.Size = new Size(32, 32);
+            ptbAddBalance.TabIndex = 6;
+            ptbAddBalance.TabStop = false;
+            ptbAddBalance.Visible = false;
+            ptbAddBalance.Click += ptbAddBalance_Click;
             // 
             // lblBalanceValue
             // 
@@ -241,8 +256,8 @@
             // mkbCPF
             // 
             mkbCPF.BackColor = Color.White;
-            mkbCPF.BorderColor = Color.DeepSkyBlue;
-            mkbCPF.BorderFocusColor = Color.AliceBlue;
+            mkbCPF.BorderColor = Color.SeaGreen;
+            mkbCPF.BorderFocusColor = Color.PaleGreen;
             mkbCPF.BorderSize = 2;
             mkbCPF.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             mkbCPF.Location = new Point(421, 123);
@@ -253,13 +268,13 @@
             mkbCPF.TabIndex = 6;
             mkbCPF.TextMask = "000.000.000-00";
             mkbCPF.Texts = "   .   .   -";
-            mkbCPF.UnderlineStyle = false;
+            mkbCPF.UnderlineStyle = true;
             // 
             // mkbCNH
             // 
             mkbCNH.BackColor = Color.White;
-            mkbCNH.BorderColor = Color.DeepSkyBlue;
-            mkbCNH.BorderFocusColor = Color.AliceBlue;
+            mkbCNH.BorderColor = Color.SeaGreen;
+            mkbCNH.BorderFocusColor = Color.PaleGreen;
             mkbCNH.BorderSize = 2;
             mkbCNH.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             mkbCNH.Location = new Point(754, 123);
@@ -270,7 +285,7 @@
             mkbCNH.TabIndex = 8;
             mkbCNH.TextMask = "000000000000";
             mkbCNH.Texts = "";
-            mkbCNH.UnderlineStyle = false;
+            mkbCNH.UnderlineStyle = true;
             // 
             // lblCNH
             // 
@@ -367,8 +382,8 @@
             // txtViolationType
             // 
             txtViolationType.BackColor = Color.White;
-            txtViolationType.BorderColor = Color.DeepSkyBlue;
-            txtViolationType.BorderFocusColor = Color.AliceBlue;
+            txtViolationType.BorderColor = Color.SeaGreen;
+            txtViolationType.BorderFocusColor = Color.PaleGreen;
             txtViolationType.BorderSize = 2;
             txtViolationType.Enabled = false;
             txtViolationType.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -383,7 +398,7 @@
             txtViolationType.Size = new Size(204, 36);
             txtViolationType.TabIndex = 13;
             txtViolationType.Texts = "";
-            txtViolationType.UnderlineStyle = false;
+            txtViolationType.UnderlineStyle = true;
             // 
             // btnViolationAdd
             // 
@@ -426,8 +441,8 @@
             // txtViolationValue
             // 
             txtViolationValue.BackColor = Color.White;
-            txtViolationValue.BorderColor = Color.DeepSkyBlue;
-            txtViolationValue.BorderFocusColor = Color.AliceBlue;
+            txtViolationValue.BorderColor = Color.SeaGreen;
+            txtViolationValue.BorderFocusColor = Color.PaleGreen;
             txtViolationValue.BorderSize = 2;
             txtViolationValue.Enabled = false;
             txtViolationValue.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -442,7 +457,7 @@
             txtViolationValue.Size = new Size(105, 36);
             txtViolationValue.TabIndex = 21;
             txtViolationValue.Texts = "";
-            txtViolationValue.UnderlineStyle = false;
+            txtViolationValue.UnderlineStyle = true;
             // 
             // btnRentalRecordAdd
             // 
@@ -466,8 +481,8 @@
             // txtEmail
             // 
             txtEmail.BackColor = Color.White;
-            txtEmail.BorderColor = Color.DeepSkyBlue;
-            txtEmail.BorderFocusColor = Color.AliceBlue;
+            txtEmail.BorderColor = Color.SeaGreen;
+            txtEmail.BorderFocusColor = Color.PaleGreen;
             txtEmail.BorderSize = 2;
             txtEmail.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtEmail.Location = new Point(120, 192);
@@ -481,7 +496,7 @@
             txtEmail.Size = new Size(860, 36);
             txtEmail.TabIndex = 23;
             txtEmail.Texts = "";
-            txtEmail.UnderlineStyle = false;
+            txtEmail.UnderlineStyle = true;
             // 
             // lblEmail
             // 
@@ -545,6 +560,7 @@
             Text = "Cadastrar Usuario";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)ptbAddBalance).EndInit();
             cmsPenalty.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -588,5 +604,6 @@
         private ToolStripMenuItem editarToolStripMenuItem;
         private ToolStripMenuItem apagarToolStripMenuItem;
         private CustomControls.CustomButton btnEditViolation;
+        private PictureBox ptbAddBalance;
     }
 }
