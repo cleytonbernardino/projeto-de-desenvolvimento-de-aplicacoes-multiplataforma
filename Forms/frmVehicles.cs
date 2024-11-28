@@ -17,12 +17,12 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         public void AdjustltvVehicleColumns(object? sender, EventArgs e)
         {
             int maxWidth = ltvVehicle.Width;
-            chId.Width =            (int) Math.Round(0.08 * maxWidth);
-            chModel.Width =         (int) Math.Round(0.20 * maxWidth);
-            chLicensePlate.Width =  (int) Math.Round(0.20 * maxWidth);
-            chColor.Width =         (int) Math.Round(0.12 * maxWidth);
-            chBrand.Width =         (int) Math.Round(0.20 * maxWidth);
-            chRented.Width =        (int) Math.Round(0.20 * maxWidth);
+            chId.Width =               (int) Math.Round(0.08 * maxWidth);
+            chModel.Width =            (int) Math.Round(0.20 * maxWidth);
+            chLicensePlate.Width =     (int) Math.Round(0.20 * maxWidth);
+            chColor.Width =            (int) Math.Round(0.12 * maxWidth);
+            chDailyVehicleRate.Width = (int) Math.Round(0.20 * maxWidth);
+            chRented.Width =           (int) Math.Round(0.20 * maxWidth);
         }
 
         private void LoadLtvVehicles(string search = "")
@@ -43,7 +43,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 item.Text = vehicle.Id.ToString();
                 item.SubItems.Add(vehicle.Model);
                 item.SubItems.Add(vehicle.LicensePlate);
-                item.SubItems.Add(vehicle.Brand); // Trocar isso para mostrar a validade do aluguel se tiver
+                item.SubItems.Add(vehicle.DailyVehicleRate.ToString());
                 item.SubItems.Add(vehicle.Color);
                 if (vehicle.RentedBy == 0)
                 {
@@ -94,8 +94,14 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnRent_Click(object sender, EventArgs e)
         {
-            frmRented frm = new();
-            frm.Show(); // Mudar para dialog dps
+            if (ltvVehicle.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Selecione um veiculo primeiro", "Alerta");
+                return;
+            }
+            int id = int.Parse(ltvVehicle.SelectedItems[0].Text);
+            frmRented frm = new(id);
+            frm.ShowDialog();
         }
 
         private void ltvVehicle_DoubleClick(object sender, EventArgs e)

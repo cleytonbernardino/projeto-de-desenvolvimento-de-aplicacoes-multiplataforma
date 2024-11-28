@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
 {
@@ -29,6 +21,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
         }
         // Events
         public event EventHandler _TextChanged;
+        public event KeyPressEventHandler KeyPress_;
+        public event KeyEventHandler KeyDown_;
 
         // Properties
         [Category("Additional Features")]
@@ -145,6 +139,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
                 }
             }
         }
+
+        private void maskedTextBox1_TextChanged(object sender, EventArgs e) => _TextChanged?.Invoke(sender, e);
+        private void maskedTextBox1_KeyPress(object sender, KeyPressEventArgs e) => KeyPress_?.Invoke(sender, e);
+        private void maskedTextBox1_KeyDown(object sender, KeyEventArgs e) => KeyDown_?.Invoke(sender, e);
 
         private void maskedTextBox1_Enter(object sender, EventArgs e)
         {

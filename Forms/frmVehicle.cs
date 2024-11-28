@@ -31,8 +31,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 MessageBox.Show("Erro ao exibir os dados do veículo", "Erro");
                 this.Dispose();
             }
+            _id = id;
             txtLicensePlate.Texts = vehicle.LicensePlate;
             txtChassiNumber.Texts = vehicle.ChassiNumber;
+            txtDailyVehicleRate.Texts = vehicle.DailyVehicleRate.ToString();
             txtColor.Texts = vehicle.Color;
             txtModel.Texts = vehicle.Model;
             mkbRenavam.Texts = vehicle.Renavam;
@@ -40,7 +42,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             cbxBrand.Text = vehicle.Brand;
             cbxFuelType.Text = vehicle.FuelType;
 
-            nupMileage.Value = vehicle.Mileage;
+            txtMileage.Texts = vehicle.Mileage.ToString();
 
             cbAr.Checked = vehicle.AirConditioning;
             cbEletricGlass.Checked = vehicle.EletricWindows;
@@ -123,7 +125,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         // Impede que o input funcione
         private void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         // Faz com que ao selecionar seguro total todas as opção seja marcadas
@@ -157,16 +159,17 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 Renavam = mkbRenavam.Texts,
                 Model = txtModel.Texts,
                 ChassiNumber = txtChassiNumber.Texts,
+                DailyVehicleRate = double.Parse(txtDailyVehicleRate.Texts),
                 Color = txtColor.Texts,
                 FuelType = cbxFuelType.Text,
                 Direction = direction,
                 Obs = txtObs.Texts,
-                Mileage = int.Parse(nupMileage.Value.ToString()),
+                Mileage = int.Parse(txtMileage.Texts.ToString()),
                 Licensed = cbLincense.Checked,
                 AirConditioning = cbAr.Checked,
                 EletricWindows = cbEletricGlass.Checked,
                 EletricLocks = cbEletricLocks.Checked,
-                ModelYear = dtpModelYear.Value.Date,
+                ModelYear = dtpModelYear.Value.Date ,
             };
 
             int id = service.Save(vehicle);
@@ -186,19 +189,42 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void btnDelete_Click(object sender, EventArgs e)
         {
             DialogResult resp = MessageBox.Show("Deseja mesmo excluir esse veiculo?", "Cuidado", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-            if (resp != DialogResult.Yes) return; 
+            if (resp != DialogResult.Yes) return;
 
             if (_id == 0)
             {
                 this.Dispose();
             }
-            if(service.DeleteVehicleById(_id)) MessageBox.Show("Naõ foi possivel excluir", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (service.DeleteVehicleById(_id)) MessageBox.Show("Naõ foi possivel excluir", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             this.Dispose();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Dispose();
+        }
+
+        private void frmVehicle_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S) btnSave.PerformClick();
+            if (e.Control && e.KeyCode == Keys.Delete) btnDelete.PerformClick();
+            if (e.KeyCode == Keys.Escape) btnClose.PerformClick();
+        }
+
+        private void txtDailyVehicleRate__KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != ','))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtKm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

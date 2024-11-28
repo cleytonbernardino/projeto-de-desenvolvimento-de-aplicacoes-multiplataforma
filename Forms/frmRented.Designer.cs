@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             ltvRecord = new ListView();
-            txtCPF = new CustomControls.CustonMaskedBox();
+            mkbCPF = new CustomControls.CustonMaskedBox();
             customButton1 = new CustomControls.CustomButton();
-            customTextBox1 = new CustomControls.CustomTextBox();
+            txtLicensePlate = new CustomControls.CustomTextBox();
             dateTimePicker1 = new DateTimePicker();
             label1 = new Label();
             label2 = new Label();
@@ -40,33 +40,40 @@
             customButton2 = new CustomControls.CustomButton();
             customButton3 = new CustomControls.CustomButton();
             label5 = new Label();
-            dateTimePicker2 = new DateTimePicker();
+            dtpReturnDay = new DateTimePicker();
+            label6 = new Label();
+            label7 = new Label();
+            lblName = new Label();
+            txtName = new CustomControls.CustomTextBox();
             SuspendLayout();
             // 
             // ltvRecord
             // 
-            ltvRecord.Location = new Point(12, 225);
+            ltvRecord.Location = new Point(12, 514);
             ltvRecord.Name = "ltvRecord";
-            ltvRecord.Size = new Size(429, 273);
+            ltvRecord.Size = new Size(474, 35);
             ltvRecord.TabIndex = 0;
             ltvRecord.UseCompatibleStateImageBehavior = false;
             // 
-            // txtCPF
+            // mkbCPF
             // 
-            txtCPF.BackColor = Color.White;
-            txtCPF.BorderColor = Color.DeepSkyBlue;
-            txtCPF.BorderFocusColor = Color.AliceBlue;
-            txtCPF.BorderSize = 2;
-            txtCPF.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtCPF.Location = new Point(13, 93);
-            txtCPF.Margin = new Padding(4);
-            txtCPF.Name = "txtCPF";
-            txtCPF.Padding = new Padding(7);
-            txtCPF.Size = new Size(232, 30);
-            txtCPF.TabIndex = 1;
-            txtCPF.TextMask = "000.000.000-00";
-            txtCPF.Texts = "   .   .   -";
-            txtCPF.UnderlineStyle = false;
+            mkbCPF.BackColor = Color.White;
+            mkbCPF.BorderColor = Color.SeaGreen;
+            mkbCPF.BorderFocusColor = Color.PaleGreen;
+            mkbCPF.BorderSize = 2;
+            mkbCPF.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            mkbCPF.Location = new Point(13, 93);
+            mkbCPF.Margin = new Padding(4);
+            mkbCPF.Name = "mkbCPF";
+            mkbCPF.Padding = new Padding(7);
+            mkbCPF.Size = new Size(232, 30);
+            mkbCPF.TabIndex = 0;
+            mkbCPF.TextMask = "000.000.000-00";
+            mkbCPF.Texts = "   .   .   -";
+            mkbCPF.UnderlineStyle = true;
+            mkbCPF._TextChanged += mkbCPF__TextChanged;
+            mkbCPF.Enter += mkbCPF_Enter;
+            mkbCPF.Leave += txtCPF_Leave;
             // 
             // customButton1
             // 
@@ -78,7 +85,7 @@
             customButton1.FlatAppearance.BorderSize = 0;
             customButton1.FlatStyle = FlatStyle.Flat;
             customButton1.ForeColor = Color.Black;
-            customButton1.Location = new Point(291, 12);
+            customButton1.Location = new Point(316, 7);
             customButton1.Name = "customButton1";
             customButton1.Size = new Size(150, 40);
             customButton1.TabIndex = 2;
@@ -86,31 +93,31 @@
             customButton1.TextColor = Color.Black;
             customButton1.UseVisualStyleBackColor = false;
             // 
-            // customTextBox1
+            // txtLicensePlate
             // 
-            customTextBox1.BackColor = Color.White;
-            customTextBox1.BorderColor = Color.DeepSkyBlue;
-            customTextBox1.BorderFocusColor = Color.AliceBlue;
-            customTextBox1.BorderSize = 2;
-            customTextBox1.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            customTextBox1.Location = new Point(13, 24);
-            customTextBox1.Margin = new Padding(4);
-            customTextBox1.MaxLenght = 32767;
-            customTextBox1.MultLine = false;
-            customTextBox1.Name = "customTextBox1";
-            customTextBox1.Padding = new Padding(7);
-            customTextBox1.PasswordChar = false;
-            customTextBox1.PlaceHolder = "";
-            customTextBox1.ReadOnly = true;
-            customTextBox1.Size = new Size(232, 36);
-            customTextBox1.TabIndex = 3;
-            customTextBox1.Texts = "";
-            customTextBox1.UnderlineStyle = false;
+            txtLicensePlate.BackColor = Color.White;
+            txtLicensePlate.BorderColor = Color.SeaGreen;
+            txtLicensePlate.BorderFocusColor = Color.PaleGreen;
+            txtLicensePlate.BorderSize = 2;
+            txtLicensePlate.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtLicensePlate.Location = new Point(13, 24);
+            txtLicensePlate.Margin = new Padding(4);
+            txtLicensePlate.MaxLenght = 32767;
+            txtLicensePlate.MultLine = false;
+            txtLicensePlate.Name = "txtLicensePlate";
+            txtLicensePlate.Padding = new Padding(7);
+            txtLicensePlate.PasswordChar = false;
+            txtLicensePlate.PlaceHolder = "";
+            txtLicensePlate.ReadOnly = true;
+            txtLicensePlate.Size = new Size(232, 36);
+            txtLicensePlate.TabIndex = 1;
+            txtLicensePlate.Texts = "";
+            txtLicensePlate.UnderlineStyle = true;
             // 
             // dateTimePicker1
             // 
             dateTimePicker1.Format = DateTimePickerFormat.Short;
-            dateTimePicker1.Location = new Point(13, 160);
+            dateTimePicker1.Location = new Point(14, 315);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(129, 25);
             dateTimePicker1.TabIndex = 4;
@@ -118,7 +125,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(13, 140);
+            label1.Location = new Point(14, 295);
             label1.Name = "label1";
             label1.Size = new Size(88, 17);
             label1.TabIndex = 5;
@@ -145,7 +152,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(145, 205);
+            label4.Location = new Point(153, 480);
             label4.Name = "label4";
             label4.Size = new Size(176, 17);
             label4.TabIndex = 8;
@@ -161,7 +168,7 @@
             customButton2.FlatAppearance.BorderSize = 0;
             customButton2.FlatStyle = FlatStyle.Flat;
             customButton2.ForeColor = Color.Black;
-            customButton2.Location = new Point(291, 108);
+            customButton2.Location = new Point(316, 103);
             customButton2.Name = "customButton2";
             customButton2.Size = new Size(150, 40);
             customButton2.TabIndex = 9;
@@ -179,7 +186,7 @@
             customButton3.FlatAppearance.BorderSize = 0;
             customButton3.FlatStyle = FlatStyle.Flat;
             customButton3.ForeColor = Color.Black;
-            customButton3.Location = new Point(291, 60);
+            customButton3.Location = new Point(316, 55);
             customButton3.Name = "customButton3";
             customButton3.Size = new Size(150, 40);
             customButton3.TabIndex = 10;
@@ -190,27 +197,80 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(171, 140);
+            label5.Location = new Point(247, 295);
             label5.Name = "label5";
             label5.Size = new Size(32, 17);
             label5.TabIndex = 12;
             label5.Text = "Até";
             // 
-            // dateTimePicker2
+            // dtpReturnDay
             // 
-            dateTimePicker2.Format = DateTimePickerFormat.Short;
-            dateTimePicker2.Location = new Point(171, 160);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(129, 25);
-            dateTimePicker2.TabIndex = 11;
+            dtpReturnDay.Format = DateTimePickerFormat.Short;
+            dtpReturnDay.Location = new Point(247, 315);
+            dtpReturnDay.Name = "dtpReturnDay";
+            dtpReturnDay.Size = new Size(129, 25);
+            dtpReturnDay.TabIndex = 11;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(13, 370);
+            label6.Name = "label6";
+            label6.Size = new Size(184, 17);
+            label6.TabIndex = 13;
+            label6.Text = "Dias até o vencimento:";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(195, 370);
+            label7.Name = "label7";
+            label7.Size = new Size(16, 17);
+            label7.TabIndex = 14;
+            label7.Text = "0";
+            // 
+            // lblName
+            // 
+            lblName.AutoSize = true;
+            lblName.Location = new Point(13, 141);
+            lblName.Name = "lblName";
+            lblName.Size = new Size(264, 17);
+            lblName.TabIndex = 16;
+            lblName.Text = "Nome completo de quem vai alugar";
+            // 
+            // txtName
+            // 
+            txtName.BackColor = Color.White;
+            txtName.BorderColor = Color.FromArgb(93, 181, 245);
+            txtName.BorderFocusColor = Color.PaleGreen;
+            txtName.BorderSize = 2;
+            txtName.Enabled = false;
+            txtName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtName.Location = new Point(13, 162);
+            txtName.Margin = new Padding(4);
+            txtName.MaxLenght = 32767;
+            txtName.MultLine = false;
+            txtName.Name = "txtName";
+            txtName.Padding = new Padding(7);
+            txtName.PasswordChar = false;
+            txtName.PlaceHolder = "Insira o CPF para ver o nome.";
+            txtName.ReadOnly = false;
+            txtName.Size = new Size(453, 36);
+            txtName.TabIndex = 15;
+            txtName.Texts = "";
+            txtName.UnderlineStyle = false;
             // 
             // frmRented
             // 
             AutoScaleDimensions = new SizeF(8F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(456, 510);
+            ClientSize = new Size(498, 561);
+            Controls.Add(lblName);
+            Controls.Add(txtName);
+            Controls.Add(label7);
+            Controls.Add(label6);
             Controls.Add(label5);
-            Controls.Add(dateTimePicker2);
+            Controls.Add(dtpReturnDay);
             Controls.Add(customButton3);
             Controls.Add(customButton2);
             Controls.Add(label4);
@@ -218,9 +278,9 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(dateTimePicker1);
-            Controls.Add(customTextBox1);
+            Controls.Add(txtLicensePlate);
             Controls.Add(customButton1);
-            Controls.Add(txtCPF);
+            Controls.Add(mkbCPF);
             Controls.Add(ltvRecord);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "frmRented";
@@ -232,9 +292,9 @@
         #endregion
 
         private ListView ltvRecord;
-        private CustomControls.CustonMaskedBox txtCPF;
+        private CustomControls.CustonMaskedBox mkbCPF;
         private CustomControls.CustomButton customButton1;
-        private CustomControls.CustomTextBox customTextBox1;
+        private CustomControls.CustomTextBox txtLicensePlate;
         private DateTimePicker dateTimePicker1;
         private Label label1;
         private Label label2;
@@ -243,6 +303,10 @@
         private CustomControls.CustomButton customButton2;
         private CustomControls.CustomButton customButton3;
         private Label label5;
-        private DateTimePicker dateTimePicker2;
+        private DateTimePicker dtpReturnDay;
+        private Label label6;
+        private Label label7;
+        private Label lblName;
+        private CustomControls.CustomTextBox txtName;
     }
 }

@@ -31,13 +31,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVehicle));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            txtMileage = new CustomControls.CustomTextBox();
+            txtDailyVehicleRate = new CustomControls.CustomTextBox();
+            lblDailyVehicleRate = new Label();
             groupBox2 = new GroupBox();
             rbElectroHydraulic = new RadioButton();
             rbElectrical = new RadioButton();
             rbHydraulics = new RadioButton();
             rbMechanic = new RadioButton();
-            nupMileage = new NumericUpDown();
-            lblKm = new Label();
+            lblMileage = new Label();
             gpbDocuments = new GroupBox();
             cbLincense = new CheckBox();
             cbKey = new CheckBox();
@@ -87,7 +89,6 @@
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)nupMileage).BeginInit();
             gpbDocuments.SuspendLayout();
             gpbAddons.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -105,13 +106,15 @@
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(1019, 522);
-            tabControl1.TabIndex = 0;
+            tabControl1.TabIndex = 100;
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(txtMileage);
+            tabPage1.Controls.Add(txtDailyVehicleRate);
+            tabPage1.Controls.Add(lblDailyVehicleRate);
             tabPage1.Controls.Add(groupBox2);
-            tabPage1.Controls.Add(nupMileage);
-            tabPage1.Controls.Add(lblKm);
+            tabPage1.Controls.Add(lblMileage);
             tabPage1.Controls.Add(gpbDocuments);
             tabPage1.Controls.Add(gpbAddons);
             tabPage1.Controls.Add(txtObs);
@@ -140,6 +143,59 @@
             tabPage1.Text = "Informações Basicas";
             tabPage1.UseVisualStyleBackColor = true;
             // 
+            // txtMileage
+            // 
+            txtMileage.BackColor = Color.White;
+            txtMileage.BorderColor = Color.SeaGreen;
+            txtMileage.BorderFocusColor = Color.PaleGreen;
+            txtMileage.BorderSize = 2;
+            txtMileage.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtMileage.Location = new Point(684, 160);
+            txtMileage.Margin = new Padding(4);
+            txtMileage.MaxLenght = 8;
+            txtMileage.MultLine = false;
+            txtMileage.Name = "txtMileage";
+            txtMileage.Padding = new Padding(7);
+            txtMileage.PasswordChar = false;
+            txtMileage.PlaceHolder = "";
+            txtMileage.ReadOnly = false;
+            txtMileage.Size = new Size(155, 36);
+            txtMileage.TabIndex = 8;
+            txtMileage.Texts = "";
+            txtMileage.UnderlineStyle = true;
+            txtMileage.KeyPress += txtKm_KeyPress;
+            // 
+            // txtDailyVehicleRate
+            // 
+            txtDailyVehicleRate.BackColor = Color.White;
+            txtDailyVehicleRate.BorderColor = Color.SeaGreen;
+            txtDailyVehicleRate.BorderFocusColor = Color.PaleGreen;
+            txtDailyVehicleRate.BorderSize = 2;
+            txtDailyVehicleRate.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtDailyVehicleRate.Location = new Point(845, 160);
+            txtDailyVehicleRate.Margin = new Padding(4);
+            txtDailyVehicleRate.MaxLenght = 17;
+            txtDailyVehicleRate.MultLine = false;
+            txtDailyVehicleRate.Name = "txtDailyVehicleRate";
+            txtDailyVehicleRate.Padding = new Padding(7);
+            txtDailyVehicleRate.PasswordChar = false;
+            txtDailyVehicleRate.PlaceHolder = "";
+            txtDailyVehicleRate.ReadOnly = false;
+            txtDailyVehicleRate.Size = new Size(155, 36);
+            txtDailyVehicleRate.TabIndex = 9;
+            txtDailyVehicleRate.Texts = "";
+            txtDailyVehicleRate.UnderlineStyle = true;
+            txtDailyVehicleRate._KeyPress += txtDailyVehicleRate__KeyPress;
+            // 
+            // lblDailyVehicleRate
+            // 
+            lblDailyVehicleRate.AutoSize = true;
+            lblDailyVehicleRate.Location = new Point(845, 138);
+            lblDailyVehicleRate.Name = "lblDailyVehicleRate";
+            lblDailyVehicleRate.Size = new Size(136, 17);
+            lblDailyVehicleRate.TabIndex = 24;
+            lblDailyVehicleRate.Text = "Valor do aluguel";
+            // 
             // groupBox2
             // 
             groupBox2.Controls.Add(rbElectroHydraulic);
@@ -149,7 +205,7 @@
             groupBox2.Location = new Point(699, 219);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(301, 124);
-            groupBox2.TabIndex = 23;
+            groupBox2.TabIndex = 12;
             groupBox2.TabStop = false;
             groupBox2.Text = "Direção";
             // 
@@ -199,22 +255,14 @@
             rbMechanic.UseVisualStyleBackColor = true;
             rbMechanic.CheckedChanged += rbMechanic_CheckedChanged;
             // 
-            // nupMileage
+            // lblMileage
             // 
-            nupMileage.Location = new Point(762, 158);
-            nupMileage.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
-            nupMileage.Name = "nupMileage";
-            nupMileage.Size = new Size(120, 25);
-            nupMileage.TabIndex = 22;
-            // 
-            // lblKm
-            // 
-            lblKm.AutoSize = true;
-            lblKm.Location = new Point(762, 138);
-            lblKm.Name = "lblKm";
-            lblKm.Size = new Size(104, 17);
-            lblKm.TabIndex = 21;
-            lblKm.Text = "Kilometragem";
+            lblMileage.AutoSize = true;
+            lblMileage.Location = new Point(684, 138);
+            lblMileage.Name = "lblMileage";
+            lblMileage.Size = new Size(104, 17);
+            lblMileage.TabIndex = 21;
+            lblMileage.Text = "Kilometragem";
             // 
             // gpbDocuments
             // 
@@ -224,7 +272,7 @@
             gpbDocuments.Location = new Point(366, 219);
             gpbDocuments.Name = "gpbDocuments";
             gpbDocuments.Size = new Size(292, 124);
-            gpbDocuments.TabIndex = 20;
+            gpbDocuments.TabIndex = 11;
             gpbDocuments.TabStop = false;
             gpbDocuments.Text = "Documentação";
             // 
@@ -266,7 +314,7 @@
             gpbAddons.Location = new Point(10, 219);
             gpbAddons.Name = "gpbAddons";
             gpbAddons.Size = new Size(309, 124);
-            gpbAddons.TabIndex = 19;
+            gpbAddons.TabIndex = 10;
             gpbAddons.TabStop = false;
             gpbAddons.Text = "Adicionais";
             // 
@@ -309,14 +357,15 @@
             txtObs.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtObs.Location = new Point(10, 376);
             txtObs.Margin = new Padding(4);
-            txtObs.MaxLenght = 32767;
+            txtObs.MaxLenght = 255;
             txtObs.MultLine = true;
             txtObs.Name = "txtObs";
             txtObs.Padding = new Padding(7);
             txtObs.PasswordChar = false;
             txtObs.PlaceHolder = "";
+            txtObs.ReadOnly = false;
             txtObs.Size = new Size(993, 112);
-            txtObs.TabIndex = 18;
+            txtObs.TabIndex = 13;
             txtObs.Texts = "";
             txtObs.UnderlineStyle = false;
             // 
@@ -335,17 +384,17 @@
             cbxFuelType.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbxFuelType.FormattingEnabled = true;
             cbxFuelType.Items.AddRange(new object[] { "Álcool", "Elétrico", "Etanol", "Gasolina", "Hibrido" });
-            cbxFuelType.Location = new Point(565, 159);
+            cbxFuelType.Location = new Point(535, 171);
             cbxFuelType.Name = "cbxFuelType";
             cbxFuelType.Size = new Size(142, 25);
-            cbxFuelType.TabIndex = 16;
+            cbxFuelType.TabIndex = 7;
             cbxFuelType.Text = "Selecione um";
             cbxFuelType.KeyPress += comboBox1_KeyPress;
             // 
             // lblGas
             // 
             lblGas.AutoSize = true;
-            lblGas.Location = new Point(565, 138);
+            lblGas.Location = new Point(535, 138);
             lblGas.Name = "lblGas";
             lblGas.Size = new Size(96, 17);
             lblGas.TabIndex = 15;
@@ -360,14 +409,15 @@
             txtColor.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtColor.Location = new Point(271, 159);
             txtColor.Margin = new Padding(4);
-            txtColor.MaxLenght = 32767;
+            txtColor.MaxLenght = 25;
             txtColor.MultLine = false;
             txtColor.Name = "txtColor";
             txtColor.Padding = new Padding(7);
             txtColor.PasswordChar = false;
             txtColor.PlaceHolder = "";
+            txtColor.ReadOnly = false;
             txtColor.Size = new Size(229, 36);
-            txtColor.TabIndex = 14;
+            txtColor.TabIndex = 6;
             txtColor.Texts = "";
             txtColor.UnderlineStyle = true;
             // 
@@ -392,7 +442,7 @@
             mkbRenavam.Name = "mkbRenavam";
             mkbRenavam.Padding = new Padding(7);
             mkbRenavam.Size = new Size(214, 30);
-            mkbRenavam.TabIndex = 12;
+            mkbRenavam.TabIndex = 5;
             mkbRenavam.TextMask = "00000000000";
             mkbRenavam.Texts = "";
             mkbRenavam.UnderlineStyle = true;
@@ -415,14 +465,15 @@
             txtChassiNumber.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtChassiNumber.Location = new Point(649, 87);
             txtChassiNumber.Margin = new Padding(4);
-            txtChassiNumber.MaxLenght = 32767;
+            txtChassiNumber.MaxLenght = 17;
             txtChassiNumber.MultLine = false;
             txtChassiNumber.Name = "txtChassiNumber";
             txtChassiNumber.Padding = new Padding(7);
             txtChassiNumber.PasswordChar = false;
             txtChassiNumber.PlaceHolder = "";
+            txtChassiNumber.ReadOnly = false;
             txtChassiNumber.Size = new Size(351, 36);
-            txtChassiNumber.TabIndex = 10;
+            txtChassiNumber.TabIndex = 4;
             txtChassiNumber.Texts = "";
             txtChassiNumber.UnderlineStyle = true;
             // 
@@ -442,7 +493,7 @@
             dtpModelYear.MinDate = new DateTime(1910, 1, 1, 0, 0, 0, 0);
             dtpModelYear.Name = "dtpModelYear";
             dtpModelYear.Size = new Size(132, 25);
-            dtpModelYear.TabIndex = 8;
+            dtpModelYear.TabIndex = 3;
             // 
             // lblModelYear
             // 
@@ -462,14 +513,15 @@
             txtModel.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtModel.Location = new Point(167, 87);
             txtModel.Margin = new Padding(4);
-            txtModel.MaxLenght = 32767;
+            txtModel.MaxLenght = 55;
             txtModel.MultLine = false;
             txtModel.Name = "txtModel";
             txtModel.Padding = new Padding(7);
             txtModel.PasswordChar = false;
             txtModel.PlaceHolder = "";
+            txtModel.ReadOnly = false;
             txtModel.Size = new Size(275, 36);
-            txtModel.TabIndex = 6;
+            txtModel.TabIndex = 2;
             txtModel.Texts = "";
             txtModel.UnderlineStyle = true;
             // 
@@ -491,7 +543,7 @@
             cbxBrand.Location = new Point(16, 87);
             cbxBrand.Name = "cbxBrand";
             cbxBrand.Size = new Size(121, 25);
-            cbxBrand.TabIndex = 3;
+            cbxBrand.TabIndex = 1;
             cbxBrand.Text = "Digite aqui";
             // 
             // lblBrand
@@ -517,9 +569,10 @@
             txtLicensePlate.Name = "txtLicensePlate";
             txtLicensePlate.Padding = new Padding(7);
             txtLicensePlate.PasswordChar = false;
-            txtLicensePlate.PlaceHolder = "";
+            txtLicensePlate.PlaceHolder = "Insira a Placa sem traço(-).";
+            txtLicensePlate.ReadOnly = false;
             txtLicensePlate.Size = new Size(843, 36);
-            txtLicensePlate.TabIndex = 1;
+            txtLicensePlate.TabIndex = 0;
             txtLicensePlate.Texts = "";
             txtLicensePlate.UnderlineStyle = true;
             // 
@@ -536,10 +589,10 @@
             // 
             tabPage2.Controls.Add(groupBox1);
             tabPage2.Controls.Add(gpbInsecure);
-            tabPage2.Location = new Point(4, 26);
+            tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1011, 492);
+            tabPage2.Size = new Size(1011, 494);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Seguro e Manutenção";
             tabPage2.UseVisualStyleBackColor = true;
@@ -552,7 +605,7 @@
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Location = new Point(234, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(774, 486);
+            groupBox1.Size = new Size(774, 488);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Manutenção";
@@ -599,7 +652,7 @@
             gpbInsecure.Dock = DockStyle.Left;
             gpbInsecure.Location = new Point(3, 3);
             gpbInsecure.Name = "gpbInsecure";
-            gpbInsecure.Size = new Size(231, 486);
+            gpbInsecure.Size = new Size(231, 488);
             gpbInsecure.TabIndex = 0;
             gpbInsecure.TabStop = false;
             gpbInsecure.Text = "Informações de Seguro";
@@ -732,7 +785,7 @@
             btnClose.Location = new Point(849, 3);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(150, 40);
-            btnClose.TabIndex = 2;
+            btnClose.TabIndex = 16;
             btnClose.Text = "Fechar";
             btnClose.TextColor = Color.Black;
             btnClose.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -756,7 +809,7 @@
             btnDelete.Location = new Point(682, 3);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(150, 40);
-            btnDelete.TabIndex = 1;
+            btnDelete.TabIndex = 15;
             btnDelete.Text = "Excluir";
             btnDelete.TextColor = Color.Black;
             btnDelete.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -782,7 +835,7 @@
             btnSave.Name = "btnSave";
             btnSave.RightToLeft = RightToLeft.No;
             btnSave.Size = new Size(150, 40);
-            btnSave.TabIndex = 0;
+            btnSave.TabIndex = 14;
             btnSave.Text = "Salvar";
             btnSave.TextColor = Color.Black;
             btnSave.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -800,19 +853,21 @@
             Controls.Add(tabControl1);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
             MaximizeBox = false;
             MaximumSize = new Size(1035, 620);
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
             MinimumSize = new Size(1035, 620);
             Name = "frmVehicle";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Cadastro de Veiculo";
+            KeyDown += frmVehicle_KeyDown;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)nupMileage).EndInit();
             gpbDocuments.ResumeLayout(false);
             gpbDocuments.PerformLayout();
             gpbAddons.ResumeLayout(false);
@@ -856,8 +911,7 @@
         private CheckBox cbLincense;
         private CheckBox cbKey;
         private CheckBox cbManual;
-        private NumericUpDown nupMileage;
-        private Label lblKm;
+        private Label lblMileage;
         private Panel panel1;
         private CustomControls.CustomButton btnSave;
         private CustomControls.CustomButton btnClose;
@@ -883,5 +937,8 @@
         private RadioButton rbMechanic;
         private Label label1;
         private CheckBox cbEletricLocks;
+        private CustomControls.CustomTextBox txtDailyVehicleRate;
+        private Label lblDailyVehicleRate;
+        private CustomControls.CustomTextBox txtMileage;
     }
 }

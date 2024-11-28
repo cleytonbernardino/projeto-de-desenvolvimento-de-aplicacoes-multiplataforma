@@ -63,6 +63,7 @@
             txtUsername.Padding = new Padding(7);
             txtUsername.PasswordChar = false;
             txtUsername.PlaceHolder = "admin";
+            txtUsername.ReadOnly = false;
             txtUsername.Size = new Size(317, 36);
             txtUsername.TabIndex = 1;
             txtUsername.Texts = "";
@@ -83,6 +84,7 @@
             txtPassword.Padding = new Padding(7);
             txtPassword.PasswordChar = true;
             txtPassword.PlaceHolder = "admin";
+            txtPassword.ReadOnly = false;
             txtPassword.Size = new Size(270, 36);
             txtPassword.TabIndex = 2;
             txtPassword.Texts = "";
@@ -135,7 +137,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1264, 681);
+            ClientSize = new Size(1248, 642);
             Controls.Add(lblLogo);
             Controls.Add(btnSignIn);
             Controls.Add(btnSeePassword);
@@ -144,6 +146,7 @@
             Controls.Add(lblSignIn);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "frmLogin";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Localiza Seminovos | Login";
             ResumeLayout(false);
             PerformLayout();

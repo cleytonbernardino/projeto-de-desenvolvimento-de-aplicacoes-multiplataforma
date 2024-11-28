@@ -2,6 +2,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmLogin : Form
     {
+        public bool IsLogged { get; private set; } = true;
+
         public frmLogin()
         {
             InitializeComponent();
@@ -14,8 +16,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnSignIn_Click(object sender, EventArgs e)
         {
-            frmMenu menu = new frmMenu();
-            menu.Show();
+            this.Close();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms.MessageBox
+﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms.DialogBox
 {
     public partial class BalanceToBeAdd : Form
     {

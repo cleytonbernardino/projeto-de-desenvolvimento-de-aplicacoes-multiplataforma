@@ -16,7 +16,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             "First_name=@First_name, Last_name=@Last_name, Email=@Email, Balance=@Balance, Date_of_birth=@Date_of_birth" +
             " WHERE id=@id";
 
-        private readonly string select = "SELECT * FROM tbl_user WHERE id=@id;";
+        private readonly string select = "SELECT * FROM tbl_user WHERE ";
 
         private readonly string search = "SELECT id, First_name as Nome, Last_name as Sobrenome, CPF FROM tbl_user " +
             "WHERE CONCAT(First_name, Last_name) LIKE @CompleteName;";
@@ -137,13 +137,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             return dt;
         }
 
-        public User Select(int id)
+        public User? Select(string where, SqlParameter[] parameters)
         {
             using (SqlConnection conn = new(_connectionString))
             {
-                using (SqlCommand cmd = new(select, conn))
+                using (SqlCommand cmd = new(select + where, conn))
                 {
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddRange(parameters);
                     try
                     {
                         conn.Open();

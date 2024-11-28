@@ -1,5 +1,4 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
-using System.Data;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 {
@@ -26,8 +25,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 
         public int Save(Vehicle vehicle)
         {
-            if (vehicle.Id == 0) return _dao.Save(vehicle);
-            return _dao.Update(vehicle);
+            return _dao.Save(vehicle);
         }
 
         public bool DeleteVehicleById(int id)

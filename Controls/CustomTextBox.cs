@@ -8,10 +8,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
     {
 
         // Fields
-        private Color borderColor = Color.DeepSkyBlue;
-        private Color borderFocusColor = Color.AliceBlue;
+        private Color borderColor = Color.SeaGreen;
+        private Color borderFocusColor = Color.PaleGreen;
         private int borderSize = 2;
-        private bool underlineStyle = false;
+        private bool underlineStyle = true;
         private bool isFocused = false;
 
         // Constructor

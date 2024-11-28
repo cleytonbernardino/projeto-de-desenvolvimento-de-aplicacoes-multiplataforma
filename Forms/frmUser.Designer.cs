@@ -35,6 +35,7 @@
             txtLastName = new CustomControls.CustomTextBox();
             lblLastName = new Label();
             panel1 = new Panel();
+            pnlBalance = new Panel();
             ptbAddBalance = new PictureBox();
             lblBalanceValue = new Label();
             lblBalanceText = new Label();
@@ -66,6 +67,7 @@
             lblEmail = new Label();
             btnEditViolation = new CustomControls.CustomButton();
             panel1.SuspendLayout();
+            pnlBalance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ptbAddBalance).BeginInit();
             cmsPenalty.SuspendLayout();
             SuspendLayout();
@@ -94,8 +96,9 @@
             txtFirstName.Padding = new Padding(7);
             txtFirstName.PasswordChar = false;
             txtFirstName.PlaceHolder = "";
+            txtFirstName.ReadOnly = false;
             txtFirstName.Size = new Size(316, 36);
-            txtFirstName.TabIndex = 1;
+            txtFirstName.TabIndex = 0;
             txtFirstName.Texts = "";
             txtFirstName.UnderlineStyle = true;
             // 
@@ -114,8 +117,9 @@
             txtLastName.Padding = new Padding(7);
             txtLastName.PasswordChar = false;
             txtLastName.PlaceHolder = "";
+            txtLastName.ReadOnly = false;
             txtLastName.Size = new Size(455, 36);
-            txtLastName.TabIndex = 3;
+            txtLastName.TabIndex = 1;
             txtLastName.Texts = "";
             txtLastName.UnderlineStyle = true;
             // 
@@ -131,8 +135,7 @@
             // panel1
             // 
             panel1.BackColor = Color.SeaGreen;
-            panel1.Controls.Add(ptbAddBalance);
-            panel1.Controls.Add(lblBalanceValue);
+            panel1.Controls.Add(pnlBalance);
             panel1.Controls.Add(lblBalanceText);
             panel1.Controls.Add(btnClose);
             panel1.Controls.Add(btnDelete);
@@ -143,11 +146,21 @@
             panel1.Size = new Size(1024, 53);
             panel1.TabIndex = 4;
             // 
+            // pnlBalance
+            // 
+            pnlBalance.Controls.Add(ptbAddBalance);
+            pnlBalance.Controls.Add(lblBalanceValue);
+            pnlBalance.Location = new Point(91, 0);
+            pnlBalance.Name = "pnlBalance";
+            pnlBalance.Size = new Size(86, 50);
+            pnlBalance.TabIndex = 7;
+            // 
             // ptbAddBalance
             // 
+            ptbAddBalance.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ptbAddBalance.Cursor = Cursors.Hand;
             ptbAddBalance.Image = (Image)resources.GetObject("ptbAddBalance.Image");
-            ptbAddBalance.Location = new Point(129, 5);
+            ptbAddBalance.Location = new Point(51, 3);
             ptbAddBalance.Name = "ptbAddBalance";
             ptbAddBalance.Size = new Size(32, 32);
             ptbAddBalance.TabIndex = 6;
@@ -158,7 +171,7 @@
             // lblBalanceValue
             // 
             lblBalanceValue.AutoSize = true;
-            lblBalanceValue.Location = new Point(91, 15);
+            lblBalanceValue.Location = new Point(3, 15);
             lblBalanceValue.Name = "lblBalanceValue";
             lblBalanceValue.Size = new Size(32, 17);
             lblBalanceValue.TabIndex = 5;
@@ -189,7 +202,7 @@
             btnClose.Location = new Point(849, 3);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(150, 40);
-            btnClose.TabIndex = 2;
+            btnClose.TabIndex = 12;
             btnClose.Text = "Fechar";
             btnClose.TextColor = Color.Black;
             btnClose.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -212,7 +225,7 @@
             btnDelete.Location = new Point(682, 3);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(150, 40);
-            btnDelete.TabIndex = 1;
+            btnDelete.TabIndex = 11;
             btnDelete.Text = "Excluir";
             btnDelete.TextColor = Color.Black;
             btnDelete.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -221,6 +234,7 @@
             // 
             // btnSave
             // 
+            btnSave.AccessibleDescription = "";
             btnSave.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSave.BackColor = Color.White;
             btnSave.BackgroudColor = Color.White;
@@ -237,7 +251,7 @@
             btnSave.Name = "btnSave";
             btnSave.RightToLeft = RightToLeft.No;
             btnSave.Size = new Size(150, 40);
-            btnSave.TabIndex = 0;
+            btnSave.TabIndex = 10;
             btnSave.Text = "Salvar";
             btnSave.TextColor = Color.Black;
             btnSave.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -265,7 +279,7 @@
             mkbCPF.Name = "mkbCPF";
             mkbCPF.Padding = new Padding(7);
             mkbCPF.Size = new Size(232, 36);
-            mkbCPF.TabIndex = 6;
+            mkbCPF.TabIndex = 3;
             mkbCPF.TextMask = "000.000.000-00";
             mkbCPF.Texts = "   .   .   -";
             mkbCPF.UnderlineStyle = true;
@@ -282,7 +296,7 @@
             mkbCNH.Name = "mkbCNH";
             mkbCNH.Padding = new Padding(7);
             mkbCNH.Size = new Size(232, 36);
-            mkbCNH.TabIndex = 8;
+            mkbCNH.TabIndex = 4;
             mkbCNH.TextMask = "000000000000";
             mkbCNH.Texts = "";
             mkbCNH.UnderlineStyle = true;
@@ -310,9 +324,10 @@
             // 
             dtpDateOfBirth.Format = DateTimePickerFormat.Short;
             dtpDateOfBirth.Location = new Point(183, 127);
+            dtpDateOfBirth.MinDate = new DateTime(1910, 1, 1, 0, 0, 0, 0);
             dtpDateOfBirth.Name = "dtpDateOfBirth";
             dtpDateOfBirth.Size = new Size(127, 25);
-            dtpDateOfBirth.TabIndex = 10;
+            dtpDateOfBirth.TabIndex = 2;
             // 
             // lblViolation
             // 
@@ -332,7 +347,8 @@
             ltvViolation.Location = new Point(12, 338);
             ltvViolation.Name = "ltvViolation";
             ltvViolation.Size = new Size(441, 254);
-            ltvViolation.TabIndex = 12;
+            ltvViolation.TabIndex = 13;
+            ltvViolation.TabStop = false;
             ltvViolation.UseCompatibleStateImageBehavior = false;
             ltvViolation.View = View.Details;
             ltvViolation.DoubleClick += ltvPenalty_DoubleClick;
@@ -389,14 +405,15 @@
             txtViolationType.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtViolationType.Location = new Point(18, 295);
             txtViolationType.Margin = new Padding(4);
-            txtViolationType.MaxLenght = 32767;
+            txtViolationType.MaxLenght = 30;
             txtViolationType.MultLine = false;
             txtViolationType.Name = "txtViolationType";
             txtViolationType.Padding = new Padding(7);
             txtViolationType.PasswordChar = false;
             txtViolationType.PlaceHolder = "Tipo da violação";
+            txtViolationType.ReadOnly = false;
             txtViolationType.Size = new Size(204, 36);
-            txtViolationType.TabIndex = 13;
+            txtViolationType.TabIndex = 6;
             txtViolationType.Texts = "";
             txtViolationType.UnderlineStyle = true;
             // 
@@ -414,7 +431,7 @@
             btnViolationAdd.Location = new Point(342, 291);
             btnViolationAdd.Name = "btnViolationAdd";
             btnViolationAdd.Size = new Size(100, 40);
-            btnViolationAdd.TabIndex = 15;
+            btnViolationAdd.TabIndex = 8;
             btnViolationAdd.Text = "Adicionar";
             btnViolationAdd.TextColor = Color.Black;
             btnViolationAdd.UseVisualStyleBackColor = false;
@@ -426,7 +443,8 @@
             listView2.Location = new Point(557, 338);
             listView2.Name = "listView2";
             listView2.Size = new Size(430, 254);
-            listView2.TabIndex = 17;
+            listView2.TabIndex = 14;
+            listView2.TabStop = false;
             listView2.UseCompatibleStateImageBehavior = false;
             // 
             // lblRentalRecord
@@ -448,14 +466,15 @@
             txtViolationValue.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtViolationValue.Location = new Point(230, 295);
             txtViolationValue.Margin = new Padding(4);
-            txtViolationValue.MaxLenght = 32767;
+            txtViolationValue.MaxLenght = 9;
             txtViolationValue.MultLine = false;
             txtViolationValue.Name = "txtViolationValue";
             txtViolationValue.Padding = new Padding(7);
             txtViolationValue.PasswordChar = false;
             txtViolationValue.PlaceHolder = "Valor";
+            txtViolationValue.ReadOnly = false;
             txtViolationValue.Size = new Size(105, 36);
-            txtViolationValue.TabIndex = 21;
+            txtViolationValue.TabIndex = 7;
             txtViolationValue.Texts = "";
             txtViolationValue.UnderlineStyle = true;
             // 
@@ -473,7 +492,7 @@
             btnRentalRecordAdd.Location = new Point(557, 292);
             btnRentalRecordAdd.Name = "btnRentalRecordAdd";
             btnRentalRecordAdd.Size = new Size(430, 40);
-            btnRentalRecordAdd.TabIndex = 22;
+            btnRentalRecordAdd.TabIndex = 9;
             btnRentalRecordAdd.Text = "Adicionar veiculo ao registro";
             btnRentalRecordAdd.TextColor = Color.Black;
             btnRentalRecordAdd.UseVisualStyleBackColor = false;
@@ -493,8 +512,9 @@
             txtEmail.Padding = new Padding(7);
             txtEmail.PasswordChar = false;
             txtEmail.PlaceHolder = "";
+            txtEmail.ReadOnly = false;
             txtEmail.Size = new Size(860, 36);
-            txtEmail.TabIndex = 23;
+            txtEmail.TabIndex = 5;
             txtEmail.Texts = "";
             txtEmail.UnderlineStyle = true;
             // 
@@ -555,11 +575,15 @@
             Controls.Add(btnViolationAdd);
             Controls.Add(btnEditViolation);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            KeyPreview = true;
             Name = "frmUser";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Cadastrar Usuario";
+            KeyDown += frmUser_KeyDown;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            pnlBalance.ResumeLayout(false);
+            pnlBalance.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ptbAddBalance).EndInit();
             cmsPenalty.ResumeLayout(false);
             ResumeLayout(false);
@@ -605,5 +629,6 @@
         private ToolStripMenuItem apagarToolStripMenuItem;
         private CustomControls.CustomButton btnEditViolation;
         private PictureBox ptbAddBalance;
+        private Panel pnlBalance;
     }
 }

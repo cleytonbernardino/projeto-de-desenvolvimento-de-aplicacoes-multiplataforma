@@ -1,4 +1,4 @@
-﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms.MessageBox
+﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms.DialogBox
 {
     partial class BalanceToBeAdd
     {
@@ -43,12 +43,13 @@
             txtValue.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtValue.Location = new Point(13, 78);
             txtValue.Margin = new Padding(4);
-            txtValue.MaxLenght = 32767;
+            txtValue.MaxLenght = 16;
             txtValue.MultLine = false;
             txtValue.Name = "txtValue";
             txtValue.Padding = new Padding(7);
             txtValue.PasswordChar = false;
             txtValue.PlaceHolder = "Insira um valor";
+            txtValue.ReadOnly = false;
             txtValue.Size = new Size(355, 36);
             txtValue.TabIndex = 0;
             txtValue.Texts = "";

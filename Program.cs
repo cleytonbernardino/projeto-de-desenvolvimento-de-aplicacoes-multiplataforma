@@ -12,7 +12,12 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new frmMenu());
+            frmLogin loginForm = new frmLogin();
+            Application.Run(loginForm);
+            if (loginForm.IsLogged)
+            {
+                Application.Run(new frmMenu());
+            }
         }
     }
 }

@@ -41,7 +41,7 @@
             chId = new ColumnHeader();
             chModel = new ColumnHeader();
             chLicensePlate = new ColumnHeader();
-            chBrand = new ColumnHeader();
+            chDailyVehicleRate = new ColumnHeader();
             chColor = new ColumnHeader();
             chRented = new ColumnHeader();
             SuspendLayout();
@@ -63,6 +63,7 @@
             txtSearch.Padding = new Padding(7);
             txtSearch.PasswordChar = false;
             txtSearch.PlaceHolder = "Digite a placa a ser pesquisada aqui.";
+            txtSearch.ReadOnly = false;
             txtSearch.Size = new Size(547, 36);
             txtSearch.TabIndex = 2;
             txtSearch.Texts = "";
@@ -95,8 +96,8 @@
             // btnSearch
             // 
             btnSearch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSearch.BackColor = Color.FromArgb(110, 189, 244);
-            btnSearch.BackgroudColor = Color.FromArgb(110, 189, 244);
+            btnSearch.BackColor = Color.FromArgb(93, 229, 245);
+            btnSearch.BackgroudColor = Color.FromArgb(93, 229, 245);
             btnSearch.BorderColor = Color.PaleVioletRed;
             btnSearch.BorderRadius = 40;
             btnSearch.BorderSize = 0;
@@ -118,8 +119,8 @@
             // btnEdit
             // 
             btnEdit.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnEdit.BackColor = Color.FromArgb(90, 71, 255);
-            btnEdit.BackgroudColor = Color.FromArgb(90, 71, 255);
+            btnEdit.BackColor = Color.FromArgb(2, 184, 47);
+            btnEdit.BackgroudColor = Color.FromArgb(2, 184, 47);
             btnEdit.BorderColor = Color.FromArgb(75, 131, 193);
             btnEdit.BorderRadius = 40;
             btnEdit.BorderSize = 0;
@@ -156,8 +157,8 @@
             // btnRent
             // 
             btnRent.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnRent.BackColor = Color.FromArgb(110, 189, 244);
-            btnRent.BackgroudColor = Color.FromArgb(110, 189, 244);
+            btnRent.BackColor = Color.FromArgb(93, 181, 245);
+            btnRent.BackgroudColor = Color.FromArgb(93, 181, 245);
             btnRent.BorderColor = Color.PaleVioletRed;
             btnRent.BorderRadius = 40;
             btnRent.BorderSize = 0;
@@ -180,7 +181,7 @@
             // 
             ltvVehicle.Activation = ItemActivation.TwoClick;
             ltvVehicle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            ltvVehicle.Columns.AddRange(new ColumnHeader[] { chId, chModel, chLicensePlate, chBrand, chColor, chRented });
+            ltvVehicle.Columns.AddRange(new ColumnHeader[] { chId, chModel, chLicensePlate, chDailyVehicleRate, chColor, chRented });
             ltvVehicle.FullRowSelect = true;
             ltvVehicle.GridLines = true;
             ltvVehicle.Location = new Point(9, 97);
@@ -207,10 +208,10 @@
             chLicensePlate.Text = "Placa";
             chLicensePlate.Width = 239;
             // 
-            // chBrand
+            // chDailyVehicleRate
             // 
-            chBrand.Text = "Marca";
-            chBrand.Width = 239;
+            chDailyVehicleRate.Text = "Valor do Aluguel";
+            chDailyVehicleRate.Width = 239;
             // 
             // chColor
             // 
@@ -257,7 +258,7 @@
         private ColumnHeader chId;
         private ColumnHeader chModel;
         private ColumnHeader chLicensePlate;
-        private ColumnHeader chBrand;
+        private ColumnHeader chDailyVehicleRate;
         private ColumnHeader chColor;
         private ColumnHeader chRented;
         private ListView ltvVehicle;

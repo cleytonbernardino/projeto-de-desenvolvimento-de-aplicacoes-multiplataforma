@@ -1,5 +1,6 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
 using ProjetoDesenvolvimentoAplicacoesMultplataforma.Utils;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
@@ -22,6 +23,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             List<int> violationsToBeRemoved
         )
         {
+            if (violations.Count > 0) balance = GetNewBalance(balance, violations);
+
             User user = new()
             {
                 Id = id,
@@ -31,7 +34,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
                 BirtyDay = birtyDay,
                 CPF = cpf,
                 CNH = cnh,
-                Balance = balance
+                Balance = balance,
             };
             if (id == 0)
             {
@@ -41,7 +44,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
                 return _dao.Save(user);
             }
 
-            SavePenalty(
+            SaveViolations(
                 violations, violationsToBeRemoved
             );
             _dao.Update(user);
@@ -53,9 +56,22 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             return _dao.ListUsers();
         }
 
+        // Talvez remover essa opção e deixar somente cpf
         public User GetUserById(int id)
         {
-            return _dao.Select(id);
+            SqlParameter[] param =
+            [
+                new SqlParameter("@id", id)
+            ];
+            return _dao.Select("id=@id", param);
+        }
+
+        public User GetUserByCpf(string cpf)
+        {
+            SqlParameter[] param = [
+                new SqlParameter("@cpf", cpf)
+            ];
+            return _dao.Select("cpf=@cpf", param);
         }
 
         public DataTable GetUsersByName(string name)
@@ -73,42 +89,48 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             return _dao.Delete(id);
         }
 
-        public double GetNewBalance(int id, List<Violation> violations)
+        public double GetUserBalance(int id)
         {
-            User user = GetUserById(id);
-            if (user == null) throw new Exception("User not exist");
-            if (violations.Count > 0) return 0;
+            SqlParameter[] param =
+            [
+                new SqlParameter("@id", id)
+            ];
+            User user = _dao.Select("id=@id", param);
+            return user.Balance;
+        }
 
-            double amount = user.Balance;
+        private double GetNewBalance(double balance, List<Violation> violations)
+        {
             foreach (Violation violation in violations)
             {
-                amount -= violation.Cost;
+                if (violation.Id != 0) continue;
+                balance -= violation.Cost;
             }
-            return amount;
+            return balance;
         }
 
-    private void SavePenalty(
-            List<Violation> violations,
-            List<int> violationsToBeRemoved
-        )
-        {
-            List<Violation> violationsToBeAdded = new();
-            List<Violation> violationsToBeUpdated = new();
-            if (violations.Count > 0)
+        private void SaveViolations(
+                List<Violation> violations,
+                List<int> violationsToBeRemoved
+            )
             {
-                foreach (Violation violation in violations)
+                List<Violation> violationsToBeAdded = new();
+                List<Violation> violationsToBeUpdated = new();
+                if (violations.Count > 0)
                 {
-                    if (violation.Id != 0)
+                    foreach (Violation violation in violations)
                     {
-                        violationsToBeUpdated.Add(violation);
-                        continue;
-                    };
-                    violationsToBeAdded.Add(violation);
-                }
-            };
-            if (violationsToBeAdded.Count > 0) _daoPenalty.Save(violationsToBeAdded);
-            if (violationsToBeUpdated.Count > 0) _daoPenalty.Update(violationsToBeUpdated);
-            if (violationsToBeRemoved.Count > 0) _daoPenalty.Delete(violationsToBeRemoved);
+                        if (violation.Id != 0)
+                        {
+                            violationsToBeUpdated.Add(violation);
+                            continue;
+                        };
+                        violationsToBeAdded.Add(violation);
+                    }
+                };
+                if (violationsToBeAdded.Count > 0) _daoPenalty.Save(violationsToBeAdded);
+                if (violationsToBeUpdated.Count > 0) _daoPenalty.Update(violationsToBeUpdated);
+                if (violationsToBeRemoved.Count > 0) _daoPenalty.Delete(violationsToBeRemoved);
+            }
         }
-    }
 }

@@ -37,7 +37,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             txtEmail.Texts = user.Email;
             lblBalanceValue.Text = user.Balance.ToString();
             mkbCPF.Texts = user.CPF;
-            mkbCNH.Texts = user.CNH;
+            mkbCNH.Texts = "000" + user.CNH;
 
             mkbCPF.Enabled = false;
             mkbCNH.Enabled = false;
@@ -212,6 +212,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 return;
             }
             LoadLtvViolation();
+            lblBalanceValue.Text = (_service.GetUserBalance(_id)).ToString();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -270,12 +271,17 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void ptbAddBalance_Click(object sender, EventArgs e)
         {
-            Forms.MessageBox.BalanceToBeAdd balanceDialog = new();
+            Forms.DialogBox.BalanceToBeAdd balanceDialog = new();
             if (balanceDialog.ShowDialog() == DialogResult.Cancel) return;
 
             double balance = double.Parse(lblBalanceValue.Text);
             balance += balanceDialog.Value;
             lblBalanceValue.Text = balance.ToString();
+        }
+
+        private void frmUser_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S) Save();
         }
     }
 }

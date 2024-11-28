@@ -30,6 +30,7 @@ partial class frmMenu
     {
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu));
         pnlMenu = new Panel();
+        btnUser = new Button();
         btnVehicleList = new Button();
         pcbMain = new PictureBox();
         pnlTitle = new Panel();
@@ -39,7 +40,6 @@ partial class frmMenu
         pcbClose = new PictureBox();
         pcbMenuIcon = new PictureBox();
         pnlFormContainer = new Panel();
-        btnUser = new Button();
         pnlMenu.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)pcbMain).BeginInit();
         pnlTitle.SuspendLayout();
@@ -61,6 +61,22 @@ partial class frmMenu
         pnlMenu.Name = "pnlMenu";
         pnlMenu.Size = new Size(50, 681);
         pnlMenu.TabIndex = 0;
+        // 
+        // btnUser
+        // 
+        btnUser.FlatAppearance.BorderSize = 0;
+        btnUser.FlatAppearance.MouseOverBackColor = SystemColors.ButtonShadow;
+        btnUser.FlatStyle = FlatStyle.Flat;
+        btnUser.Image = (Image)resources.GetObject("btnUser.Image");
+        btnUser.ImageAlign = ContentAlignment.MiddleLeft;
+        btnUser.Location = new Point(6, 221);
+        btnUser.Name = "btnUser";
+        btnUser.RightToLeft = RightToLeft.No;
+        btnUser.Size = new Size(238, 57);
+        btnUser.TabIndex = 2;
+        btnUser.Text = "Usuarios";
+        btnUser.UseVisualStyleBackColor = true;
+        btnUser.Click += btnUser_Click;
         // 
         // btnVehicleList
         // 
@@ -173,22 +189,6 @@ partial class frmMenu
         pnlFormContainer.Size = new Size(1214, 641);
         pnlFormContainer.TabIndex = 2;
         // 
-        // btnUser
-        // 
-        btnUser.FlatAppearance.BorderSize = 0;
-        btnUser.FlatAppearance.MouseOverBackColor = SystemColors.ButtonShadow;
-        btnUser.FlatStyle = FlatStyle.Flat;
-        btnUser.Image = (Image)resources.GetObject("btnUser.Image");
-        btnUser.ImageAlign = ContentAlignment.MiddleLeft;
-        btnUser.Location = new Point(6, 221);
-        btnUser.Name = "btnUser";
-        btnUser.RightToLeft = RightToLeft.No;
-        btnUser.Size = new Size(238, 57);
-        btnUser.TabIndex = 2;
-        btnUser.Text = "Usuarios";
-        btnUser.UseVisualStyleBackColor = true;
-        btnUser.Click += btnUser_Click;
-        // 
         // frmMenu
         // 
         AutoScaleMode = AutoScaleMode.None;
@@ -202,7 +202,7 @@ partial class frmMenu
         Icon = (Icon)resources.GetObject("$this.Icon");
         Name = "frmMenu";
         StartPosition = FormStartPosition.CenterScreen;
-        Text = "Localiza Seminovos | Menu";
+        Text = "we";
         pnlMenu.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)pcbMain).EndInit();
         pnlTitle.ResumeLayout(false);
