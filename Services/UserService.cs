@@ -18,6 +18,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             string cnh,
             double balance,
             string role,
+            string username,
+            string password,
             DateTime birtyDay,
             List<Violation> violationsToBeAdd,
             List<Violation> violationsToBeUpdate,

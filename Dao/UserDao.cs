@@ -16,14 +16,20 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 (@First_name, 'Seu sobrenome', 'seuEmail@example.com', 0.00, '2002-04-15', '11111111111', '222222222', 'Administrador', @Username, @Password);
             DELETE FROM tbl_user WHERE Id = 1;";
 
-        private const string _insert = "INSERT INTO tbl_user (" +
-            "First_name, Last_name, Email, Balance, Date_of_birth, CPF, CNH" +
-            ") OUTPUT INSERTED.ID " + 
-            "VALUES (@First_name, @Last_name, @Email, @Balance, @Date_of_birth, @CPF, @CNH);";
+        private const string _insert = @"
+            INSERT INTO tbl_user (
+                First_name, Last_name, Email, Balance, Date_of_birth, CPF, CNH, Username, Password
+            ) OUTPUT INSERTED.ID
+            VALUES (
+                @First_name, @Last_name, @Email, @Balance, @Date_of_birth, @CPF, @CNH, @Username, @Password
+            );";
 
-        private const string _update = "UPDATE tbl_user SET " +
-            "First_name=@First_name, Last_name=@Last_name, Email=@Email, Balance=@Balance, Date_of_birth=@Date_of_birth" +
-            " WHERE id=@id";
+        private const string _update = @"
+            UPDATE tbl_user 
+            SET 
+                First_name=@First_name, Last_name=@Last_name, Email=@Email, Balance=@Balance, Date_of_birth=@Date_of_birth, 
+                Username=@Username, Password=@Password
+            WHERE id=@id";
 
         private const string _updateBalance = "UPDATE tbl_user SET Balance= Balance - @valor WHERE id=@id";
 
@@ -228,7 +234,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         CNH = reader.GetString("CNH"),
                         Balance = (float)reader.GetDecimal("Balance"),
                         BirtyDay = reader.GetDateTime("Date_of_birth"),
-                        Role = reader.GetString("Role")
+                        Role = reader.GetString("Role"),
+                        Username = reader.GetString("Username"),
+                        Password = reader.GetString("Password")
                     };
                 }
                 return null;
@@ -260,7 +268,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         CNH = reader.GetString("CNH"),
                         Balance = (float)reader.GetDecimal("Balance"),
                         BirtyDay = reader.GetDateTime("Date_of_birth"),
-                        Role = reader.GetString("Role")
+                        Role = reader.GetString("Role"),
+                        Username = reader.GetString("Username"),
+                        Password = reader.GetString("Password")
                     };
                 }
                 throw new Exception("Usuário não encontrado");
@@ -299,7 +309,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
     public class User
     {
         private string _role = "Usuário";
-        //private string _username = "";
+        private string _username = "";
 
         public int Id { get; set; }
         public required string FirstName { get; set; }
@@ -316,14 +326,14 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 _role = value;
             }
         }
-        //public string Username 
-        //{
-        //    get => _username; set
-        //    {
-        //        if (value.Length > 30) throw new Exception("Nome de usuário muito grande");
-        //        _username = value;
-        //    }
-        //}
-        //public string Password { get; set; } = "";
+        public string Username
+        {
+            get => _username; set
+            {
+                if (value.Length > 30) throw new Exception("Nome de usuário muito grande");
+                _username = value;
+            }
+        }
+        public string Password { get; set; } = "";
     }
 }

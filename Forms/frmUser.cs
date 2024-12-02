@@ -41,6 +41,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             txtFirstName.Texts = user.FirstName;
             txtLastName.Texts = user.LastName;
             txtEmail.Texts = user.Email;
+            txtUsername.Texts = user.Username;
+            txtPassword.Texts = user.Password;
             lblBalanceValue.Text = Math.Round(user.Balance, 2).ToString();
             dtpDateOfBirth.Value = user.BirtyDay;
             mkbCPF.Texts = user.CPF;
@@ -242,6 +244,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 mkbCNH.Texts.Substring(3, 9), // Ignora os zeros, talvez mudar no banco de dados para suportar
                 double.Parse(lblBalanceValue.Text),
                 role,
+                txtUsername.Texts,
+                txtPassword.Texts,
                 dtpDateOfBirth.Value.Date,
                 ViolationAdd,
                 ViolationEdit,

@@ -69,6 +69,10 @@
             btnEditViolation = new CustomControls.CustomButton();
             lblRole = new Label();
             cbxRoles = new ComboBox();
+            lblUsername = new Label();
+            txtUsername = new CustomControls.CustomTextBox();
+            lblPassword = new Label();
+            txtPassword = new CustomControls.CustomTextBox();
             panel1.SuspendLayout();
             pnlBalance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ptbAddBalance).BeginInit();
@@ -266,7 +270,7 @@
             // 
             // lblCPF
             // 
-            lblCPF.Location = new Point(348, 123);
+            lblCPF.Location = new Point(348, 113);
             lblCPF.Name = "lblCPF";
             lblCPF.Size = new Size(66, 36);
             lblCPF.TabIndex = 5;
@@ -280,7 +284,7 @@
             mkbCPF.BorderFocusColor = Color.PaleGreen;
             mkbCPF.BorderSize = 2;
             mkbCPF.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            mkbCPF.Location = new Point(421, 123);
+            mkbCPF.Location = new Point(421, 113);
             mkbCPF.Margin = new Padding(4);
             mkbCPF.Name = "mkbCPF";
             mkbCPF.Padding = new Padding(7);
@@ -298,7 +302,7 @@
             mkbCNH.BorderFocusColor = Color.PaleGreen;
             mkbCNH.BorderSize = 2;
             mkbCNH.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            mkbCNH.Location = new Point(754, 123);
+            mkbCNH.Location = new Point(754, 113);
             mkbCNH.Margin = new Padding(4);
             mkbCNH.Name = "mkbCNH";
             mkbCNH.Padding = new Padding(7);
@@ -311,7 +315,7 @@
             // 
             // lblCNH
             // 
-            lblCNH.Location = new Point(681, 123);
+            lblCNH.Location = new Point(681, 113);
             lblCNH.Name = "lblCNH";
             lblCNH.Size = new Size(66, 36);
             lblCNH.TabIndex = 7;
@@ -321,7 +325,7 @@
             // lblDateOfBirth
             // 
             lblDateOfBirth.ImageAlign = ContentAlignment.MiddleLeft;
-            lblDateOfBirth.Location = new Point(24, 123);
+            lblDateOfBirth.Location = new Point(24, 113);
             lblDateOfBirth.Name = "lblDateOfBirth";
             lblDateOfBirth.Size = new Size(153, 36);
             lblDateOfBirth.TabIndex = 9;
@@ -331,7 +335,7 @@
             // dtpDateOfBirth
             // 
             dtpDateOfBirth.Format = DateTimePickerFormat.Short;
-            dtpDateOfBirth.Location = new Point(183, 127);
+            dtpDateOfBirth.Location = new Point(183, 117);
             dtpDateOfBirth.MinDate = new DateTime(1910, 1, 1, 0, 0, 0, 0);
             dtpDateOfBirth.Name = "dtpDateOfBirth";
             dtpDateOfBirth.Size = new Size(127, 25);
@@ -340,11 +344,11 @@
             // lblViolation
             // 
             lblViolation.AutoSize = true;
-            lblViolation.Location = new Point(18, 268);
+            lblViolation.Location = new Point(36, 274);
             lblViolation.Name = "lblViolation";
             lblViolation.Size = new Size(80, 17);
             lblViolation.TabIndex = 11;
-            lblViolation.Text = "Violações";
+            lblViolation.Text = "Infrações";
             // 
             // ltvViolation
             // 
@@ -462,7 +466,7 @@
             // lblRentalRecord
             // 
             lblRentalRecord.AutoSize = true;
-            lblRentalRecord.Location = new Point(557, 268);
+            lblRentalRecord.Location = new Point(800, 268);
             lblRentalRecord.Name = "lblRentalRecord";
             lblRentalRecord.Size = new Size(160, 17);
             lblRentalRecord.TabIndex = 16;
@@ -516,7 +520,7 @@
             txtEmail.BorderFocusColor = Color.PaleGreen;
             txtEmail.BorderSize = 2;
             txtEmail.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtEmail.Location = new Point(120, 192);
+            txtEmail.Location = new Point(91, 169);
             txtEmail.Margin = new Padding(4);
             txtEmail.MaxLenght = 255;
             txtEmail.MultLine = false;
@@ -525,7 +529,7 @@
             txtEmail.PasswordChar = false;
             txtEmail.PlaceHolder = "";
             txtEmail.ReadOnly = false;
-            txtEmail.Size = new Size(533, 36);
+            txtEmail.Size = new Size(562, 36);
             txtEmail.TabIndex = 5;
             txtEmail.Texts = "";
             txtEmail.UnderlineStyle = true;
@@ -533,7 +537,7 @@
             // lblEmail
             // 
             lblEmail.AutoSize = true;
-            lblEmail.Location = new Point(18, 192);
+            lblEmail.Location = new Point(27, 169);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(48, 17);
             lblEmail.TabIndex = 24;
@@ -561,7 +565,7 @@
             // 
             // lblRole
             // 
-            lblRole.Location = new Point(682, 192);
+            lblRole.Location = new Point(691, 169);
             lblRole.Name = "lblRole";
             lblRole.Size = new Size(66, 36);
             lblRole.TabIndex = 26;
@@ -573,16 +577,80 @@
             cbxRoles.DropDownStyle = ComboBoxStyle.DropDownList;
             cbxRoles.FormattingEnabled = true;
             cbxRoles.Items.AddRange(new object[] { "Administrador", "Funcionário", "Usuário" });
-            cbxRoles.Location = new Point(754, 199);
+            cbxRoles.Location = new Point(763, 176);
             cbxRoles.Name = "cbxRoles";
             cbxRoles.Size = new Size(233, 25);
             cbxRoles.TabIndex = 6;
+            // 
+            // lblUsername
+            // 
+            lblUsername.AutoSize = true;
+            lblUsername.Location = new Point(27, 228);
+            lblUsername.Name = "lblUsername";
+            lblUsername.Size = new Size(72, 17);
+            lblUsername.TabIndex = 28;
+            lblUsername.Text = "Username";
+            // 
+            // txtUsername
+            // 
+            txtUsername.BackColor = Color.White;
+            txtUsername.BorderColor = Color.SeaGreen;
+            txtUsername.BorderFocusColor = Color.PaleGreen;
+            txtUsername.BorderSize = 2;
+            txtUsername.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtUsername.Location = new Point(100, 220);
+            txtUsername.Margin = new Padding(4);
+            txtUsername.MaxLenght = 30;
+            txtUsername.MultLine = false;
+            txtUsername.Name = "txtUsername";
+            txtUsername.Padding = new Padding(7);
+            txtUsername.PasswordChar = false;
+            txtUsername.PlaceHolder = "";
+            txtUsername.ReadOnly = false;
+            txtUsername.Size = new Size(235, 36);
+            txtUsername.TabIndex = 27;
+            txtUsername.Texts = "";
+            txtUsername.UnderlineStyle = true;
+            // 
+            // lblPassword
+            // 
+            lblPassword.AutoSize = true;
+            lblPassword.Location = new Point(372, 228);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(48, 17);
+            lblPassword.TabIndex = 30;
+            lblPassword.Text = "Senha";
+            // 
+            // txtPassword
+            // 
+            txtPassword.BackColor = Color.White;
+            txtPassword.BorderColor = Color.SeaGreen;
+            txtPassword.BorderFocusColor = Color.PaleGreen;
+            txtPassword.BorderSize = 2;
+            txtPassword.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtPassword.Location = new Point(427, 220);
+            txtPassword.Margin = new Padding(4);
+            txtPassword.MaxLenght = 100;
+            txtPassword.MultLine = false;
+            txtPassword.Name = "txtPassword";
+            txtPassword.Padding = new Padding(7);
+            txtPassword.PasswordChar = false;
+            txtPassword.PlaceHolder = "";
+            txtPassword.ReadOnly = false;
+            txtPassword.Size = new Size(346, 36);
+            txtPassword.TabIndex = 29;
+            txtPassword.Texts = "";
+            txtPassword.UnderlineStyle = true;
             // 
             // frmUser
             // 
             AutoScaleDimensions = new SizeF(8F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1024, 604);
+            Controls.Add(lblPassword);
+            Controls.Add(txtPassword);
+            Controls.Add(lblUsername);
+            Controls.Add(txtUsername);
             Controls.Add(cbxRoles);
             Controls.Add(lblRole);
             Controls.Add(lblEmail);
@@ -666,5 +734,9 @@
         private ColumnHeader columnHeader4;
         private Label lblRole;
         private ComboBox cbxRoles;
+        private Label lblUsername;
+        private CustomControls.CustomTextBox txtUsername;
+        private Label lblPassword;
+        private CustomControls.CustomTextBox txtPassword;
     }
 }
