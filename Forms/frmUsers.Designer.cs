@@ -38,7 +38,6 @@ partial class frmUsers
         txtSearch = new CustomControls.CustomTextBox();
         dgvUsers = new DataGridView();
         tmrSearch = new System.Windows.Forms.Timer(components);
-        label1 = new Label();
         ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
         SuspendLayout();
         // 
@@ -151,6 +150,7 @@ partial class frmUsers
         txtSearch.Padding = new Padding(7);
         txtSearch.PasswordChar = false;
         txtSearch.PlaceHolder = "Digite o nome do usuario";
+        txtSearch.ReadOnly = false;
         txtSearch.Size = new Size(531, 36);
         txtSearch.TabIndex = 9;
         txtSearch.Texts = "";
@@ -189,16 +189,6 @@ partial class frmUsers
         tmrSearch.Interval = 900;
         tmrSearch.Tick += tmrSearch_Tick;
         // 
-        // label1
-        // 
-        label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        label1.AutoSize = true;
-        label1.Location = new Point(234, 63);
-        label1.Name = "label1";
-        label1.Size = new Size(344, 17);
-        label1.TabIndex = 14;
-        label1.Text = "Colocar Cores Melhores para esse botões ->";
-        // 
         // frmUsers
         // 
         AutoScaleDimensions = new SizeF(8F, 17F);
@@ -210,7 +200,6 @@ partial class frmUsers
         Controls.Add(btnAdd);
         Controls.Add(txtSearch);
         Controls.Add(dgvUsers);
-        Controls.Add(label1);
         Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
         FormBorderStyle = FormBorderStyle.None;
         Name = "frmUsers";
@@ -218,7 +207,6 @@ partial class frmUsers
         Text = "frmUsers";
         ((System.ComponentModel.ISupportInitialize)dgvUsers).EndInit();
         ResumeLayout(false);
-        PerformLayout();
     }
 
     #endregion
@@ -230,5 +218,4 @@ partial class frmUsers
     private CustomControls.CustomTextBox txtSearch;
     private DataGridView dgvUsers;
     private System.Windows.Forms.Timer tmrSearch;
-    private Label label1;
 }

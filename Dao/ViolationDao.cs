@@ -123,7 +123,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public bool Delete(List<int> ids)
+        public bool Delete(List<Violation> violations)
         {
             using (SqlConnection conn = new(_connectionString))
             {
@@ -132,9 +132,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     try
                     {
                         conn.Open();
-                        foreach (int id in ids)
+                        foreach (Violation violation in violations)
                         {
-                            cmd.Parameters.AddWithValue("@id", id);
+                            cmd.Parameters.AddWithValue("@id", violation.Id);
                             cmd.ExecuteNonQuery();
                             cmd.Parameters.Clear();
                         }

@@ -27,6 +27,7 @@
 
         public static bool IsCpfValid(string cpf)
         {
+            if (cpf.Length == 14) cpf = ToCpf(cpf);
             if (cpf.Length != 11 || !cpf.All(Char.IsDigit)) return false;
 
             int firstDigit = CalculateCheckDigit(cpf, true);
@@ -34,9 +35,7 @@
 
             string cpfVerified = cpf.Substring(0, 9) + firstDigit + secondDigit;
 
-
-            if (cpfVerified != cpf) return false;
-            return true;
+            return cpfVerified == cpf;
         }
 
         public static string ToCpf(string cpf)

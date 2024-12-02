@@ -41,6 +41,7 @@
             maskedTextBox1.Name = "maskedTextBox1";
             maskedTextBox1.Size = new Size(200, 20);
             maskedTextBox1.TabIndex = 0;
+            maskedTextBox1.Click += maskedTextBox1_Click;
             maskedTextBox1.TextChanged += maskedTextBox1_TextChanged;
             maskedTextBox1.Enter += maskedTextBox1_Enter;
             maskedTextBox1.KeyDown += maskedTextBox1_KeyDown;

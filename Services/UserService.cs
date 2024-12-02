@@ -1,6 +1,5 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
 using ProjetoDesenvolvimentoAplicacoesMultplataforma.Utils;
-using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
@@ -18,12 +17,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             string cpf,
             string cnh,
             double balance,
+            string role,
             DateTime birtyDay,
-            List<Violation> violations,
-            List<int> violationsToBeRemoved
+            List<Violation> violationsToBeAdd,
+            List<Violation> violationsToBeUpdate,
+            List<Violation> violationsToBeRemoved
         )
         {
-            if (violations.Count > 0) balance = GetNewBalance(balance, violations);
+            if (
+                violationsToBeAdd .Count > 0|| violationsToBeUpdate.Count > 0 || violationsToBeRemoved.Count > 0
+            ) balance = GetNewBalance(balance, violationsToBeAdd, violationsToBeUpdate);
 
             User user = new()
             {
@@ -35,6 +38,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
                 CPF = cpf,
                 CNH = cnh,
                 Balance = balance,
+                Role = role
             };
             if (id == 0)
             {
@@ -45,33 +49,27 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             }
 
             SaveViolations(
-                violations, violationsToBeRemoved
+                violationsToBeAdd, violationsToBeUpdate, violationsToBeRemoved
             );
             _dao.Update(user);
             return 0;
         }
+
+        public int Login (string username, string password) => _dao.Login(username, password);
+
+        public int FirstUse(string firstName, string username, string password) => _dao.FirstUse(firstName, username, password);
 
         public DataTable ListUsers()
         {
             return _dao.ListUsers();
         }
 
-        // Talvez remover essa opção e deixar somente cpf
-        public User GetUserById(int id)
-        {
-            SqlParameter[] param =
-            [
-                new SqlParameter("@id", id)
-            ];
-            return _dao.Select("id=@id", param);
-        }
+        public User? GetUserById(int id) => _dao.Select(id);
 
-        public User GetUserByCpf(string cpf)
+        public User? GetUserByCpf(string cpf)
         {
-            SqlParameter[] param = [
-                new SqlParameter("@cpf", cpf)
-            ];
-            return _dao.Select("cpf=@cpf", param);
+            if (cpf.Length == 14) cpf = cpfUtils.ToCpf(cpf);
+            return _dao.Select(cpf);
         }
 
         public DataTable GetUsersByName(string name)
@@ -89,48 +87,47 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             return _dao.Delete(id);
         }
 
-        public double GetUserBalance(int id)
+        public double GetUserBalance(string cpf)
         {
-            SqlParameter[] param =
-            [
-                new SqlParameter("@id", id)
-            ];
-            User user = _dao.Select("id=@id", param);
+            if (cpf.Length == 14) cpf = cpfUtils.ToCpf(cpf);
+            User user = _dao.Select(cpf);
             return user.Balance;
         }
 
-        private double GetNewBalance(double balance, List<Violation> violations)
+        public string GetRole(int currentUserId, string newUserRole)
         {
-            foreach (Violation violation in violations)
+            string role = GetUserById(currentUserId).Role;
+
+            if (role == "Administrador") return newUserRole;
+            else if (role == "Funcionário") return "Usuário";
+            return "NA";
+        }
+
+        private double GetNewBalance(
+            double balance, List<Violation> violationsToBeAdd, List<Violation> violationsToBeUpdate
+        )
+        {
+            (List<Violation> Add, List<Violation> Edit) = (violationsToBeAdd, violationsToBeUpdate);
+            foreach (Violation violation in Add)
             {
-                if (violation.Id != 0) continue;
+                balance -= violation.Cost;
+            }
+            foreach (Violation violation in Edit)
+            {
                 balance -= violation.Cost;
             }
             return balance;
         }
 
         private void SaveViolations(
-                List<Violation> violations,
-                List<int> violationsToBeRemoved
+            List<Violation> violationsToBeAdd,
+            List<Violation> violationsToBeUpdate,
+            List<Violation> violationsToBeRemoved
             )
-            {
-                List<Violation> violationsToBeAdded = new();
-                List<Violation> violationsToBeUpdated = new();
-                if (violations.Count > 0)
-                {
-                    foreach (Violation violation in violations)
-                    {
-                        if (violation.Id != 0)
-                        {
-                            violationsToBeUpdated.Add(violation);
-                            continue;
-                        };
-                        violationsToBeAdded.Add(violation);
-                    }
-                };
-                if (violationsToBeAdded.Count > 0) _daoPenalty.Save(violationsToBeAdded);
-                if (violationsToBeUpdated.Count > 0) _daoPenalty.Update(violationsToBeUpdated);
-                if (violationsToBeRemoved.Count > 0) _daoPenalty.Delete(violationsToBeRemoved);
-            }
+        {
+            if (violationsToBeAdd.Count > 0) _daoPenalty.Save(violationsToBeAdd);
+            if (violationsToBeUpdate.Count > 0) _daoPenalty.Update(violationsToBeUpdate);
+            if (violationsToBeRemoved.Count > 0) _daoPenalty.Delete(violationsToBeRemoved);
         }
+    }
 }

@@ -5,20 +5,25 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmUser : Form
     {
-        private int _id = 0;
+        public int UserID { get; private set; }
 
-        private readonly List<int> _violationToBeRemoved = [];
+        private int _id = 0;
+        private readonly int _currentUserId;
+        private string _cpf = "";
+
         private readonly UserService _service = new();
 
-        public frmUser()
+        public frmUser(int currentUserID)
         {
             InitializeComponent();
+            _currentUserId = currentUserID;
         }
 
-        public frmUser(int id)
+        public frmUser(int id, int currentUserId)
         {
             InitializeComponent();
             InitEditMode(id);
+            _currentUserId = currentUserId;
         }
 
         private void InitEditMode(int id)
@@ -32,12 +37,15 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             }
 
             _id = id;
+            _cpf = user.CPF;
             txtFirstName.Texts = user.FirstName;
             txtLastName.Texts = user.LastName;
             txtEmail.Texts = user.Email;
-            lblBalanceValue.Text = user.Balance.ToString();
+            lblBalanceValue.Text = Math.Round(user.Balance, 2).ToString();
+            dtpDateOfBirth.Value = user.BirtyDay;
             mkbCPF.Texts = user.CPF;
             mkbCNH.Texts = "000" + user.CNH;
+            cbxRoles.Text = user.Role;
 
             mkbCPF.Enabled = false;
             mkbCNH.Enabled = false;
@@ -62,7 +70,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             {
                 lvItem = new ListViewItem(violation.Id.ToString());
                 lvItem.SubItems.Add(violation.Name);
-                lvItem.SubItems.Add(violation.Cost.ToString());
+                lvItem.SubItems.Add(Math.Round(violation.Cost, 2).ToString());
+                lvItem.SubItems.Add("");
                 ltvViolation.Items.Add(lvItem);
             }
         }
@@ -77,12 +86,20 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             return true;
         }
 
+        private bool CanDrive()
+        {
+            DateTime birth = dtpDateOfBirth.Value.Date;
+            return birth.AddYears(18) <= DateTime.Now;
+        }
+
         private void LoadViolationToEdit()
         {
             ListViewItem item = ltvViolation.SelectedItems[0];
             txtViolationType.Texts = item.SubItems[1].Text;
             txtViolationValue.Texts = item.SubItems[2].Text;
             ltvViolation.Enabled = false;
+            btnSave.Enabled = false;
+            btnDelete.Enabled = false;
             btnViolationAdd.Visible = false;
             btnEditViolation.Visible = true;
         }
@@ -104,6 +121,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             ListViewItem lvt = new("Não Salvo");
             lvt.SubItems.Add(name);
             lvt.SubItems.Add(cost.ToString());
+            lvt.SubItems.Add("A");
             ltvViolation.Items.Add(lvt);
 
             txtViolationType.Texts = "";
@@ -111,32 +129,50 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             txtViolationType.Focus();
         }
 
-        private List<Violation> SaveViolations()
+        private (List<Violation> Additions, List<Violation> Edits, List<Violation> Remove) SaveViolations()
         {
             int id;
-            List<Violation> violationsList = new();
+            List<Violation> violationsToBeAdd = new();
+            List<Violation> violationsToBeEdit = new();
+            List<Violation> violationsToBeRemoved = new();
+            Violation violation;
 
             foreach (ListViewItem violationItem in ltvViolation.Items)
             {
                 try
                 {
-                    id = int.Parse(violationItem.SubItems[0].Text);
+                    if (string.IsNullOrEmpty(violationItem.SubItems[3].Text)) continue;
                 }
                 catch
                 {
-                    id = 0;
+                    return (violationsToBeAdd, violationsToBeEdit, violationsToBeRemoved);
                 }
-
-                Violation violation = new()
+                violation = new()
                 {
-                    Id = id,
+                    Id = 0,
                     OwnerId = _id,
                     Name = violationItem.SubItems[1].Text,
-                    Cost = float.Parse(violationItem.SubItems[2].Text),
+                    Cost = double.Parse(violationItem.SubItems[2].Text),
                 };
-                violationsList.Add(violation);
+                if (violationItem.SubItems[3].Text == "A")
+                {
+                    violationsToBeAdd.Add(violation);
+                }
+                else if (violationItem.SubItems[3].Text == "E")
+                {
+                    id = int.Parse(violationItem.Text);
+                    violation.Id = id;
+                    violationsToBeEdit.Add(violation);
+                }
+                else
+                {
+                    id = int.Parse(violationItem.Text);
+                    violation.Id = id;
+                    violationsToBeRemoved.Add(violation);
+                }
+
             }
-            return violationsList;
+            return (violationsToBeAdd, violationsToBeEdit, violationsToBeRemoved);
         }
 
         private void EditViolation()
@@ -158,7 +194,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
             item.SubItems[1].Text = name;
             item.SubItems[2].Text = cost.ToString();
+            item.SubItems[3].Text = "E";
             ltvViolation.Enabled = true;
+            btnSave.Enabled = false;
+            btnDelete.Enabled = false;
             btnViolationAdd.Visible = true;
             btnEditViolation.Visible = false;
         }
@@ -166,23 +205,34 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void RemoveViolation()
         {
             if (!IsViolationSelected()) return;
-            int id;
-            try
+
+            if (ltvViolation.SelectedItems[0].Text == "Não Salvo")
             {
-                id = int.Parse(ltvViolation.SelectedItems[0].Text);
-                _violationToBeRemoved.Add(id);
+                int ltvIndex = ltvViolation.SelectedItems[0].Index;
+                ltvViolation.Items.RemoveAt(ltvIndex);
+                return;
             }
-            catch
-            {
-                //Não fazer nada
-            }
-            int ltvIndex = ltvViolation.SelectedItems[0].Index;
-            ltvViolation.Items.RemoveAt(ltvIndex);
+            ltvViolation.SelectedItems[3].Text = "D";
         }
 
         private void Save()
         {
-            List<Violation> violations = SaveViolations();
+            if (!CanDrive())
+            {
+                MessageBox.Show("O locatario é menor de idade", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string role = role = _service.GetRole(_currentUserId, cbxRoles.Text);
+            if (role == "NA")
+            {
+                MessageBox.Show("Cargo invalido, ou usuário sem permição", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            (
+                List<Violation> ViolationAdd, List<Violation> ViolationEdit, List<Violation> ViolationRem
+            ) = SaveViolations();
             int id = _service.Save(
                 _id,
                 txtFirstName.Texts,
@@ -191,9 +241,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 mkbCPF.Texts,
                 mkbCNH.Texts.Substring(3, 9), // Ignora os zeros, talvez mudar no banco de dados para suportar
                 double.Parse(lblBalanceValue.Text),
-                dtpDateOfBirth.Value,
-                violations,
-                _violationToBeRemoved
+                role,
+                dtpDateOfBirth.Value.Date,
+                ViolationAdd,
+                ViolationEdit,
+                ViolationRem
             );
             if (id == -2)
             {
@@ -206,18 +258,19 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 return;
             }
             MessageBox.Show("Salvo com sucesso", "Sucesso");
+
             if (id > 0)
             {
                 InitEditMode(id);
                 return;
             }
             LoadLtvViolation();
-            lblBalanceValue.Text = (_service.GetUserBalance(_id)).ToString();
+            lblBalanceValue.Text = Math.Round(_service.GetUserBalance(_cpf), 2).ToString();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            this.Close();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -282,6 +335,26 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void frmUser_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.S) Save();
+        }
+
+        private void mkbCPF__MouseClick(object sender, EventArgs e)
+        {
+            mkbCPF.Select(0, 0);
+        }
+
+        private void mkbCNH__MouseClick(object sender, EventArgs e)
+        {
+            mkbCNH.Select(0, 0);
+        }
+
+        private void frmUser_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            (List<Violation> addList, List<Violation> editList, List<Violation> removeList) = SaveViolations();
+            if (addList.Count == 0 && editList.Count == 0 && removeList.Count == 0) return;
+            DialogResult resp = MessageBox.Show(
+                "Há alterações não salvas deseja salvar(Ctrl + s)?", "Alerta", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
+            );
+            if (resp == DialogResult.Yes) Save();
         }
     }
 }

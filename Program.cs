@@ -16,8 +16,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             Application.Run(loginForm);
             if (loginForm.IsLogged)
             {
-                Application.Run(new frmMenu());
-            }
+                Application.Run(new frmMenu(loginForm.UserId));
+            };
         }
     }
 }

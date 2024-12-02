@@ -28,31 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRented));
             ltvRecord = new ListView();
             mkbCPF = new CustomControls.CustonMaskedBox();
-            customButton1 = new CustomControls.CustomButton();
+            btnRent = new CustomControls.CustomButton();
             txtLicensePlate = new CustomControls.CustomTextBox();
-            dateTimePicker1 = new DateTimePicker();
+            dtpStartingDay = new DateTimePicker();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
-            customButton2 = new CustomControls.CustomButton();
-            customButton3 = new CustomControls.CustomButton();
+            btnCancelRental = new CustomControls.CustomButton();
+            btnExtendRent = new CustomControls.CustomButton();
             label5 = new Label();
             dtpReturnDay = new DateTimePicker();
-            label6 = new Label();
-            label7 = new Label();
+            lblDaysRemainingText = new Label();
+            lblDaysRemainingValue = new Label();
             lblName = new Label();
             txtName = new CustomControls.CustomTextBox();
+            lblTotalValue = new Label();
+            lblTotalValueText = new Label();
             SuspendLayout();
             // 
             // ltvRecord
             // 
-            ltvRecord.Location = new Point(12, 514);
+            ltvRecord.Location = new Point(12, 320);
             ltvRecord.Name = "ltvRecord";
-            ltvRecord.Size = new Size(474, 35);
-            ltvRecord.TabIndex = 0;
+            ltvRecord.Size = new Size(474, 229);
+            ltvRecord.TabIndex = 3;
             ltvRecord.UseCompatibleStateImageBehavior = false;
             // 
             // mkbCPF
@@ -75,23 +78,24 @@
             mkbCPF.Enter += mkbCPF_Enter;
             mkbCPF.Leave += txtCPF_Leave;
             // 
-            // customButton1
+            // btnRent
             // 
-            customButton1.BackColor = Color.White;
-            customButton1.BackgroudColor = Color.White;
-            customButton1.BorderColor = Color.PaleVioletRed;
-            customButton1.BorderRadius = 40;
-            customButton1.BorderSize = 0;
-            customButton1.FlatAppearance.BorderSize = 0;
-            customButton1.FlatStyle = FlatStyle.Flat;
-            customButton1.ForeColor = Color.Black;
-            customButton1.Location = new Point(316, 7);
-            customButton1.Name = "customButton1";
-            customButton1.Size = new Size(150, 40);
-            customButton1.TabIndex = 2;
-            customButton1.Text = "Alugar";
-            customButton1.TextColor = Color.Black;
-            customButton1.UseVisualStyleBackColor = false;
+            btnRent.BackColor = Color.White;
+            btnRent.BackgroudColor = Color.White;
+            btnRent.BorderColor = Color.PaleVioletRed;
+            btnRent.BorderRadius = 40;
+            btnRent.BorderSize = 0;
+            btnRent.FlatAppearance.BorderSize = 0;
+            btnRent.FlatStyle = FlatStyle.Flat;
+            btnRent.ForeColor = Color.Black;
+            btnRent.Location = new Point(316, 7);
+            btnRent.Name = "btnRent";
+            btnRent.Size = new Size(150, 40);
+            btnRent.TabIndex = 4;
+            btnRent.Text = "Alugar";
+            btnRent.TextColor = Color.Black;
+            btnRent.UseVisualStyleBackColor = false;
+            btnRent.Click += btnRent_Click;
             // 
             // txtLicensePlate
             // 
@@ -110,22 +114,24 @@
             txtLicensePlate.PlaceHolder = "";
             txtLicensePlate.ReadOnly = true;
             txtLicensePlate.Size = new Size(232, 36);
-            txtLicensePlate.TabIndex = 1;
+            txtLicensePlate.TabIndex = 7;
+            txtLicensePlate.TabStop = false;
             txtLicensePlate.Texts = "";
             txtLicensePlate.UnderlineStyle = true;
             // 
-            // dateTimePicker1
+            // dtpStartingDay
             // 
-            dateTimePicker1.Format = DateTimePickerFormat.Short;
-            dateTimePicker1.Location = new Point(14, 315);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(129, 25);
-            dateTimePicker1.TabIndex = 4;
+            dtpStartingDay.Format = DateTimePickerFormat.Short;
+            dtpStartingDay.Location = new Point(13, 230);
+            dtpStartingDay.Name = "dtpStartingDay";
+            dtpStartingDay.Size = new Size(129, 25);
+            dtpStartingDay.TabIndex = 1;
+            dtpStartingDay.ValueChanged += dtpStartingDay_ValueChanged;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(14, 295);
+            label1.Location = new Point(13, 210);
             label1.Name = "label1";
             label1.Size = new Size(88, 17);
             label1.TabIndex = 5;
@@ -152,52 +158,55 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(153, 480);
+            label4.Location = new Point(155, 300);
             label4.Name = "label4";
             label4.Size = new Size(176, 17);
             label4.TabIndex = 8;
             label4.Text = "Utimos 50, locatarios";
             // 
-            // customButton2
+            // btnCancelRental
             // 
-            customButton2.BackColor = Color.White;
-            customButton2.BackgroudColor = Color.White;
-            customButton2.BorderColor = Color.PaleVioletRed;
-            customButton2.BorderRadius = 40;
-            customButton2.BorderSize = 0;
-            customButton2.FlatAppearance.BorderSize = 0;
-            customButton2.FlatStyle = FlatStyle.Flat;
-            customButton2.ForeColor = Color.Black;
-            customButton2.Location = new Point(316, 103);
-            customButton2.Name = "customButton2";
-            customButton2.Size = new Size(150, 40);
-            customButton2.TabIndex = 9;
-            customButton2.Text = "Cancelar";
-            customButton2.TextColor = Color.Black;
-            customButton2.UseVisualStyleBackColor = false;
+            btnCancelRental.BackColor = Color.White;
+            btnCancelRental.BackgroudColor = Color.White;
+            btnCancelRental.BorderColor = Color.PaleVioletRed;
+            btnCancelRental.BorderRadius = 40;
+            btnCancelRental.BorderSize = 0;
+            btnCancelRental.FlatAppearance.BorderSize = 0;
+            btnCancelRental.FlatStyle = FlatStyle.Flat;
+            btnCancelRental.ForeColor = Color.Black;
+            btnCancelRental.Location = new Point(316, 103);
+            btnCancelRental.Name = "btnCancelRental";
+            btnCancelRental.Size = new Size(150, 40);
+            btnCancelRental.TabIndex = 6;
+            btnCancelRental.Text = "Cancelar Aluguel";
+            btnCancelRental.TextColor = Color.Black;
+            btnCancelRental.UseVisualStyleBackColor = false;
+            btnCancelRental.Visible = false;
+            btnCancelRental.Click += btnCancelRental_Click;
             // 
-            // customButton3
+            // btnExtendRent
             // 
-            customButton3.BackColor = Color.White;
-            customButton3.BackgroudColor = Color.White;
-            customButton3.BorderColor = Color.PaleVioletRed;
-            customButton3.BorderRadius = 40;
-            customButton3.BorderSize = 0;
-            customButton3.FlatAppearance.BorderSize = 0;
-            customButton3.FlatStyle = FlatStyle.Flat;
-            customButton3.ForeColor = Color.Black;
-            customButton3.Location = new Point(316, 55);
-            customButton3.Name = "customButton3";
-            customButton3.Size = new Size(150, 40);
-            customButton3.TabIndex = 10;
-            customButton3.Text = "Extender Aluguel";
-            customButton3.TextColor = Color.Black;
-            customButton3.UseVisualStyleBackColor = false;
+            btnExtendRent.BackColor = Color.White;
+            btnExtendRent.BackgroudColor = Color.White;
+            btnExtendRent.BorderColor = Color.PaleVioletRed;
+            btnExtendRent.BorderRadius = 40;
+            btnExtendRent.BorderSize = 0;
+            btnExtendRent.FlatAppearance.BorderSize = 0;
+            btnExtendRent.FlatStyle = FlatStyle.Flat;
+            btnExtendRent.ForeColor = Color.Black;
+            btnExtendRent.Location = new Point(316, 55);
+            btnExtendRent.Name = "btnExtendRent";
+            btnExtendRent.Size = new Size(150, 40);
+            btnExtendRent.TabIndex = 5;
+            btnExtendRent.Text = "Extender Aluguel";
+            btnExtendRent.TextColor = Color.Black;
+            btnExtendRent.UseVisualStyleBackColor = false;
+            btnExtendRent.Visible = false;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(247, 295);
+            label5.Location = new Point(246, 210);
             label5.Name = "label5";
             label5.Size = new Size(32, 17);
             label5.TabIndex = 12;
@@ -206,28 +215,29 @@
             // dtpReturnDay
             // 
             dtpReturnDay.Format = DateTimePickerFormat.Short;
-            dtpReturnDay.Location = new Point(247, 315);
+            dtpReturnDay.Location = new Point(246, 230);
             dtpReturnDay.Name = "dtpReturnDay";
             dtpReturnDay.Size = new Size(129, 25);
-            dtpReturnDay.TabIndex = 11;
+            dtpReturnDay.TabIndex = 2;
+            dtpReturnDay.ValueChanged += dtpReturnDay_ValueChanged;
             // 
-            // label6
+            // lblDaysRemainingText
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(13, 370);
-            label6.Name = "label6";
-            label6.Size = new Size(184, 17);
-            label6.TabIndex = 13;
-            label6.Text = "Dias até o vencimento:";
+            lblDaysRemainingText.AutoSize = true;
+            lblDaysRemainingText.Location = new Point(13, 268);
+            lblDaysRemainingText.Name = "lblDaysRemainingText";
+            lblDaysRemainingText.Size = new Size(120, 17);
+            lblDaysRemainingText.TabIndex = 13;
+            lblDaysRemainingText.Text = "Dias restante:";
             // 
-            // label7
+            // lblDaysRemainingValue
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(195, 370);
-            label7.Name = "label7";
-            label7.Size = new Size(16, 17);
-            label7.TabIndex = 14;
-            label7.Text = "0";
+            lblDaysRemainingValue.AutoSize = true;
+            lblDaysRemainingValue.Location = new Point(133, 268);
+            lblDaysRemainingValue.Name = "lblDaysRemainingValue";
+            lblDaysRemainingValue.Size = new Size(16, 17);
+            lblDaysRemainingValue.TabIndex = 14;
+            lblDaysRemainingValue.Text = "0";
             // 
             // lblName
             // 
@@ -244,7 +254,6 @@
             txtName.BorderColor = Color.FromArgb(93, 181, 245);
             txtName.BorderFocusColor = Color.PaleGreen;
             txtName.BorderSize = 2;
-            txtName.Enabled = false;
             txtName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtName.Location = new Point(13, 162);
             txtName.Margin = new Padding(4);
@@ -254,37 +263,60 @@
             txtName.Padding = new Padding(7);
             txtName.PasswordChar = false;
             txtName.PlaceHolder = "Insira o CPF para ver o nome.";
-            txtName.ReadOnly = false;
+            txtName.ReadOnly = true;
             txtName.Size = new Size(453, 36);
-            txtName.TabIndex = 15;
+            txtName.TabIndex = 8;
+            txtName.TabStop = false;
             txtName.Texts = "";
             txtName.UnderlineStyle = false;
             // 
+            // lblTotalValue
+            // 
+            lblTotalValue.AutoSize = true;
+            lblTotalValue.Location = new Point(380, 268);
+            lblTotalValue.Name = "lblTotalValue";
+            lblTotalValue.Size = new Size(16, 17);
+            lblTotalValue.TabIndex = 18;
+            lblTotalValue.Text = "0";
+            // 
+            // lblTotalValueText
+            // 
+            lblTotalValueText.AutoSize = true;
+            lblTotalValueText.Location = new Point(246, 268);
+            lblTotalValueText.Name = "lblTotalValueText";
+            lblTotalValueText.Size = new Size(128, 17);
+            lblTotalValueText.TabIndex = 17;
+            lblTotalValueText.Text = "Valor total: R$";
+            // 
             // frmRented
             // 
-            AutoScaleDimensions = new SizeF(8F, 17F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(498, 561);
+            Controls.Add(lblTotalValue);
+            Controls.Add(lblTotalValueText);
             Controls.Add(lblName);
             Controls.Add(txtName);
-            Controls.Add(label7);
-            Controls.Add(label6);
+            Controls.Add(lblDaysRemainingValue);
+            Controls.Add(lblDaysRemainingText);
             Controls.Add(label5);
             Controls.Add(dtpReturnDay);
-            Controls.Add(customButton3);
-            Controls.Add(customButton2);
+            Controls.Add(btnExtendRent);
+            Controls.Add(btnCancelRental);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(dateTimePicker1);
+            Controls.Add(dtpStartingDay);
             Controls.Add(txtLicensePlate);
-            Controls.Add(customButton1);
+            Controls.Add(btnRent);
             Controls.Add(mkbCPF);
             Controls.Add(ltvRecord);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
             Name = "frmRented";
             Text = "Alugar Veiculo";
+            KeyDown += frmRented_KeyDown;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -293,20 +325,22 @@
 
         private ListView ltvRecord;
         private CustomControls.CustonMaskedBox mkbCPF;
-        private CustomControls.CustomButton customButton1;
+        private CustomControls.CustomButton btnRent;
         private CustomControls.CustomTextBox txtLicensePlate;
-        private DateTimePicker dateTimePicker1;
+        private DateTimePicker dtpStartingDay;
         private Label label1;
         private Label label2;
         private Label label3;
         private Label label4;
-        private CustomControls.CustomButton customButton2;
-        private CustomControls.CustomButton customButton3;
+        private CustomControls.CustomButton btnCancelRental;
+        private CustomControls.CustomButton btnExtendRent;
         private Label label5;
         private DateTimePicker dtpReturnDay;
-        private Label label6;
-        private Label label7;
+        private Label lblDaysRemainingText;
+        private Label lblDaysRemainingValue;
         private Label lblName;
         private CustomControls.CustomTextBox txtName;
+        private Label lblTotalValue;
+        private Label lblTotalValueText;
     }
 }

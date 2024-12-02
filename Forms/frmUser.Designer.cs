@@ -53,6 +53,7 @@
             columnHeader3 = new ColumnHeader();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
+            columnHeader4 = new ColumnHeader();
             cmsPenalty = new ContextMenuStrip(components);
             adicionarToolStripMenuItem = new ToolStripMenuItem();
             editarToolStripMenuItem = new ToolStripMenuItem();
@@ -66,6 +67,8 @@
             txtEmail = new CustomControls.CustomTextBox();
             lblEmail = new Label();
             btnEditViolation = new CustomControls.CustomButton();
+            lblRole = new Label();
+            cbxRoles = new ComboBox();
             panel1.SuspendLayout();
             pnlBalance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ptbAddBalance).BeginInit();
@@ -90,7 +93,7 @@
             txtFirstName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtFirstName.Location = new Point(91, 60);
             txtFirstName.Margin = new Padding(4);
-            txtFirstName.MaxLenght = 32767;
+            txtFirstName.MaxLenght = 25;
             txtFirstName.MultLine = false;
             txtFirstName.Name = "txtFirstName";
             txtFirstName.Padding = new Padding(7);
@@ -111,7 +114,7 @@
             txtLastName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtLastName.Location = new Point(532, 60);
             txtLastName.Margin = new Padding(4);
-            txtLastName.MaxLenght = 32767;
+            txtLastName.MaxLenght = 50;
             txtLastName.MultLine = false;
             txtLastName.Name = "txtLastName";
             txtLastName.Padding = new Padding(7);
@@ -150,17 +153,17 @@
             // 
             pnlBalance.Controls.Add(ptbAddBalance);
             pnlBalance.Controls.Add(lblBalanceValue);
-            pnlBalance.Location = new Point(91, 0);
+            pnlBalance.Location = new Point(91, 11);
             pnlBalance.Name = "pnlBalance";
-            pnlBalance.Size = new Size(86, 50);
+            pnlBalance.Size = new Size(121, 32);
             pnlBalance.TabIndex = 7;
             // 
             // ptbAddBalance
             // 
-            ptbAddBalance.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ptbAddBalance.Cursor = Cursors.Hand;
+            ptbAddBalance.Dock = DockStyle.Right;
             ptbAddBalance.Image = (Image)resources.GetObject("ptbAddBalance.Image");
-            ptbAddBalance.Location = new Point(51, 3);
+            ptbAddBalance.Location = new Point(89, 0);
             ptbAddBalance.Name = "ptbAddBalance";
             ptbAddBalance.Size = new Size(32, 32);
             ptbAddBalance.TabIndex = 6;
@@ -170,21 +173,24 @@
             // 
             // lblBalanceValue
             // 
-            lblBalanceValue.AutoSize = true;
-            lblBalanceValue.Location = new Point(3, 15);
+            lblBalanceValue.Dock = DockStyle.Left;
+            lblBalanceValue.Font = new Font("JetBrains Mono", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblBalanceValue.Location = new Point(0, 0);
+            lblBalanceValue.Margin = new Padding(0);
             lblBalanceValue.Name = "lblBalanceValue";
-            lblBalanceValue.Size = new Size(32, 17);
+            lblBalanceValue.Size = new Size(86, 32);
             lblBalanceValue.TabIndex = 5;
             lblBalanceValue.Text = "0.0";
+            lblBalanceValue.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblBalanceText
             // 
-            lblBalanceText.AutoSize = true;
-            lblBalanceText.Location = new Point(12, 15);
+            lblBalanceText.Location = new Point(12, 11);
             lblBalanceText.Name = "lblBalanceText";
-            lblBalanceText.Size = new Size(80, 17);
+            lblBalanceText.Size = new Size(80, 32);
             lblBalanceText.TabIndex = 4;
             lblBalanceText.Text = "Saldo R$:";
+            lblBalanceText.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // btnClose
             // 
@@ -202,7 +208,7 @@
             btnClose.Location = new Point(849, 3);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(150, 40);
-            btnClose.TabIndex = 12;
+            btnClose.TabIndex = 13;
             btnClose.Text = "Fechar";
             btnClose.TextColor = Color.Black;
             btnClose.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -225,7 +231,7 @@
             btnDelete.Location = new Point(682, 3);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(150, 40);
-            btnDelete.TabIndex = 11;
+            btnDelete.TabIndex = 12;
             btnDelete.Text = "Excluir";
             btnDelete.TextColor = Color.Black;
             btnDelete.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -251,7 +257,7 @@
             btnSave.Name = "btnSave";
             btnSave.RightToLeft = RightToLeft.No;
             btnSave.Size = new Size(150, 40);
-            btnSave.TabIndex = 10;
+            btnSave.TabIndex = 11;
             btnSave.Text = "Salvar";
             btnSave.TextColor = Color.Black;
             btnSave.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -283,6 +289,7 @@
             mkbCPF.TextMask = "000.000.000-00";
             mkbCPF.Texts = "   .   .   -";
             mkbCPF.UnderlineStyle = true;
+            mkbCPF._MouseClick += mkbCPF__MouseClick;
             // 
             // mkbCNH
             // 
@@ -300,6 +307,7 @@
             mkbCNH.TextMask = "000000000000";
             mkbCNH.Texts = "";
             mkbCNH.UnderlineStyle = true;
+            mkbCNH._MouseClick += mkbCNH__MouseClick;
             // 
             // lblCNH
             // 
@@ -340,13 +348,13 @@
             // 
             // ltvViolation
             // 
-            ltvViolation.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader1, columnHeader2 });
+            ltvViolation.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader1, columnHeader2, columnHeader4 });
             ltvViolation.ContextMenuStrip = cmsPenalty;
             ltvViolation.Enabled = false;
             ltvViolation.FullRowSelect = true;
             ltvViolation.Location = new Point(12, 338);
             ltvViolation.Name = "ltvViolation";
-            ltvViolation.Size = new Size(441, 254);
+            ltvViolation.Size = new Size(496, 254);
             ltvViolation.TabIndex = 13;
             ltvViolation.TabStop = false;
             ltvViolation.UseCompatibleStateImageBehavior = false;
@@ -367,6 +375,10 @@
             // 
             columnHeader2.Text = "Valor";
             columnHeader2.Width = 110;
+            // 
+            // columnHeader4
+            // 
+            columnHeader4.Text = "Flag";
             // 
             // cmsPenalty
             // 
@@ -413,7 +425,7 @@
             txtViolationType.PlaceHolder = "Tipo da violação";
             txtViolationType.ReadOnly = false;
             txtViolationType.Size = new Size(204, 36);
-            txtViolationType.TabIndex = 6;
+            txtViolationType.TabIndex = 7;
             txtViolationType.Texts = "";
             txtViolationType.UnderlineStyle = true;
             // 
@@ -431,7 +443,7 @@
             btnViolationAdd.Location = new Point(342, 291);
             btnViolationAdd.Name = "btnViolationAdd";
             btnViolationAdd.Size = new Size(100, 40);
-            btnViolationAdd.TabIndex = 8;
+            btnViolationAdd.TabIndex = 9;
             btnViolationAdd.Text = "Adicionar";
             btnViolationAdd.TextColor = Color.Black;
             btnViolationAdd.UseVisualStyleBackColor = false;
@@ -474,7 +486,7 @@
             txtViolationValue.PlaceHolder = "Valor";
             txtViolationValue.ReadOnly = false;
             txtViolationValue.Size = new Size(105, 36);
-            txtViolationValue.TabIndex = 7;
+            txtViolationValue.TabIndex = 8;
             txtViolationValue.Texts = "";
             txtViolationValue.UnderlineStyle = true;
             // 
@@ -492,7 +504,7 @@
             btnRentalRecordAdd.Location = new Point(557, 292);
             btnRentalRecordAdd.Name = "btnRentalRecordAdd";
             btnRentalRecordAdd.Size = new Size(430, 40);
-            btnRentalRecordAdd.TabIndex = 9;
+            btnRentalRecordAdd.TabIndex = 10;
             btnRentalRecordAdd.Text = "Adicionar veiculo ao registro";
             btnRentalRecordAdd.TextColor = Color.Black;
             btnRentalRecordAdd.UseVisualStyleBackColor = false;
@@ -506,14 +518,14 @@
             txtEmail.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtEmail.Location = new Point(120, 192);
             txtEmail.Margin = new Padding(4);
-            txtEmail.MaxLenght = 32767;
+            txtEmail.MaxLenght = 255;
             txtEmail.MultLine = false;
             txtEmail.Name = "txtEmail";
             txtEmail.Padding = new Padding(7);
             txtEmail.PasswordChar = false;
             txtEmail.PlaceHolder = "";
             txtEmail.ReadOnly = false;
-            txtEmail.Size = new Size(860, 36);
+            txtEmail.Size = new Size(533, 36);
             txtEmail.TabIndex = 5;
             txtEmail.Texts = "";
             txtEmail.UnderlineStyle = true;
@@ -547,11 +559,32 @@
             btnEditViolation.Visible = false;
             btnEditViolation.Click += btnEditPenalty_Click;
             // 
+            // lblRole
+            // 
+            lblRole.Location = new Point(682, 192);
+            lblRole.Name = "lblRole";
+            lblRole.Size = new Size(66, 36);
+            lblRole.TabIndex = 26;
+            lblRole.Text = "Cargo";
+            lblRole.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // cbxRoles
+            // 
+            cbxRoles.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbxRoles.FormattingEnabled = true;
+            cbxRoles.Items.AddRange(new object[] { "Administrador", "Funcionário", "Usuário" });
+            cbxRoles.Location = new Point(754, 199);
+            cbxRoles.Name = "cbxRoles";
+            cbxRoles.Size = new Size(233, 25);
+            cbxRoles.TabIndex = 6;
+            // 
             // frmUser
             // 
             AutoScaleDimensions = new SizeF(8F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1024, 604);
+            Controls.Add(cbxRoles);
+            Controls.Add(lblRole);
             Controls.Add(lblEmail);
             Controls.Add(txtEmail);
             Controls.Add(btnRentalRecordAdd);
@@ -575,15 +608,15 @@
             Controls.Add(btnViolationAdd);
             Controls.Add(btnEditViolation);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             Name = "frmUser";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Cadastrar Usuario";
+            FormClosing += frmUser_FormClosing;
             KeyDown += frmUser_KeyDown;
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             pnlBalance.ResumeLayout(false);
-            pnlBalance.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ptbAddBalance).EndInit();
             cmsPenalty.ResumeLayout(false);
             ResumeLayout(false);
@@ -630,5 +663,8 @@
         private CustomControls.CustomButton btnEditViolation;
         private PictureBox ptbAddBalance;
         private Panel pnlBalance;
+        private ColumnHeader columnHeader4;
+        private Label lblRole;
+        private ComboBox cbxRoles;
     }
 }

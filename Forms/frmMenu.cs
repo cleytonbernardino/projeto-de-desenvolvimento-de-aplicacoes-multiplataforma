@@ -1,13 +1,23 @@
-﻿namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
+﻿using System.Runtime.InteropServices;
+
+namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmMenu : Form
     {
         public event EventHandler? ResizedWindow;
 
-        public frmMenu()
+        private readonly int _currentUserId;
+
+        public frmMenu(int currentUserId)
         {
             InitializeComponent();
+            _currentUserId = currentUserId;
         }
+
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
 
         private void OpenForm(Form frm)
         {
@@ -75,8 +85,14 @@
 
         private void btnUser_Click(object sender, EventArgs e)
         {
-            Form frm = new frmUsers();
+            Form frm = new frmUsers(_currentUserId);
             OpenForm(frm);
+        }
+
+        private void pnlTitle_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
     }
 }

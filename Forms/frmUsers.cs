@@ -5,13 +5,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
     public partial class frmUsers : Form
     {
         private readonly UserService service = new();
+        private readonly int _currentUserID;
 
-        public frmUsers()
+        public frmUsers(int currentUserID)
         {
             InitializeComponent();
             LoadDgv();
+            _currentUserID = currentUserID;
         }
 
+        // Será trocado de datagridview para listview, Então boa parte do codigo será reescrito
         private int GetId()
         {
             if (dgvUsers.SelectedCells.Count <= 0)
@@ -46,7 +49,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             int id = GetId();
             if (id == -1) return;
 
-            Form frm = new frmUser(id);
+            Form frm = new frmUser(id, _currentUserID);
             frm.Show();
         }
 
@@ -64,6 +67,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            if (txtSearch.Texts.Length == 0) LoadDgv();
             UpdateDgv();
         }
 
@@ -80,7 +84,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Form frm = new frmUser();
+            Form frm = new frmUser(_currentUserID);
             frm.Show();
         }
 

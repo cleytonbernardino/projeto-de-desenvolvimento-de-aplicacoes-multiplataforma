@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Data.SqlTypes;
+using System.Windows.Forms;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
@@ -12,7 +14,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         private const string _select = "SELECT * FROM tbl_vehicle WHERE id=@id;";
 
         // Comando List
-        private const string _list = "SELECT id, License_plate, Mileage, Color, Brand, Model, Rented_by, Rental_expiration FROM tbl_vehicle";
+        private const string _list = "SELECT id, License_plate, Daily_vehicle_rate, Color, Model, Rented_by FROM tbl_vehicle";
 
         // Comando List com like
         private const string _search = "SELECT id, License_plate, Mileage, Color, Brand, Model, Rented_by, Rental_expiration FROM tbl_vehicle" +
@@ -44,8 +46,30 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             WHERE 
                 id=@id;";
 
+        private const string _updateRental = @"
+            UPDATE tbl_vehicle
+            SET 
+                Rented_by=@Rented_by, Rental_expiration=@Rental_expiration
+            WHERE 
+                License_plate=@License_plate;";
+
         // Comando Delete
         private const string _delete = "DELETE FROM tbl_vehicle WHERE id=@id;";
+
+        // Apagar veiculos com aluguel vencido
+        private const string _delteOverdueRent = @"
+            UPDATE tbl_vehicle 
+            SET 
+                Rented_by=0
+            WHERE 
+                Rental_expiration < @date;";
+
+        private const string _cancelRent = @"
+            UPDATE tbl_vehicle 
+            SET 
+                Rented_by=0
+            WHERE 
+                id=@id";
 
         // Refazer isso para deixar somente que ele crie a tabela ao inves de copiar o django
         private void InitBD()
@@ -71,7 +95,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     "[Air_conditioning]   BIT DEFAULT 0 NOT NULL,"   +
                     "[Electric_windows]   BIT DEFAULT 0 NOT NULL,"   +
                     "[Electric_locks]     BIT DEFAULT 0 NOT NULL,"   +
-                    "[Licensed]           BIT DEFAULT 0 NOT NULL"    +
+                    "[Licensed]           BIT DEFAULT 0 NOT NULL,"   +
+                    "UNIQUE NONCLUSTERED([License_plate] ASC)"       +
                 "); END;";
             using (SqlConnection conn = new(_connectionString))
             {
@@ -101,6 +126,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 if (!reader.Read()) return null;
                     Vehicle vehicle =  new() {
                         LicensePlate = reader.GetString("License_plate"),
+                        RentedBy = reader.GetInt32("Rented_by"),
                         Brand = reader.GetString("Brand"),
                         Model = reader.GetString("Model"),
                         ModelYear = reader.GetDateTime("Model_year"),
@@ -117,6 +143,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         Licensed = reader.GetBoolean("Licensed"),
                         Direction = reader.GetString("Direction"),
                     };
+                if (vehicle.RentedBy > 0) vehicle.RentalExpiration = reader.GetDateTime("Rental_expiration");
                 reader.Close();
                 return vehicle;
             }
@@ -127,9 +154,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public List<Vehicle> Listar()
+        public List<Vehicle> ListVehicle()
         {
             List<Vehicle> vehicles = new();
+            Vehicle vehicle;
             using (SqlConnection conn = new(_connectionString))
             {
                 using(SqlCommand cmd = new(_list, conn))
@@ -139,7 +167,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     while (reader.Read())
                     {
                         int rentedBy = reader.GetInt32("Rented_by");
-                        Vehicle vehicle = new()
+                        vehicle = new()
                         {
                             Id = reader.GetInt32("id"),
                             RentedBy = rentedBy,
@@ -228,6 +256,27 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
+        public void UpdateRental(
+            SqlTransaction transaction, SqlConnection conn, string licensePlate, 
+            int rentedBy, DateTime rentalExpiration
+        )
+        {
+            using SqlCommand cmd = new(_updateRental, conn, transaction);
+            cmd.Parameters.AddWithValue("@Rented_by", rentedBy);
+            cmd.Parameters.AddWithValue("@Rental_expiration", rentalExpiration);
+            cmd.Parameters.AddWithValue("@License_plate", licensePlate);
+            
+            try
+            {
+                int rows = cmd.ExecuteNonQuery();
+                if (rows == 0) throw new Exception("Veículo não encontrado");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERRO: " + ex.Message, "MESSAGE DE DEBUG|UpdateRental");
+                throw new Exception("Veículo não encontrado");
+            }
+        }
         public bool Delete(int id)
         {
             using SqlConnection conn = new(_connectionString);
@@ -244,6 +293,41 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             {
                 MessageBox.Show("ERRO: " + ex.Message);
                 return false;
+            }
+        }
+
+        public void DeleteOverdueRent()
+        {
+            using SqlConnection conn = new(_connectionString);
+            using SqlCommand cmd = new(_delteOverdueRent, conn);
+            conn.Open();
+            cmd.Parameters.AddWithValue("@date", DateTime.Now.Date);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERRO: " + ex.Message, "MESSAGEM DE DEBUG| DeleteOverdueRent");
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void CancelRent(
+            SqlTransaction transaction, SqlConnection conn, int vehicleID
+        )
+        {
+            using SqlCommand cmd = new(_cancelRent, conn, transaction);
+            conn.Open();
+            cmd.Parameters.AddWithValue("@id", vehicleID);
+            try
+            {
+                if (cmd.ExecuteNonQuery() == 0) throw new Exception("Veículo não encontrado"); ;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERRO: " + ex.Message, "MESSAGEM DE DEBUG| DeleteOverdueRent");
+                throw new Exception(ex.Message);
             }
         }
 

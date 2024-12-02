@@ -30,6 +30,7 @@ partial class frmMenu
     {
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu));
         pnlMenu = new Panel();
+        btnAccounts = new Button();
         btnUser = new Button();
         btnVehicleList = new Button();
         pcbMain = new PictureBox();
@@ -53,6 +54,7 @@ partial class frmMenu
         // pnlMenu
         // 
         pnlMenu.BackColor = Color.FromArgb(1, 172, 75);
+        pnlMenu.Controls.Add(btnAccounts);
         pnlMenu.Controls.Add(btnUser);
         pnlMenu.Controls.Add(btnVehicleList);
         pnlMenu.Controls.Add(pcbMain);
@@ -61,6 +63,23 @@ partial class frmMenu
         pnlMenu.Name = "pnlMenu";
         pnlMenu.Size = new Size(50, 681);
         pnlMenu.TabIndex = 0;
+        // 
+        // btnAccounts
+        // 
+        btnAccounts.Enabled = false;
+        btnAccounts.FlatAppearance.BorderSize = 0;
+        btnAccounts.FlatAppearance.MouseOverBackColor = SystemColors.ButtonShadow;
+        btnAccounts.FlatStyle = FlatStyle.Flat;
+        btnAccounts.Image = (Image)resources.GetObject("btnAccounts.Image");
+        btnAccounts.ImageAlign = ContentAlignment.MiddleLeft;
+        btnAccounts.Location = new Point(3, 284);
+        btnAccounts.Name = "btnAccounts";
+        btnAccounts.RightToLeft = RightToLeft.No;
+        btnAccounts.Size = new Size(238, 57);
+        btnAccounts.TabIndex = 3;
+        btnAccounts.Text = "Gerenciar Contas";
+        btnAccounts.UseVisualStyleBackColor = true;
+        btnAccounts.Visible = false;
         // 
         // btnUser
         // 
@@ -118,6 +137,7 @@ partial class frmMenu
         pnlTitle.Name = "pnlTitle";
         pnlTitle.Size = new Size(1214, 40);
         pnlTitle.TabIndex = 1;
+        pnlTitle.MouseDown += pnlTitle_MouseDown;
         // 
         // pcbMinimize
         // 
@@ -227,4 +247,5 @@ partial class frmMenu
     private PictureBox pcbMain;
     private Button btnVehicleList;
     private Button btnUser;
+    private Button btnAccounts;
 }

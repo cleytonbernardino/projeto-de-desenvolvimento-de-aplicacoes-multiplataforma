@@ -163,7 +163,7 @@
             txtMileage.TabIndex = 8;
             txtMileage.Texts = "";
             txtMileage.UnderlineStyle = true;
-            txtMileage.KeyPress += txtKm_KeyPress;
+            txtMileage._KeyPress += txtMileage__KeyPress;
             // 
             // txtDailyVehicleRate
             // 
@@ -382,14 +382,13 @@
             // 
             cbxFuelType.AutoCompleteMode = AutoCompleteMode.Append;
             cbxFuelType.AutoCompleteSource = AutoCompleteSource.ListItems;
+            cbxFuelType.DropDownStyle = ComboBoxStyle.DropDownList;
             cbxFuelType.FormattingEnabled = true;
             cbxFuelType.Items.AddRange(new object[] { "Álcool", "Elétrico", "Etanol", "Gasolina", "Hibrido" });
             cbxFuelType.Location = new Point(535, 171);
             cbxFuelType.Name = "cbxFuelType";
             cbxFuelType.Size = new Size(142, 25);
             cbxFuelType.TabIndex = 7;
-            cbxFuelType.Text = "Selecione um";
-            cbxFuelType.KeyPress += comboBox1_KeyPress;
             // 
             // lblGas
             // 

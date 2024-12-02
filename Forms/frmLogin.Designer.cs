@@ -41,7 +41,7 @@
             // 
             lblSignIn.AutoSize = true;
             lblSignIn.Font = new Font("JetBrains Mono", 50F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSignIn.ForeColor = SystemColors.Highlight;
+            lblSignIn.ForeColor = Color.SeaGreen;
             lblSignIn.Location = new Point(460, 101);
             lblSignIn.Name = "lblSignIn";
             lblSignIn.Size = new Size(317, 88);
@@ -51,13 +51,13 @@
             // txtUsername
             // 
             txtUsername.BackColor = Color.White;
-            txtUsername.BorderColor = Color.DarkGray;
-            txtUsername.BorderFocusColor = Color.DarkGreen;
+            txtUsername.BorderColor = Color.SeaGreen;
+            txtUsername.BorderFocusColor = Color.SpringGreen;
             txtUsername.BorderSize = 2;
             txtUsername.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtUsername.Location = new Point(460, 258);
             txtUsername.Margin = new Padding(4);
-            txtUsername.MaxLenght = 32767;
+            txtUsername.MaxLenght = 30;
             txtUsername.MultLine = false;
             txtUsername.Name = "txtUsername";
             txtUsername.Padding = new Padding(7);
@@ -72,13 +72,13 @@
             // txtPassword
             // 
             txtPassword.BackColor = Color.White;
-            txtPassword.BorderColor = Color.DarkGray;
-            txtPassword.BorderFocusColor = Color.DarkGreen;
+            txtPassword.BorderColor = Color.SeaGreen;
+            txtPassword.BorderFocusColor = Color.SpringGreen;
             txtPassword.BorderSize = 2;
             txtPassword.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtPassword.Location = new Point(460, 335);
             txtPassword.Margin = new Padding(4);
-            txtPassword.MaxLenght = 32767;
+            txtPassword.MaxLenght = 100;
             txtPassword.MultLine = false;
             txtPassword.Name = "txtPassword";
             txtPassword.Padding = new Padding(7);
@@ -89,6 +89,7 @@
             txtPassword.TabIndex = 2;
             txtPassword.Texts = "";
             txtPassword.UnderlineStyle = true;
+            txtPassword._KeyPress += txtPassword__KeyPress;
             // 
             // btnSeePassword
             // 
@@ -106,7 +107,7 @@
             // 
             // btnSignIn
             // 
-            btnSignIn.BackColor = SystemColors.Highlight;
+            btnSignIn.BackColor = Color.SeaGreen;
             btnSignIn.FlatAppearance.BorderSize = 0;
             btnSignIn.FlatStyle = FlatStyle.Flat;
             btnSignIn.Font = new Font("JetBrains Mono", 8.999999F, FontStyle.Regular, GraphicsUnit.Point, 0);

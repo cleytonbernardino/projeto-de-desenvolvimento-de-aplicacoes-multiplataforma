@@ -9,20 +9,26 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
         // Fields
         private Color borderColor = Color.DeepSkyBlue;
         private Color borderFocusColor = Color.AliceBlue;
-        private string textMask = "";
         private int borderSize = 2;
         private bool underlineStyle = false;
         private bool isFocus = false;
+
+        //public 
 
         public CustonMaskedBox()
         {
             InitializeComponent();
             maskedTextBox1.Culture = CultureInfo.InvariantCulture;
         }
+
         // Events
         public event EventHandler _TextChanged;
-        public event KeyPressEventHandler KeyPress_;
-        public event KeyEventHandler KeyDown_;
+        public event KeyPressEventHandler _KeyPress;
+        public event KeyEventHandler _KeyDown;
+        public event EventHandler _MouseClick;
+        public event EventHandler _FocusEnter;
+        public event EventHandler _FocusLeave;
+
 
         // Properties
         [Category("Additional Features")]
@@ -114,6 +120,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
             }
         }
 
+        public void Select(int start, int lengt)
+        {
+            maskedTextBox1.Select(start, lengt);
+        }
+
         // Overridden methods
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -141,18 +152,21 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
         }
 
         private void maskedTextBox1_TextChanged(object sender, EventArgs e) => _TextChanged?.Invoke(sender, e);
-        private void maskedTextBox1_KeyPress(object sender, KeyPressEventArgs e) => KeyPress_?.Invoke(sender, e);
-        private void maskedTextBox1_KeyDown(object sender, KeyEventArgs e) => KeyDown_?.Invoke(sender, e);
+        private void maskedTextBox1_KeyPress(object sender, KeyPressEventArgs e) => _KeyPress?.Invoke(sender, e);
+        private void maskedTextBox1_KeyDown(object sender, KeyEventArgs e) => _KeyDown?.Invoke(sender, e);
+        private void maskedTextBox1_Click(object sender, EventArgs e) => _MouseClick?.Invoke(sender, e);
 
         private void maskedTextBox1_Enter(object sender, EventArgs e)
         {
             isFocus = true;
+            _FocusEnter?.Invoke(sender, e);
             this.Invalidate();
         }
 
         private void maskedTextBox1_Leave(object sender, EventArgs e)
         {
             isFocus = false;
+            _FocusEnter?.Invoke(sender, e);
             this.Invalidate();
         }
     }

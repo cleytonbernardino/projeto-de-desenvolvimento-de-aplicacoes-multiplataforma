@@ -30,11 +30,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             List<Vehicle> vehicles;
             if (string.IsNullOrEmpty(search))
             {
-                vehicles = service.GetVehiclesByPlate(search);
+                vehicles = service.GetAllVehicles();
             }
             else
             {
-                vehicles = service.GetAllVehicles();
+                vehicles = service.GetVehiclesByPlate(search);
             }
             ltvVehicle.Items.Clear();
             foreach (Vehicle vehicle in vehicles)
@@ -100,7 +100,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 return;
             }
             int id = int.Parse(ltvVehicle.SelectedItems[0].Text);
-            frmRented frm = new(id);
+            string licencePlate = ltvVehicle.SelectedItems[0].SubItems[2].Text;
+            bool isRented = ltvVehicle.SelectedItems[0].SubItems[5].Text == "Alugado";
+
+            frmRented frm = new(id, licencePlate, isRented);
             frm.ShowDialog();
         }
 
