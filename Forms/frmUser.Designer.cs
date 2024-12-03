@@ -60,10 +60,13 @@
             apagarToolStripMenuItem = new ToolStripMenuItem();
             txtViolationType = new CustomControls.CustomTextBox();
             btnViolationAdd = new CustomControls.CustomButton();
-            listView2 = new ListView();
+            ltvRentalHistory = new ListView();
+            chVehicleId = new ColumnHeader();
+            chRentalDate = new ColumnHeader();
+            chRentalExpired = new ColumnHeader();
+            chValue = new ColumnHeader();
             lblRentalRecord = new Label();
             txtViolationValue = new CustomControls.CustomTextBox();
-            btnRentalRecordAdd = new CustomControls.CustomButton();
             txtEmail = new CustomControls.CustomTextBox();
             lblEmail = new Label();
             btnEditViolation = new CustomControls.CustomButton();
@@ -453,20 +456,44 @@
             btnViolationAdd.UseVisualStyleBackColor = false;
             btnViolationAdd.Click += btnPenaltyAdd_Click;
             // 
-            // listView2
+            // ltvRentalHistory
             // 
-            listView2.Enabled = false;
-            listView2.Location = new Point(557, 338);
-            listView2.Name = "listView2";
-            listView2.Size = new Size(430, 254);
-            listView2.TabIndex = 14;
-            listView2.TabStop = false;
-            listView2.UseCompatibleStateImageBehavior = false;
+            ltvRentalHistory.Columns.AddRange(new ColumnHeader[] { chVehicleId, chRentalDate, chRentalExpired, chValue });
+            ltvRentalHistory.Enabled = false;
+            ltvRentalHistory.FullRowSelect = true;
+            ltvRentalHistory.Location = new Point(557, 338);
+            ltvRentalHistory.MultiSelect = false;
+            ltvRentalHistory.Name = "ltvRentalHistory";
+            ltvRentalHistory.Size = new Size(430, 254);
+            ltvRentalHistory.TabIndex = 14;
+            ltvRentalHistory.TabStop = false;
+            ltvRentalHistory.UseCompatibleStateImageBehavior = false;
+            ltvRentalHistory.View = View.Details;
+            // 
+            // chVehicleId
+            // 
+            chVehicleId.Text = "ID";
+            chVehicleId.Width = 65;
+            // 
+            // chRentalDate
+            // 
+            chRentalDate.Text = "Alugado Em";
+            chRentalDate.Width = 130;
+            // 
+            // chRentalExpired
+            // 
+            chRentalExpired.Text = "Expirado Em";
+            chRentalExpired.Width = 130;
+            // 
+            // chValue
+            // 
+            chValue.Text = "Valor";
+            chValue.Width = 100;
             // 
             // lblRentalRecord
             // 
             lblRentalRecord.AutoSize = true;
-            lblRentalRecord.Location = new Point(800, 268);
+            lblRentalRecord.Location = new Point(691, 318);
             lblRentalRecord.Name = "lblRentalRecord";
             lblRentalRecord.Size = new Size(160, 17);
             lblRentalRecord.TabIndex = 16;
@@ -493,25 +520,6 @@
             txtViolationValue.TabIndex = 8;
             txtViolationValue.Texts = "";
             txtViolationValue.UnderlineStyle = true;
-            // 
-            // btnRentalRecordAdd
-            // 
-            btnRentalRecordAdd.BackColor = Color.White;
-            btnRentalRecordAdd.BackgroudColor = Color.White;
-            btnRentalRecordAdd.BorderColor = Color.PaleVioletRed;
-            btnRentalRecordAdd.BorderRadius = 40;
-            btnRentalRecordAdd.BorderSize = 0;
-            btnRentalRecordAdd.Enabled = false;
-            btnRentalRecordAdd.FlatAppearance.BorderSize = 0;
-            btnRentalRecordAdd.FlatStyle = FlatStyle.Flat;
-            btnRentalRecordAdd.ForeColor = Color.Black;
-            btnRentalRecordAdd.Location = new Point(557, 292);
-            btnRentalRecordAdd.Name = "btnRentalRecordAdd";
-            btnRentalRecordAdd.Size = new Size(430, 40);
-            btnRentalRecordAdd.TabIndex = 10;
-            btnRentalRecordAdd.Text = "Adicionar veiculo ao registro";
-            btnRentalRecordAdd.TextColor = Color.Black;
-            btnRentalRecordAdd.UseVisualStyleBackColor = false;
             // 
             // txtEmail
             // 
@@ -644,8 +652,7 @@
             // 
             // frmUser
             // 
-            AutoScaleDimensions = new SizeF(8F, 17F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(1024, 604);
             Controls.Add(lblPassword);
             Controls.Add(txtPassword);
@@ -655,9 +662,8 @@
             Controls.Add(lblRole);
             Controls.Add(lblEmail);
             Controls.Add(txtEmail);
-            Controls.Add(btnRentalRecordAdd);
             Controls.Add(txtViolationValue);
-            Controls.Add(listView2);
+            Controls.Add(ltvRentalHistory);
             Controls.Add(lblRentalRecord);
             Controls.Add(txtViolationType);
             Controls.Add(ltvViolation);
@@ -678,6 +684,9 @@
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
+            MaximizeBox = false;
+            MaximumSize = new Size(1040, 643);
+            MinimumSize = new Size(1040, 643);
             Name = "frmUser";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Cadastrar Usuario";
@@ -715,10 +724,9 @@
         private CustomControls.CustomButton btnViolationAdd;
         private CustomControls.CustomButton customButton2;
         private CustomControls.CustomTextBox customTextBox4;
-        private ListView listView2;
+        private ListView ltvRentalHistory;
         private Label lblRentalRecord;
         private CustomControls.CustomTextBox txtViolationValue;
-        private CustomControls.CustomButton btnRentalRecordAdd;
         private CustomControls.CustomTextBox txtEmail;
         private Label lblEmail;
         private ColumnHeader columnHeader1;
@@ -738,5 +746,9 @@
         private CustomControls.CustomTextBox txtUsername;
         private Label lblPassword;
         private CustomControls.CustomTextBox txtPassword;
+        private ColumnHeader chVehicleId;
+        private ColumnHeader chRentalDate;
+        private ColumnHeader chRentalExpired;
+        private ColumnHeader chValue;
     }
 }

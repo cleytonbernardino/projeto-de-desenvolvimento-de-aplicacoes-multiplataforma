@@ -19,7 +19,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms.DialogBox
             try
             {
                 resp = _service.FirstUse(txtFirstName.Texts, txtUsername.Texts, txtPassword.Texts);
-                UserID = resp;
+                UserID = 2;
                 this.Dispose();
             }
             catch (Exception ex)

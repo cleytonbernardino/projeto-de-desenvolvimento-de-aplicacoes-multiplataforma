@@ -30,15 +30,19 @@ partial class frmUsers
     {
         components = new System.ComponentModel.Container();
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
-        DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         btnDelete = new CustomControls.CustomButton();
         btnEdit = new CustomControls.CustomButton();
         btnSearch = new CustomControls.CustomButton();
         btnAdd = new CustomControls.CustomButton();
         txtSearch = new CustomControls.CustomTextBox();
-        dgvUsers = new DataGridView();
         tmrSearch = new System.Windows.Forms.Timer(components);
-        ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
+        ltvUsers = new ListView();
+        chId = new ColumnHeader();
+        chFirstName = new ColumnHeader();
+        chLastName = new ColumnHeader();
+        chCPF = new ColumnHeader();
+        chBalance = new ColumnHeader();
+        tmrAjustColun = new System.Windows.Forms.Timer(components);
         SuspendLayout();
         // 
         // btnDelete
@@ -58,7 +62,8 @@ partial class frmUsers
         btnDelete.Location = new Point(741, 51);
         btnDelete.Name = "btnDelete";
         btnDelete.Size = new Size(150, 40);
-        btnDelete.TabIndex = 13;
+        btnDelete.TabIndex = 5;
+        btnDelete.TabStop = false;
         btnDelete.Text = "Apagar";
         btnDelete.TextColor = Color.Black;
         btnDelete.UseVisualStyleBackColor = false;
@@ -67,8 +72,8 @@ partial class frmUsers
         // btnEdit
         // 
         btnEdit.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        btnEdit.BackColor = Color.FromArgb(90, 71, 255);
-        btnEdit.BackgroudColor = Color.FromArgb(90, 71, 255);
+        btnEdit.BackColor = Color.FromArgb(2, 184, 47);
+        btnEdit.BackgroudColor = Color.FromArgb(2, 184, 47);
         btnEdit.BorderColor = Color.FromArgb(75, 131, 193);
         btnEdit.BorderRadius = 40;
         btnEdit.BorderSize = 0;
@@ -81,7 +86,7 @@ partial class frmUsers
         btnEdit.Location = new Point(585, 51);
         btnEdit.Name = "btnEdit";
         btnEdit.Size = new Size(150, 40);
-        btnEdit.TabIndex = 12;
+        btnEdit.TabIndex = 4;
         btnEdit.Text = "Editar";
         btnEdit.TextColor = Color.Black;
         btnEdit.UseVisualStyleBackColor = false;
@@ -90,8 +95,8 @@ partial class frmUsers
         // btnSearch
         // 
         btnSearch.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        btnSearch.BackColor = Color.FromArgb(110, 189, 244);
-        btnSearch.BackgroudColor = Color.FromArgb(110, 189, 244);
+        btnSearch.BackColor = Color.FromArgb(93, 229, 245);
+        btnSearch.BackgroudColor = Color.FromArgb(93, 229, 245);
         btnSearch.BorderColor = Color.PaleVioletRed;
         btnSearch.BorderRadius = 40;
         btnSearch.BorderSize = 0;
@@ -104,7 +109,7 @@ partial class frmUsers
         btnSearch.Location = new Point(585, 5);
         btnSearch.Name = "btnSearch";
         btnSearch.Size = new Size(150, 40);
-        btnSearch.TabIndex = 11;
+        btnSearch.TabIndex = 2;
         btnSearch.Text = "Pesquisar";
         btnSearch.TextColor = Color.Black;
         btnSearch.UseVisualStyleBackColor = false;
@@ -127,7 +132,7 @@ partial class frmUsers
         btnAdd.Location = new Point(741, 5);
         btnAdd.Name = "btnAdd";
         btnAdd.Size = new Size(150, 40);
-        btnAdd.TabIndex = 10;
+        btnAdd.TabIndex = 3;
         btnAdd.Text = "Adicionar";
         btnAdd.TextColor = Color.Black;
         btnAdd.UseVisualStyleBackColor = false;
@@ -152,60 +157,78 @@ partial class frmUsers
         txtSearch.PlaceHolder = "Digite o nome do usuario";
         txtSearch.ReadOnly = false;
         txtSearch.Size = new Size(531, 36);
-        txtSearch.TabIndex = 9;
+        txtSearch.TabIndex = 1;
         txtSearch.Texts = "";
         txtSearch.UnderlineStyle = true;
         txtSearch._TextChanged += txtSearch__TextChanged;
-        // 
-        // dgvUsers
-        // 
-        dgvUsers.AllowUserToAddRows = false;
-        dgvUsers.AllowUserToDeleteRows = false;
-        dgvUsers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        dgvUsers.BackgroundColor = SystemColors.ControlLightLight;
-        dgvUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle1.BackColor = SystemColors.Window;
-        dataGridViewCellStyle1.Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-        dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle1.Padding = new Padding(5);
-        dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-        dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
-        dgvUsers.DefaultCellStyle = dataGridViewCellStyle1;
-        dgvUsers.Location = new Point(5, 99);
-        dgvUsers.Margin = new Padding(5);
-        dgvUsers.MultiSelect = false;
-        dgvUsers.Name = "dgvUsers";
-        dgvUsers.ReadOnly = true;
-        dgvUsers.ScrollBars = ScrollBars.Vertical;
-        dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        dgvUsers.Size = new Size(905, 407);
-        dgvUsers.TabIndex = 8;
-        dgvUsers.DoubleClick += dgvUsers_DoubleClick;
         // 
         // tmrSearch
         // 
         tmrSearch.Interval = 900;
         tmrSearch.Tick += tmrSearch_Tick;
         // 
+        // ltvUsers
+        // 
+        ltvUsers.Activation = ItemActivation.TwoClick;
+        ltvUsers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        ltvUsers.Columns.AddRange(new ColumnHeader[] { chId, chFirstName, chLastName, chCPF, chBalance });
+        ltvUsers.FullRowSelect = true;
+        ltvUsers.GridLines = true;
+        ltvUsers.Location = new Point(9, 107);
+        ltvUsers.MultiSelect = false;
+        ltvUsers.Name = "ltvUsers";
+        ltvUsers.Size = new Size(898, 395);
+        ltvUsers.TabIndex = 0;
+        ltvUsers.UseCompatibleStateImageBehavior = false;
+        ltvUsers.View = View.Details;
+        ltvUsers.ItemActivate += ltvUsers_ItemActivate;
+        // 
+        // chId
+        // 
+        chId.Text = "ID";
+        chId.Width = 103;
+        // 
+        // chFirstName
+        // 
+        chFirstName.Text = "Nome";
+        chFirstName.Width = 240;
+        // 
+        // chLastName
+        // 
+        chLastName.Text = "Sobrenome";
+        chLastName.Width = 240;
+        // 
+        // chCPF
+        // 
+        chCPF.Text = "CPF";
+        chCPF.Width = 185;
+        // 
+        // chBalance
+        // 
+        chBalance.Text = "Saldo";
+        chBalance.Width = 125;
+        // 
+        // tmrAjustColun
+        // 
+        tmrAjustColun.Enabled = true;
+        tmrAjustColun.Tick += tmrAjustColun_Tick;
+        // 
         // frmUsers
         // 
         AutoScaleDimensions = new SizeF(8F, 17F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(915, 510);
+        Controls.Add(ltvUsers);
         Controls.Add(btnDelete);
         Controls.Add(btnEdit);
         Controls.Add(btnSearch);
         Controls.Add(btnAdd);
         Controls.Add(txtSearch);
-        Controls.Add(dgvUsers);
         Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
         FormBorderStyle = FormBorderStyle.None;
         Name = "frmUsers";
         Padding = new Padding(5);
         Text = "frmUsers";
-        ((System.ComponentModel.ISupportInitialize)dgvUsers).EndInit();
         ResumeLayout(false);
     }
 
@@ -216,6 +239,12 @@ partial class frmUsers
     private CustomControls.CustomButton btnSearch;
     private CustomControls.CustomButton btnAdd;
     private CustomControls.CustomTextBox txtSearch;
-    private DataGridView dgvUsers;
     private System.Windows.Forms.Timer tmrSearch;
+    private ListView ltvUsers;
+    private ColumnHeader chId;
+    private ColumnHeader chFirstName;
+    private ColumnHeader chLastName;
+    private ColumnHeader chCPF;
+    private ColumnHeader chBalance;
+    private System.Windows.Forms.Timer tmrAjustColun;
 }

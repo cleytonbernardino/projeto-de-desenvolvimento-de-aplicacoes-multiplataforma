@@ -21,18 +21,37 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
         {
             _vehicleId = vehicleId;
             txtLicensePlate.Texts = licencePlate;
+            LoadLtvRecord();
             if (isRented)
             {
+                Vehicle vehicle = _servicesVehicle.GetVehicleById(vehicleId);
+                User user = _serviceUser.GetUserById(vehicle.RentedBy);
                 dtpReturnDay.MinDate = GetVehicle().RentalExpiration;
-                btnRent.Visible = false;
+                btnRent.Enabled = false;
                 btnCancelRental.Visible = true;
-                btnExtendRent.Visible = true;
+                txtName.Texts = user.FirstName + " " + user.LastName;
+                mkbCPF.Texts = user.CPF;
+                mkbCPF.Enabled = false;
                 return;
             }
             dtpReturnDay.MinDate = DateTime.Now;
             btnRent.Visible = true;
             btnCancelRental.Visible = false;
-            btnExtendRent.Visible = false;
+        }
+
+        private void LoadLtvRecord()
+        {
+            ltvRecord.Items.Clear();
+            List<RentalHistory> rentalHistory = _servicesVehicle.GetRentalHistory(_vehicleId);
+            ListViewItem item;
+            foreach (RentalHistory history in rentalHistory)
+            {
+                item = new(history.UserId.ToString());
+                item.SubItems.Add(history.RentalDate.ToShortDateString());
+                item.SubItems.Add(history.RentalExpiration.ToShortDateString());
+                item.SubItems.Add(history.RentalValue.ToString());
+                ltvRecord.Items.Add(item);
+            }
         }
 
         private Vehicle GetVehicle()
@@ -115,10 +134,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
                 return;
             }
             bool result = _serviceTransaction.RentVehicle(
-                txtLicensePlate.Texts,
+                _vehicleId,
                 GetRentalValue(),
                 GetUser().Id,
-                dtpReturnDay.Value
+                dtpStartingDay.Value.Date,
+                dtpReturnDay.Value.Date
             );
             if (!result)
             {
@@ -131,35 +151,26 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
         private void btnCancelRental_Click(object sender, EventArgs e)
         {
             DialogResult resp = MessageBox.Show(
-                $"Deseja mesmo cancelar esse alguel ainda restam {GetTotalDays()} Dias, será devolvido o valor de {GetRentalValue} Reais",
+                $"Deseja mesmo cancelar esse alguel ainda restam {GetTotalDays()} Dias, será devolvido o valor de {GetRentalValue()} Reais",
                 "Alerta Operação IRREVERSÍVEL", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
             );
             if (resp != DialogResult.Yes) return;
             
-            double reversal = _serviceTransaction.CancelRent(_vehicleId);
+            double reversal = _serviceTransaction.CancelRent(_vehicleId, GetRentalValue());
             if (reversal == -1)
             {
-                MessageBox.Show("Erro ao cancelar o alugel", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erro ao cancelar o aluguel", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             MessageBox.Show(
                 $"Cancelado com sucesso foi realizado um estorno de R$: {reversal}.", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information
             );
+            this.Close();
         }
 
         private void frmRented_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.S)
-            {
-                if (btnRent.Visible)
-                {
-                    btnRent.PerformClick();
-                }
-                else
-                {
-                    btnExtendRent.PerformClick();
-                }
-            }
+            if (e.Control && e.KeyCode == Keys.S) btnRent.PerformClick();
             if (e.KeyCode == Keys.Escape) this.Dispose();
         }
     }

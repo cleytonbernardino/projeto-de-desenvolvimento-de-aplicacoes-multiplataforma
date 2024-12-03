@@ -5,6 +5,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
     internal class VehicleService
     {
         private readonly VehicleDao _dao = new();
+        private readonly RentalHistoryDao _daoHistory = new();
 
         public VehicleService()
         {
@@ -25,6 +26,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 
         // Colocar filtros
         public List<Vehicle> GetAllVehicles() => _dao.ListVehicle();
+
+        public List<RentalHistory> GetRentalHistory(int id) => _daoHistory.ListVehicle(true, id);
 
         public Vehicle? GetVehicleById(int id)
         {

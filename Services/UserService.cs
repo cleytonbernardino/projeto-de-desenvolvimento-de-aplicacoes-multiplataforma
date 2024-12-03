@@ -1,6 +1,5 @@
 ﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
 using ProjetoDesenvolvimentoAplicacoesMultplataforma.Utils;
-using System.Data;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 {
@@ -8,6 +7,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
     {
         private readonly UserDao _dao = new();
         private readonly ViolationDao _daoPenalty = new();
+        private readonly RentalHistoryDao _daoRentalHistory = new();
 
         public int Save(
             int id,
@@ -40,7 +40,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
                 CPF = cpf,
                 CNH = cnh,
                 Balance = balance,
-                Role = role
+                Role = role,
+                Username = username,
+                Password = password
             };
             if (id == 0)
             {
@@ -61,8 +63,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 
         public int FirstUse(string firstName, string username, string password) => _dao.FirstUse(firstName, username, password);
 
-        public DataTable ListUsers()
+        public List<User> ListUsers(string name = "")
         {
+            if (name != "") return _dao.Search(name);
             return _dao.ListUsers();
         }
 
@@ -72,11 +75,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
         {
             if (cpf.Length == 14) cpf = cpfUtils.ToCpf(cpf);
             return _dao.Select(cpf);
-        }
-
-        public DataTable GetUsersByName(string name)
-        {
-            return _dao.Search(name);
         }
 
         public List<Violation> GetPenaltysByOwnerId(int ownerId)
@@ -104,6 +102,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             else if (role == "Funcionário") return "Usuário";
             return "NA";
         }
+
+        public List<RentalHistory> GetRentalHistory(int id) => _daoRentalHistory.ListVehicle(false, id);
 
         private double GetNewBalance(
             double balance, List<Violation> violationsToBeAdd, List<Violation> violationsToBeUpdate

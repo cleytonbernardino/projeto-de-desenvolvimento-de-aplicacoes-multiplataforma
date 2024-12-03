@@ -9,17 +9,25 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 
         private VehicleDao _daoVehicle = new();
         private UserDao _daoUser = new();
+        private RentalHistoryDao _daoRentalHistory = new();
 
         public bool RentVehicle(
-            string licensePlate,
+            int vehicleId,
             double rentalValue,
             int userId,
-            //DateTime rentalDate,
+            DateTime rentalDate,
             DateTime rentalExpiration
         )
         {
-            if (licensePlate.Length != 7) throw new Exception("Placa incorreta");
             SqlTransaction transaction;
+            RentalHistory rentalHistory = new()
+            {
+                VehicleId = vehicleId,
+                UserId = userId,
+                RentalDate = rentalDate,
+                RentalExpiration = rentalExpiration,
+                RentalValue = rentalValue
+            };
 
             using SqlConnection conn = new(_connectionString);
             conn.Open();
@@ -28,24 +36,23 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             try
             {
                 _daoUser.UpdateBalance(transaction, conn, userId, rentalValue);
-                _daoVehicle.UpdateRental(transaction, conn, licensePlate, userId, rentalExpiration);
+                _daoVehicle.UpdateRental(transaction, conn, vehicleId, userId, rentalDate, rentalExpiration);
+                _daoRentalHistory.Save(transaction, conn, rentalHistory);
 
                 transaction.Commit();
                 return true;
             } catch (Exception e)
             {
-                MessageBox.Show("Erro ao alugar veículo: " + e.Message, "MESSAGEM DE DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 transaction.Rollback();
                 return false;
             }
         }
 
-        public double CancelRent(int vehicleId)
+        public double CancelRent(int vehicleId, double amountToBeRefunded)
         {
             Vehicle vehicle = _daoVehicle.Select(vehicleId);
             if (vehicle is null) throw new Exception("Veículo não encontrado");
 
-            double remainingValue = vehicle.DailyVehicleRate * (vehicle.RentalExpiration - DateTime.Now).Days;
             int userId = vehicle.RentedBy;
 
             SqlTransaction transaction;
@@ -57,10 +64,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             try
             {
                 _daoVehicle.CancelRent(transaction, conn, vehicleId);
-                _daoUser.UpdateBalance(transaction, conn, vehicle.RentedBy, (remainingValue * -1));
+                _daoUser.UpdateBalance(transaction, conn, vehicle.RentedBy, (amountToBeRefunded * -1));
 
                 transaction.Commit();
-                return remainingValue;
+                return amountToBeRefunded;
             }
             catch
             {

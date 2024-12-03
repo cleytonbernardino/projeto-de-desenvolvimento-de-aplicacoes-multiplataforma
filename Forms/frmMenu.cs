@@ -85,7 +85,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnUser_Click(object sender, EventArgs e)
         {
-            Form frm = new frmUsers(_currentUserId);
+            frmUsers frm = new frmUsers(_currentUserId);
+            ResizedWindow += frm.AdjustltvUsersColumns;
             OpenForm(frm);
         }
 

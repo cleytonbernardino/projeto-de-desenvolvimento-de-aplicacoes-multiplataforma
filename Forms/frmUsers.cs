@@ -1,47 +1,60 @@
-﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Services;
+﻿using ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao;
+using ProjetoDesenvolvimentoAplicacoesMultplataforma.Services;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 {
     public partial class frmUsers : Form
     {
-        private readonly UserService service = new();
+        private readonly UserService _service = new();
         private readonly int _currentUserID;
 
         public frmUsers(int currentUserID)
         {
             InitializeComponent();
-            LoadDgv();
+            LoadLtvUsers();
             _currentUserID = currentUserID;
         }
 
-        // Será trocado de datagridview para listview, Então boa parte do codigo será reescrito
+        public void AdjustltvUsersColumns(object? sender, EventArgs e)
+        {
+            chId.Width = (int)Math.Round(0.11 * ltvUsers.Width);
+            chFirstName.Width = (int)Math.Round(0.27 * ltvUsers.Width);
+            chLastName.Width = (int)Math.Round(0.27 * ltvUsers.Width);
+            chCPF.Width = (int)Math.Round(0.21 * ltvUsers.Width);
+            chBalance.Width = (int)Math.Round(0.14 * ltvUsers.Width);
+        }
+
         private int GetId()
         {
-            if (dgvUsers.SelectedCells.Count <= 0)
+            if (ltvUsers.SelectedItems.Count <= 0)
             {
                 MessageBox.Show("Selecione um usuario primeiro.", "Alerta", MessageBoxButtons.OK);
                 return -1;
             }
 
-            return int.Parse(dgvUsers.SelectedCells[0].Value.ToString());
+            return int.Parse(ltvUsers.SelectedItems[0].Text);
         }
 
-        private void LoadDgv()
+        private void LoadLtvUsers(string userName = "")
         {
-            BindingSource data = new();
-            data.DataSource = service.ListUsers();
-
-            dgvUsers.DataSource = data;
-            dgvUsers.Columns[0].Visible = false;
-        }
-
-        private void UpdateDgv()
-        {
-            BindingSource data = new();
-            data.DataSource = service.GetUsersByName(txtSearch.Texts);
-
-            dgvUsers.DataSource = data;
-            dgvUsers.Columns[0].Visible = false;
+            ltvUsers.Items.Clear();
+            List<User> users = _service.ListUsers(userName);
+            ListViewItem item;
+            foreach (User user in users)
+            {
+                item = new()
+                {
+                    Text = user.Id.ToString(),
+                    SubItems =
+                    {
+                        user.FirstName,
+                        user.LastName,
+                        user.CPF,
+                        Math.Round(user.Balance, 2).ToString(),
+                    }
+                };
+                ltvUsers.Items.Add(item);
+            }
         }
 
         private void EditUser()
@@ -61,14 +74,14 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             DialogResult = MessageBox.Show("Deseja mesmo apagar esse usuario? Essa operação é irreversivel", "CUIDADO", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (DialogResult == DialogResult.Yes)
             {
-                service.Delete(id);
+                _service.Delete(id);
             }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            if (txtSearch.Texts.Length == 0) LoadDgv();
-            UpdateDgv();
+            if (txtSearch.Texts.Length == 0) LoadLtvUsers();
+            LoadLtvUsers();
         }
 
         private void txtSearch__TextChanged(object sender, EventArgs e)
@@ -79,18 +92,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void tmrSearch_Tick(object sender, EventArgs e)
         {
             tmrSearch.Stop();
-            UpdateDgv();
+            LoadLtvUsers();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             Form frm = new frmUser(_currentUserID);
             frm.Show();
-        }
-
-        private void dgvUsers_DoubleClick(object sender, EventArgs e)
-        {
-            EditUser();
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -101,6 +109,17 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void btnDelete_Click(object sender, EventArgs e)
         {
             DeleteUser();
+        }
+
+        private void tmrAjustColun_Tick(object sender, EventArgs e)
+        {
+            AdjustltvUsersColumns(null, EventArgs.Empty);
+            tmrAjustColun.Stop();
+        }
+
+        private void ltvUsers_ItemActivate(object sender, EventArgs e)
+        {
+            EditUser();
         }
     }
 }

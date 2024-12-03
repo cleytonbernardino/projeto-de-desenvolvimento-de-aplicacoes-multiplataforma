@@ -1,7 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Data.SqlTypes;
-using System.Windows.Forms;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
@@ -14,11 +12,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         private const string _select = "SELECT * FROM tbl_vehicle WHERE id=@id;";
 
         // Comando List
-        private const string _list = "SELECT id, License_plate, Daily_vehicle_rate, Color, Model, Rented_by FROM tbl_vehicle";
+        private const string _list = "SELECT id, License_plate, Color, Daily_vehicle_rate, Model, Rented_by, Rental_expiration FROM tbl_vehicle";
 
         // Comando List com like
-        private const string _search = "SELECT id, License_plate, Mileage, Color, Brand, Model, Rented_by, Rental_expiration FROM tbl_vehicle" +
-            " WHERE License_plate LIKE @License_plate";
+        private const string _search = _list + " WHERE License_plate LIKE @License_plate";
 
         // Comando Insert
         private const string _insert = @"
@@ -49,9 +46,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         private const string _updateRental = @"
             UPDATE tbl_vehicle
             SET 
-                Rented_by=@Rented_by, Rental_expiration=@Rental_expiration
+                Rented_by=@Rented_by, Rental_date=@Rental_date, Rental_expiration=@Rental_expiration
             WHERE 
-                License_plate=@License_plate;";
+                id=@id;";
 
         // Comando Delete
         private const string _delete = "DELETE FROM tbl_vehicle WHERE id=@id;";
@@ -71,33 +68,33 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             WHERE 
                 id=@id";
 
-        // Refazer isso para deixar somente que ele crie a tabela ao inves de copiar o django
         private void InitBD()
         {
-            string command = "IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_vehicle' AND schema_id = SCHEMA_ID('dbo'))" +
-                "BEGIN\n" +
-                "CREATE TABLE [dbo].[tbl_vehicle] (" +
-                    "[id]                 INT IDENTITY(1,1) PRIMARY KEY NOT NULL," +
-                    "[Rented_by]          INT           NULL,"       +
-                    "[Rental_expiration]  DATE          NULL,"       +
-                    "[License_plate]      NCHAR(7) UNIQUE NOT NULL," +
-                    "[Brand]              VARCHAR(25)   NOT NULL,"   +
-                    "[Model]              VARCHAR(55)   NOT NULL,"   +
-                    "[Model_year]         DATE          NOT NULL,"   +
-                    "[Chassis_number]     NCHAR(17)     NOT NULL,"   +
-                    "[Renavam]            NCHAR(11)     NOT NULL,"   +
-                    "[Daily_vehicle_rate] FLOAT         NOT NULL,"   +
-                    "[Color]              VARCHAR(25)   NOT NULL,"   +
-                    "[Fuel_type]          VARCHAR(15)   NOT NULL,"   +
-                    "[Mileage]            INT           NOT NULL,"   +
-                    "[OBS]                VARCHAR(255)  NULL,"       +
-	                "[Direction]          VARCHAR(25)   NOT NULL,"   +
-                    "[Air_conditioning]   BIT DEFAULT 0 NOT NULL,"   +
-                    "[Electric_windows]   BIT DEFAULT 0 NOT NULL,"   +
-                    "[Electric_locks]     BIT DEFAULT 0 NOT NULL,"   +
-                    "[Licensed]           BIT DEFAULT 0 NOT NULL,"   +
-                    "UNIQUE NONCLUSTERED([License_plate] ASC)"       +
-                "); END;";
+            string command = @"IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_vehicle' AND schema_id = SCHEMA_ID('dbo'))
+                BEGIN
+                CREATE TABLE [dbo].[tbl_vehicle] (
+                    [id]                 INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+                    [Rented_by]          INT           NULL,
+                    [Rental_date]        DATE          NULL,       
+                    [Rental_expiration]  DATE          NULL,       
+                    [License_plate]      NCHAR(7) UNIQUE NOT NULL, 
+                    [Brand]              VARCHAR(25)   NOT NULL,  
+                    [Model]              VARCHAR(55)   NOT NULL,   
+                    [Model_year]         DATE          NOT NULL,   
+                    [Chassis_number]     NCHAR(17)     NOT NULL,   
+                    [Renavam]            NCHAR(11)     NOT NULL,   
+                    [Daily_vehicle_rate] FLOAT         NOT NULL,   
+                    [Color]              VARCHAR(25)   NOT NULL,   
+                    [Fuel_type]          VARCHAR(15)   NOT NULL,   
+                    [Mileage]            INT           NOT NULL,   
+                    [OBS]                VARCHAR(255)  NULL,       
+	                [Direction]          VARCHAR(25)   NOT NULL,   
+                    [Air_conditioning]   BIT DEFAULT 0 NOT NULL,   
+                    [Electric_windows]   BIT DEFAULT 0 NOT NULL,   
+                    [Electric_locks]     BIT DEFAULT 0 NOT NULL,   
+                    [Licensed]           BIT DEFAULT 0 NOT NULL,   
+                    UNIQUE NONCLUSTERED([License_plate] ASC)       
+                ); END;";
             using (SqlConnection conn = new(_connectionString))
             {
                 using (SqlCommand cmd = new(command, conn))
@@ -110,7 +107,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
         public VehicleDao()
         {
-            // Cria uma nova tabela e faz todas as alterações necessarias
             InitBD();
         }
 
@@ -257,14 +253,15 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         }
 
         public void UpdateRental(
-            SqlTransaction transaction, SqlConnection conn, string licensePlate, 
-            int rentedBy, DateTime rentalExpiration
+            SqlTransaction transaction, SqlConnection conn, int id, 
+            int rentedBy, DateTime rentalDate, DateTime rentalExpiration
         )
         {
             using SqlCommand cmd = new(_updateRental, conn, transaction);
             cmd.Parameters.AddWithValue("@Rented_by", rentedBy);
+            cmd.Parameters.AddWithValue("@Rental_date", rentalDate);
             cmd.Parameters.AddWithValue("@Rental_expiration", rentalExpiration);
-            cmd.Parameters.AddWithValue("@License_plate", licensePlate);
+            cmd.Parameters.AddWithValue("@id", id);
             
             try
             {
@@ -318,7 +315,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         )
         {
             using SqlCommand cmd = new(_cancelRent, conn, transaction);
-            conn.Open();
             cmd.Parameters.AddWithValue("@id", vehicleID);
             try
             {

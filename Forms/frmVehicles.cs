@@ -109,7 +109,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void ltvVehicle_DoubleClick(object sender, EventArgs e)
         {
-            btnEdit.PerformClick();
+            btnRent.PerformClick();
         }
     }
 }

@@ -55,11 +55,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             txtViolationType.Enabled = true;
             txtViolationValue.Enabled = true;
             btnViolationAdd.Enabled = true;
-            listView2.Enabled = true;
-            btnRentalRecordAdd.Enabled = true;
+            ltvRentalHistory.Enabled = true;
 
             ptbAddBalance.Visible = true;
             LoadLtvViolation();
+            LoadLtvRentalHistory();
         }
 
         private void LoadLtvViolation()
@@ -75,6 +75,21 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 lvItem.SubItems.Add(Math.Round(violation.Cost, 2).ToString());
                 lvItem.SubItems.Add("");
                 ltvViolation.Items.Add(lvItem);
+            }
+        }
+
+        private void LoadLtvRentalHistory()
+        {
+            ltvRentalHistory.Items.Clear();
+            ListViewItem lvItem;
+            List<RentalHistory> rentalHistories = _service.GetRentalHistory(_id);
+            foreach (RentalHistory rentalHistory in rentalHistories)
+            {
+                lvItem = new ListViewItem(rentalHistory.VehicleId.ToString());
+                lvItem.SubItems.Add(rentalHistory.RentalDate.Date.ToShortDateString());
+                lvItem.SubItems.Add(rentalHistory.RentalExpiration.ToShortDateString());
+                lvItem.SubItems.Add(Math.Round(rentalHistory.RentalValue, 2).ToString());
+                ltvRentalHistory.Items.Add(lvItem);
             }
         }
 

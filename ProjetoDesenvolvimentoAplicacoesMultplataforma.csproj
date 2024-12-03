@@ -6,6 +6,14 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Informações do Assembly -->
+    <AssemblyTitle>Localiza Seminovos</AssemblyTitle>
+    <AssemblyDescription>
+      Programa feito para PROJETO DE DESENVOLVIMENTO DE APLICACOES MULTIPLATAFORMA, na universiade Nove de Julho
+    </AssemblyDescription>
+    <FileVersion>1.0.0</FileVersion>
+    <Authors>Cleyton Bernardino</Authors>
   </PropertyGroup>
 
   <ItemGroup>

@@ -30,6 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRented));
             ltvRecord = new ListView();
+            chUserId = new ColumnHeader();
+            chRentalDate = new ColumnHeader();
+            chRentalExpired = new ColumnHeader();
+            chRentalValue = new ColumnHeader();
             mkbCPF = new CustomControls.CustonMaskedBox();
             btnRent = new CustomControls.CustomButton();
             txtLicensePlate = new CustomControls.CustomTextBox();
@@ -39,7 +43,6 @@
             label3 = new Label();
             label4 = new Label();
             btnCancelRental = new CustomControls.CustomButton();
-            btnExtendRent = new CustomControls.CustomButton();
             label5 = new Label();
             dtpReturnDay = new DateTimePicker();
             lblDaysRemainingText = new Label();
@@ -52,11 +55,35 @@
             // 
             // ltvRecord
             // 
+            ltvRecord.Columns.AddRange(new ColumnHeader[] { chUserId, chRentalDate, chRentalExpired, chRentalValue });
+            ltvRecord.FullRowSelect = true;
             ltvRecord.Location = new Point(12, 320);
+            ltvRecord.MultiSelect = false;
             ltvRecord.Name = "ltvRecord";
             ltvRecord.Size = new Size(474, 229);
             ltvRecord.TabIndex = 3;
             ltvRecord.UseCompatibleStateImageBehavior = false;
+            ltvRecord.View = View.Details;
+            // 
+            // chUserId
+            // 
+            chUserId.Text = "Usuario Id";
+            chUserId.Width = 110;
+            // 
+            // chRentalDate
+            // 
+            chRentalDate.Text = "Alugado Em";
+            chRentalDate.Width = 120;
+            // 
+            // chRentalExpired
+            // 
+            chRentalExpired.Text = "Expirado Em";
+            chRentalExpired.Width = 120;
+            // 
+            // chRentalValue
+            // 
+            chRentalValue.Text = "Valor";
+            chRentalValue.Width = 115;
             // 
             // mkbCPF
             // 
@@ -88,7 +115,7 @@
             btnRent.FlatAppearance.BorderSize = 0;
             btnRent.FlatStyle = FlatStyle.Flat;
             btnRent.ForeColor = Color.Black;
-            btnRent.Location = new Point(316, 7);
+            btnRent.Location = new Point(316, 24);
             btnRent.Name = "btnRent";
             btnRent.Size = new Size(150, 40);
             btnRent.TabIndex = 4;
@@ -174,7 +201,7 @@
             btnCancelRental.FlatAppearance.BorderSize = 0;
             btnCancelRental.FlatStyle = FlatStyle.Flat;
             btnCancelRental.ForeColor = Color.Black;
-            btnCancelRental.Location = new Point(316, 103);
+            btnCancelRental.Location = new Point(316, 72);
             btnCancelRental.Name = "btnCancelRental";
             btnCancelRental.Size = new Size(150, 40);
             btnCancelRental.TabIndex = 6;
@@ -183,25 +210,6 @@
             btnCancelRental.UseVisualStyleBackColor = false;
             btnCancelRental.Visible = false;
             btnCancelRental.Click += btnCancelRental_Click;
-            // 
-            // btnExtendRent
-            // 
-            btnExtendRent.BackColor = Color.White;
-            btnExtendRent.BackgroudColor = Color.White;
-            btnExtendRent.BorderColor = Color.PaleVioletRed;
-            btnExtendRent.BorderRadius = 40;
-            btnExtendRent.BorderSize = 0;
-            btnExtendRent.FlatAppearance.BorderSize = 0;
-            btnExtendRent.FlatStyle = FlatStyle.Flat;
-            btnExtendRent.ForeColor = Color.Black;
-            btnExtendRent.Location = new Point(316, 55);
-            btnExtendRent.Name = "btnExtendRent";
-            btnExtendRent.Size = new Size(150, 40);
-            btnExtendRent.TabIndex = 5;
-            btnExtendRent.Text = "Extender Aluguel";
-            btnExtendRent.TextColor = Color.Black;
-            btnExtendRent.UseVisualStyleBackColor = false;
-            btnExtendRent.Visible = false;
             // 
             // label5
             // 
@@ -300,7 +308,6 @@
             Controls.Add(lblDaysRemainingText);
             Controls.Add(label5);
             Controls.Add(dtpReturnDay);
-            Controls.Add(btnExtendRent);
             Controls.Add(btnCancelRental);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -312,9 +319,11 @@
             Controls.Add(mkbCPF);
             Controls.Add(ltvRecord);
             Font = new Font("JetBrains Mono", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
             KeyPreview = true;
             Name = "frmRented";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Alugar Veiculo";
             KeyDown += frmRented_KeyDown;
             ResumeLayout(false);
@@ -333,7 +342,6 @@
         private Label label3;
         private Label label4;
         private CustomControls.CustomButton btnCancelRental;
-        private CustomControls.CustomButton btnExtendRent;
         private Label label5;
         private DateTimePicker dtpReturnDay;
         private Label lblDaysRemainingText;
@@ -342,5 +350,9 @@
         private CustomControls.CustomTextBox txtName;
         private Label lblTotalValue;
         private Label lblTotalValueText;
+        private ColumnHeader chUserId;
+        private ColumnHeader chRentalDate;
+        private ColumnHeader chRentalExpired;
+        private ColumnHeader chRentalValue;
     }
 }

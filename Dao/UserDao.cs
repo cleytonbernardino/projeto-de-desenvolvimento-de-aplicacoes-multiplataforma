@@ -38,43 +38,46 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         private const string _search = "SELECT id, First_name as Nome, Last_name as Sobrenome, CPF FROM tbl_user " +
             "WHERE CONCAT(First_name, Last_name) LIKE @CompleteName;";
 
-        private const string _list = "SELECT id, First_name as Nome, Last_name as Sobrenome, CPF FROM tbl_user;";
+        private const string _list = "SELECT id, First_name, Last_name, CPF, Balance FROM tbl_user;";
 
         private const string _delete = "DELETE FROM tbl_user WHERE id=@id;";
 
         public UserDao()
         {
-            using (SqlConnection conn = new(_connectionString))
+            string comand = @"
+                IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_user' AND schema_id = SCHEMA_ID('dbo'))
+                BEGIN
+                    CREATE TABLE [dbo].[tbl_user] (
+                        [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                        [First_name]      VARCHAR(25)    NOT NULL,
+                        [Last_name]       VARCHAR(50)    NOT NULL,
+                        [Email]           VARCHAR(255)   UNIQUE NOT NULL,
+                        [Balance]         DECIMAL(8, 2)  NOT NULL,
+                        [Date_of_birth]   DATE           NOT NULL,
+                        [CPF]             NCHAR(11)      UNIQUE NOT NULL,
+                        [CNH]             NCHAR(9)       NOT NULL,
+                        [Role]            VARCHAR(15)    NOT NULL DEFAULT ('usuário'),
+                        [Username]        VARCHAR(30)    NOT NULL,
+                        [Password]        VARCHAR(100)   NOT NULL
+                    ); 
+                    INSERT INTO [dbo].[tbl_user] 
+                        ([First_name], [Last_name], [Email], [Balance], [Date_of_birth], [CPF], [CNH], [Role], [Username], [Password]) 
+                    VALUES 
+                        ('ME EXCLUA', 'CONTA INSEGURA', 'admin@example.com', 0.00, '2002-04-15', '00000000000', '000000000', 'Administrador', 'admin', 'admin');
+                END;";
+
+            using SqlConnection conn = new(_connectionString);
+            using SqlCommand cmd = new SqlCommand(comand, conn);
+            try
             {
                 conn.Open();
-                string comand = @"
-                    IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'tbl_user' AND schema_id = SCHEMA_ID('dbo'))
-                    BEGIN
-                        CREATE TABLE [dbo].[tbl_user] (
-                            [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-                            [First_name]      VARCHAR(25)    NOT NULL,
-                            [Last_name]       VARCHAR(50)    NOT NULL,
-                            [Email]           VARCHAR(255)   UNIQUE NOT NULL,
-                            [Balance]         DECIMAL(8, 2)  NOT NULL,
-                            [Date_of_birth]   DATE           NOT NULL,
-                            [CPF]             NCHAR(11)      UNIQUE NOT NULL,
-                            [CNH]             NCHAR(9)       NOT NULL,
-                            [Role]            VARCHAR(15)    NOT NULL DEFAULT ('usuário'),
-                            [Username]        VARCHAR(30)    NOT NULL,
-                            [Password]        VARCHAR(100)   NOT NULL
-                        ); 
-                        INSERT INTO [dbo].[tbl_user] 
-                            ([First_name], [Last_name], [Email], [Balance], [Date_of_birth], [CPF], [CNH], [Role], [Username], [Password]) 
-                        VALUES 
-                            ('ME EXCLUA', 'CONTA INSEGURA', 'admin@example.com', 0.00, '2002-04-15', '00000000000', '000000000', 'Administrador', 'admin', 'admin');
-                    END;";
-                using (SqlCommand cmd = new SqlCommand(comand, conn))
-                {
-                    if (cmd.ExecuteNonQuery() > 0) MessageBox.Show(
-                        "Esse é o primeiro uso do programa, foi criado um usuário chamado admin com senha admin, use para criar um novo, e APAGUE ESTE!!.",
-                        "IMPORTANTE LEIA", MessageBoxButtons.OK, MessageBoxIcon.Warning
-                    );
-                }
+                if (cmd.ExecuteNonQuery() > 0) MessageBox.Show(
+                    "Esse é o primeiro uso do programa, foi criado um usuário chamado admin com senha admin, use para criar um novo, e APAGUE ESTE!!.",
+                    "IMPORTANTE LEIA", MessageBoxButtons.OK, MessageBoxIcon.Warning
+                );
+            } catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message, "Erro");
             }
         }
 
@@ -120,6 +123,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     cmd.Parameters.AddWithValue("@CNH", user.CNH);
                     cmd.Parameters.AddWithValue("@Balance", user.Balance);
                     cmd.Parameters.AddWithValue("@Date_of_birth", user.BirtyDay);
+                    cmd.Parameters.AddWithValue("@Username", user.Username);
+                    cmd.Parameters.AddWithValue("@Password", user.Password);
                     try
                     {
                         conn.Open();
@@ -146,6 +151,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     cmd.Parameters.AddWithValue("@Email", user.Email);
                     cmd.Parameters.AddWithValue("@Balance", user.Balance);
                     cmd.Parameters.AddWithValue("@Date_of_birth", user.BirtyDay);
+                    cmd.Parameters.AddWithValue("@Username", user.Username);
+                    cmd.Parameters.AddWithValue("@Password", user.Password);
 
                     conn.Open();
                     try
@@ -180,37 +187,61 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public DataTable Search(string completeName)
+        public List<User> Search(string completeName)
         {
-            DataTable dt = new();
-            SqlDataAdapter da;
-            using (SqlConnection conn = new(_connectionString))
+            using SqlConnection conn = new(_connectionString);
+            using SqlCommand cmd = new(_search, conn);
+            List<User> users = new();
+            try
             {
-                using (SqlCommand cmd = new(_search, conn))
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    da = new(cmd);
-                    cmd.Parameters.AddWithValue("@CompleteName", "%" + completeName + "%");
-                    conn.Open();
-                    da.Fill(dt);
+                    users.Add(new User()
+                    {
+                        Id = reader.GetInt32("id"),
+                        FirstName = reader.GetString("First_name"),
+                        LastName = reader.GetString("Last_name"),
+                        CPF = reader.GetString("CPF"),
+                        Balance = (float)reader.GetDecimal("Balance")
+                    });
                 }
+                return users;
             }
-            return dt;
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message, "MESSAGE DE DEBUG");
+                return users;
+            }
         }
 
-        public DataTable ListUsers()
+        public List<User> ListUsers()
         {
-            DataTable dt = new();
-            SqlDataAdapter da;
-            using (SqlConnection conn = new(_connectionString))
+            using SqlConnection conn = new(_connectionString);
+            using SqlCommand cmd = new(_list, conn);
+            List<User> users = new();
+            try
             {
-                using (SqlCommand cmd = new(_list, conn))
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    da = new SqlDataAdapter(cmd);
-                    conn.Open();
-                    da.Fill(dt);
+                    users.Add(new User()
+                    {
+                        Id = reader.GetInt32("id"),
+                        FirstName = reader.GetString("First_name"),
+                        LastName = reader.GetString("Last_name"),
+                        CPF = reader.GetString("CPF"),  
+                        Balance = (float)reader.GetDecimal("Balance")
+                    });
                 }
+                return users;
             }
-            return dt;
+            catch (Exception ex)
+            {
+                return users;
+            }
         }
 
         public User? Select(string cpf)
@@ -312,12 +343,12 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         private string _username = "";
 
         public int Id { get; set; }
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public required string Email { get; set; }
-        public required DateTime BirtyDay { get; set; }
-        public required string CPF { get; set; }
-        public required string CNH { get; set; }
+        public string FirstName { get; set; } = "";
+        public string LastName { get; set; } = "";
+        public string Email { get; set; } = "";
+        public DateTime BirtyDay { get; set; }
+        public string CPF { get; set; } = "";
+        public string CNH { get; set; } = "";
         public double Balance { get; set; }
         public string Role {
             get => _role; set

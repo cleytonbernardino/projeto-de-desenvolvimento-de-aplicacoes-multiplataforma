@@ -29,9 +29,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                     dialog.ShowDialog();
                     UserId = dialog.UserID;
                     this.Close();
+                } else 
+                {
+                    UserId = status;
+                    this.Close();
                 }
-                UserId = status;
-                this.Close();
             }
             else
             {

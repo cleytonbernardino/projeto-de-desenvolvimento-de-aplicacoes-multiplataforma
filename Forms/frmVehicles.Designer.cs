@@ -35,7 +35,6 @@
             btnSearch = new CustomControls.CustomButton();
             btnEdit = new CustomControls.CustomButton();
             tmrSearch = new System.Windows.Forms.Timer(components);
-            label1 = new Label();
             btnRent = new CustomControls.CustomButton();
             ltvVehicle = new ListView();
             chId = new ColumnHeader();
@@ -144,16 +143,6 @@
             tmrSearch.Interval = 900;
             tmrSearch.Tick += tmrSearch_Tick;
             // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Location = new Point(212, 63);
-            label1.Name = "label1";
-            label1.Size = new Size(344, 17);
-            label1.TabIndex = 7;
-            label1.Text = "Colocar Cores Melhores para esse botões ->";
-            // 
             // btnRent
             // 
             btnRent.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -229,7 +218,6 @@
             ClientSize = new Size(915, 510);
             Controls.Add(ltvVehicle);
             Controls.Add(btnRent);
-            Controls.Add(label1);
             Controls.Add(btnEdit);
             Controls.Add(btnSearch);
             Controls.Add(btnAdd);
@@ -244,7 +232,6 @@
             ShowInTaskbar = false;
             Text = "frmVehicleTable";
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -253,7 +240,6 @@
         private CustomControls.CustomButton btnSearch;
         private CustomControls.CustomButton btnEdit;
         private System.Windows.Forms.Timer tmrSearch;
-        private Label label1;
         private CustomControls.CustomButton btnRent;
         private ColumnHeader chId;
         private ColumnHeader chModel;

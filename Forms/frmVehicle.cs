@@ -189,7 +189,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             {
                 this.Close();
             }
-            if (service.DeleteVehicleById(_id)) MessageBox.Show("Naõ foi possivel excluir", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!service.DeleteVehicleById(_id)) MessageBox.Show("Naõ foi possivel excluir", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             this.Close();
         }
 
