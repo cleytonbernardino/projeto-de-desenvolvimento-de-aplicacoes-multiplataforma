@@ -7,8 +7,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
     public partial class CustonMaskedBox : UserControl
     {
         // Fields
-        private Color borderColor = Color.DeepSkyBlue;
-        private Color borderFocusColor = Color.AliceBlue;
+        private Color borderColor = Color.SeaGreen;
+        private Color borderFocusColor = Color.PaleGreen;
         private int borderSize = 2;
         private bool underlineStyle = false;
         private bool isFocus = false;
@@ -64,6 +64,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
             {
                 underlineStyle = value;
                 this.Invalidate();
+            }
+        }
+
+        [Category("Additional Features")]
+        public bool ReadOnly
+        {
+            get => maskedTextBox1.ReadOnly;
+            set
+            {
+                maskedTextBox1.ReadOnly = value;
             }
         }
 
@@ -166,7 +176,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.CustomControls
         private void maskedTextBox1_Leave(object sender, EventArgs e)
         {
             isFocus = false;
-            _FocusEnter?.Invoke(sender, e);
+            _FocusLeave?.Invoke(sender, e);
             this.Invalidate();
         }
     }

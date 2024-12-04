@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVehicle));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            txtModelYear = new CustomControls.CustomTextBox();
             txtMileage = new CustomControls.CustomTextBox();
             txtDailyVehicleRate = new CustomControls.CustomTextBox();
             lblDailyVehicleRate = new Label();
@@ -58,7 +59,6 @@
             lblRenavam = new Label();
             txtChassiNumber = new CustomControls.CustomTextBox();
             lblChassi = new Label();
-            dtpModelYear = new DateTimePicker();
             lblModelYear = new Label();
             txtModel = new CustomControls.CustomTextBox();
             lblModel = new Label();
@@ -68,7 +68,6 @@
             lblLicensePlate = new Label();
             tabPage2 = new TabPage();
             groupBox1 = new GroupBox();
-            label1 = new Label();
             dateTimePicker1 = new DateTimePicker();
             lblLastManuntencao = new Label();
             gpbInsecure = new GroupBox();
@@ -110,6 +109,7 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(txtModelYear);
             tabPage1.Controls.Add(txtMileage);
             tabPage1.Controls.Add(txtDailyVehicleRate);
             tabPage1.Controls.Add(lblDailyVehicleRate);
@@ -127,7 +127,6 @@
             tabPage1.Controls.Add(lblRenavam);
             tabPage1.Controls.Add(txtChassiNumber);
             tabPage1.Controls.Add(lblChassi);
-            tabPage1.Controls.Add(dtpModelYear);
             tabPage1.Controls.Add(lblModelYear);
             tabPage1.Controls.Add(txtModel);
             tabPage1.Controls.Add(lblModel);
@@ -142,6 +141,28 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Informações Basicas";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // txtModelYear
+            // 
+            txtModelYear.BackColor = Color.White;
+            txtModelYear.BorderColor = Color.SeaGreen;
+            txtModelYear.BorderFocusColor = Color.PaleGreen;
+            txtModelYear.BorderSize = 2;
+            txtModelYear.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtModelYear.Location = new Point(479, 87);
+            txtModelYear.Margin = new Padding(4);
+            txtModelYear.MaxLenght = 4;
+            txtModelYear.MultLine = false;
+            txtModelYear.Name = "txtModelYear";
+            txtModelYear.Padding = new Padding(7);
+            txtModelYear.PasswordChar = false;
+            txtModelYear.PlaceHolder = "";
+            txtModelYear.ReadOnly = false;
+            txtModelYear.Size = new Size(139, 36);
+            txtModelYear.TabIndex = 3;
+            txtModelYear.Texts = "";
+            txtModelYear.UnderlineStyle = true;
+            txtModelYear._KeyPress += txtModelYear__KeyPress;
             // 
             // txtMileage
             // 
@@ -385,7 +406,7 @@
             cbxFuelType.DropDownStyle = ComboBoxStyle.DropDownList;
             cbxFuelType.FormattingEnabled = true;
             cbxFuelType.Items.AddRange(new object[] { "Álcool", "Elétrico", "Etanol", "Gasolina", "Hibrido" });
-            cbxFuelType.Location = new Point(535, 171);
+            cbxFuelType.Location = new Point(516, 171);
             cbxFuelType.Name = "cbxFuelType";
             cbxFuelType.Size = new Size(142, 25);
             cbxFuelType.TabIndex = 7;
@@ -393,7 +414,7 @@
             // lblGas
             // 
             lblGas.AutoSize = true;
-            lblGas.Location = new Point(535, 138);
+            lblGas.Location = new Point(522, 138);
             lblGas.Name = "lblGas";
             lblGas.Size = new Size(96, 17);
             lblGas.TabIndex = 15;
@@ -440,11 +461,13 @@
             mkbRenavam.Margin = new Padding(4);
             mkbRenavam.Name = "mkbRenavam";
             mkbRenavam.Padding = new Padding(7);
+            mkbRenavam.ReadOnly = false;
             mkbRenavam.Size = new Size(214, 30);
             mkbRenavam.TabIndex = 5;
             mkbRenavam.TextMask = "00000000000";
             mkbRenavam.Texts = "";
             mkbRenavam.UnderlineStyle = true;
+            mkbRenavam._MouseClick += mkbRenavam__MouseClick;
             // 
             // lblRenavam
             // 
@@ -484,15 +507,6 @@
             lblChassi.Size = new Size(136, 17);
             lblChassi.TabIndex = 9;
             lblChassi.Text = "Número do Chassi";
-            // 
-            // dtpModelYear
-            // 
-            dtpModelYear.Format = DateTimePickerFormat.Short;
-            dtpModelYear.Location = new Point(479, 87);
-            dtpModelYear.MinDate = new DateTime(1910, 1, 1, 0, 0, 0, 0);
-            dtpModelYear.Name = "dtpModelYear";
-            dtpModelYear.Size = new Size(132, 25);
-            dtpModelYear.TabIndex = 3;
             // 
             // lblModelYear
             // 
@@ -598,7 +612,6 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(dateTimePicker1);
             groupBox1.Controls.Add(lblLastManuntencao);
             groupBox1.Dock = DockStyle.Fill;
@@ -608,15 +621,6 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Manutenção";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(162, 213);
-            label1.Name = "label1";
-            label1.Size = new Size(440, 17);
-            label1.TabIndex = 2;
-            label1.Text = "PENSAR EM ALGO PARA COLOCAR AQUI PARA PREENCHER ESPAÇO";
             // 
             // dateTimePicker1
             // 
@@ -892,7 +896,6 @@
         private TabPage tabPage2;
         private CustomControls.CustomTextBox txtChassiNumber;
         private Label lblChassi;
-        private DateTimePicker dtpModelYear;
         private Label lblModelYear;
         private CustomControls.CustomTextBox txtModel;
         private CustomControls.CustonMaskedBox mkbRenavam;
@@ -934,10 +937,10 @@
         private RadioButton rbElectrical;
         private RadioButton rbHydraulics;
         private RadioButton rbMechanic;
-        private Label label1;
         private CheckBox cbEletricLocks;
         private CustomControls.CustomTextBox txtDailyVehicleRate;
         private Label lblDailyVehicleRate;
         private CustomControls.CustomTextBox txtMileage;
+        private CustomControls.CustomTextBox txtModelYear;
     }
 }

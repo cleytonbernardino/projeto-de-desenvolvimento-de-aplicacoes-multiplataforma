@@ -13,6 +13,15 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 @Vehicle_id, @User_id, @Rental_date, @Rental_expiration, @Rental_value
             );";
 
+        // Usando para atualizar o dia que o veículo foi devolvido, no caso de cancelamento
+        private const string _update = @"
+            UPDATE tbl_rentalHistory
+            SET
+                Rental_expiration=@Rental_expiration
+            WHERE 
+                User_id=@User_id
+        ";
+
         // Comando parcial, para que eu possa buscar tanto userId quanto por vehicleId
         private const string _list = @"SELECT * FROM tbl_rentalHistory WHERE ";
 
@@ -78,7 +87,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             return history;
         }
 
-
         // Funções de transation
         public void Save(SqlTransaction transaction, SqlConnection conn, RentalHistory history)
         {
@@ -89,6 +97,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             cmd.Parameters.AddWithValue("@Rental_expiration", history.RentalExpiration);
             cmd.Parameters.AddWithValue("@Rental_value", history.RentalValue);
             if (cmd.ExecuteNonQuery() == 0) throw new Exception("Erro ao salvar esse veículo no historico.");
+        }
+
+        public void UpdateRentalExpiration(
+            SqlTransaction transaction, SqlConnection conn, int userId, DateTime rentalExpiration
+        )
+        {
+            using SqlCommand cmd = new(_update, conn, transaction);
+            cmd.Parameters.AddWithValue("@Rental_expiration", rentalExpiration);
+            cmd.Parameters.AddWithValue("@User_id", userId);
+            if (cmd.ExecuteNonQuery() == 0) throw new Exception("Erro ao atualizar a data de devolução.");
         }
     }
 

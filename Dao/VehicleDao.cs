@@ -14,9 +14,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         // Comando List
         private const string _list = "SELECT id, License_plate, Color, Daily_vehicle_rate, Model, Rented_by, Rental_expiration FROM tbl_vehicle";
 
-        // Comando List com like
-        private const string _search = _list + " WHERE License_plate LIKE @License_plate";
-
         // Comando Insert
         private const string _insert = @"
             INSERT INTO tbl_vehicle (
@@ -43,6 +40,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             WHERE 
                 id=@id;";
 
+        // Atualiza o aluguel
         private const string _updateRental = @"
             UPDATE tbl_vehicle
             SET 
@@ -80,7 +78,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     [License_plate]      NCHAR(7) UNIQUE NOT NULL, 
                     [Brand]              VARCHAR(25)   NOT NULL,  
                     [Model]              VARCHAR(55)   NOT NULL,   
-                    [Model_year]         DATE          NOT NULL,   
+                    [Model_year]         NCHAR(4)      NOT NULL,   
                     [Chassis_number]     NCHAR(17)     NOT NULL,   
                     [Renavam]            NCHAR(11)     NOT NULL,   
                     [Daily_vehicle_rate] FLOAT         NOT NULL,   
@@ -125,7 +123,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         RentedBy = reader.GetInt32("Rented_by"),
                         Brand = reader.GetString("Brand"),
                         Model = reader.GetString("Model"),
-                        ModelYear = reader.GetDateTime("Model_year"),
+                        ModelYear = reader.GetString("Model_year"),
                         ChassiNumber = reader.GetString("Chassis_number"),
                         Renavam = reader.GetString("Renavam"),
                         DailyVehicleRate = reader.GetDouble("Daily_vehicle_rate"),
@@ -183,29 +181,36 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
         public List<Vehicle> Search(string licensePlate)
         {
             List<Vehicle> vehicles = new();
-            using (SqlConnection conn = new(_connectionString))
+            using SqlConnection conn = new(_connectionString);
+            using SqlCommand cmd = new();
+            
+            conn.Open();
+            cmd.Connection = conn;
+            if (licensePlate.Contains('#'))
             {
-                using (SqlCommand cmd = new(_search, conn))
+                cmd.CommandText = " WHERE id=@id";
+                cmd.Parameters.AddWithValue("@id", int.Parse(licensePlate));
+            } else
+            {
+                cmd.CommandText = " WHERE License_plate LIKE @License_plate";
+                cmd.Parameters.AddWithValue("@License_plate", licensePlate + "%");
+            }
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                int rentedBy = reader.GetInt32("Rented_by");
+                Vehicle vehicle = new()
                 {
-                    conn.Open();
-                    cmd.Parameters.AddWithValue("@License_plate", licensePlate + "%");
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        int rentedBy = reader.GetInt32("Rented_by");
-                        Vehicle vehicle = new()
-                        {
-                            Id = reader.GetInt32("id"),
-                            RentedBy = rentedBy,
-                            LicensePlate = reader.GetString("License_plate"),
-                            Color = reader.GetString("Color"),
-                            Brand = reader.GetString("Brand"),
-                            Model = reader.GetString("Model"),
-                        };
-                        if (rentedBy > 0) vehicle.RentalExpiration = reader.GetDateTime("Rental_expiration");
-                        vehicles.Add(vehicle);
-                    }
-                }
+                    Id = reader.GetInt32("id"),
+                    RentedBy = rentedBy,
+                    LicensePlate = reader.GetString("License_plate"),
+                    Color = reader.GetString("Color"),
+                    Brand = reader.GetString("Brand"),
+                    Model = reader.GetString("Model"),
+                };
+                if (rentedBy > 0) vehicle.RentalExpiration = reader.GetDateTime("Rental_expiration");
+                vehicles.Add(vehicle);
             }
             return vehicles;
         }
@@ -331,25 +336,24 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
     public class Vehicle
     {
-        public int Id { get; set; }
-        public int RentedBy { get; set; }
+        public int Id { get; set; } = 0;
+        public int RentedBy { get; set; } = 0;
         public DateTime RentalExpiration { get; set; }
         public string LicensePlate { get; set; } = string.Empty;
         public string Brand { get; set; } = string.Empty;
         public string Model { get; set; } = string.Empty;
         public string ChassiNumber { get; set; } = string.Empty;
-        public double DailyVehicleRate { get; set; }
+        public double DailyVehicleRate { get; set; } = 0;
         public string Color { get; set; } = string.Empty;
         public string FuelType { get; set; } = string.Empty;
         public string Obs { get; set; } = string.Empty;
         public string Direction { get; set; } = string.Empty;
         public string Renavam { get; set; } = string.Empty;
-        public int Mileage { get; set; }
-        public bool AirConditioning { get; set; }
-        public bool EletricWindows { get; set; }
-        public bool EletricLocks { get; set; }
-        public bool Licensed { get; set; }
-        public DateTime ModelYear { get; set; }
-
+        public string ModelYear { get; set; } = string.Empty;
+        public int Mileage { get; set; } = 0;
+        public bool AirConditioning { get; set; } = false;
+        public bool EletricWindows { get; set; } = false;
+        public bool EletricLocks { get; set; } = false;
+        public bool Licensed { get; set; } = false;
     }
 }

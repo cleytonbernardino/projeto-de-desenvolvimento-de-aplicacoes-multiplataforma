@@ -61,7 +61,15 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 
         public int Login (string username, string password) => _dao.Login(username, password);
 
-        public int FirstUse(string firstName, string username, string password) => _dao.FirstUse(firstName, username, password);
+        public int FirstUse(string firstName, string cpf, string username, string password) {
+            try
+            {
+                return _dao.FirstUse(firstName, cpf, username, password);
+            } catch
+            {
+                return -1;
+            }
+        }
 
         public List<User> ListUsers(string name = "")
         {

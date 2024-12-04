@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 {
@@ -13,22 +14,22 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             INSERT INTO tbl_user
                 ([First_name], [Last_name], [Email], [Balance], [Date_of_birth], [CPF], [CNH], [Role], [Username], [Password]) 
             VALUES 
-                (@First_name, 'Seu sobrenome', 'seuEmail@example.com', 0.00, '2002-04-15', '11111111111', '222222222', 'Administrador', @Username, @Password);
+                (@First_name, 'Seu sobrenome', 'seuEmail@example.com', 0.00, '2002-04-15', @CPF, '222222222', 'Administrador', @Username, @Password);
             DELETE FROM tbl_user WHERE Id = 1;";
 
         private const string _insert = @"
             INSERT INTO tbl_user (
-                First_name, Last_name, Email, Balance, Date_of_birth, CPF, CNH, Username, Password
+                First_name, Last_name, Email, Balance, Date_of_birth, CPF, CNH, Role, Username, Password
             ) OUTPUT INSERTED.ID
             VALUES (
-                @First_name, @Last_name, @Email, @Balance, @Date_of_birth, @CPF, @CNH, @Username, @Password
+                @First_name, @Last_name, @Email, @Balance, @Date_of_birth, @CPF, @CNH, @Role, @Username, @Password
             );";
 
         private const string _update = @"
             UPDATE tbl_user 
             SET 
                 First_name=@First_name, Last_name=@Last_name, Email=@Email, Balance=@Balance, Date_of_birth=@Date_of_birth, 
-                Username=@Username, Password=@Password
+                Role=@Role, Username=@Username, Password=@Password
             WHERE id=@id";
 
         private const string _updateBalance = "UPDATE tbl_user SET Balance= Balance - @valor WHERE id=@id";
@@ -55,10 +56,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         [Balance]         DECIMAL(8, 2)  NOT NULL,
                         [Date_of_birth]   DATE           NOT NULL,
                         [CPF]             NCHAR(11)      UNIQUE NOT NULL,
-                        [CNH]             NCHAR(9)       NOT NULL,
+                        [CNH]             NCHAR(12)      NOT NULL,
                         [Role]            VARCHAR(15)    NOT NULL DEFAULT ('usuário'),
-                        [Username]        VARCHAR(30)    NOT NULL,
-                        [Password]        VARCHAR(100)   NOT NULL
+                        [Username]        VARCHAR(30)    NULL,
+                        [Password]        VARCHAR(100)   NULL
                     ); 
                     INSERT INTO [dbo].[tbl_user] 
                         ([First_name], [Last_name], [Email], [Balance], [Date_of_birth], [CPF], [CNH], [Role], [Username], [Password]) 
@@ -98,13 +99,14 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             }
         }
 
-        public int FirstUse(string firstName, string username, string password)
+        public int FirstUse(string firstName, string cpf, string username, string password)
         {
             using SqlConnection conn = new(_connectionString);
             using SqlCommand cmd = new(_firstUse, conn);
             cmd.Parameters.AddWithValue("@First_name", firstName);
             cmd.Parameters.AddWithValue("@Username", username);
             cmd.Parameters.AddWithValue("@Password", password);
+            cmd.Parameters.AddWithValue("@CPF", cpf);
             conn.Open();
             cmd.ExecuteNonQuery();
             return 2;
@@ -116,6 +118,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
             {
                 using (SqlCommand cmd = new(_insert, conn))
                 {
+                    string username = user.Username;
+                    string password = user.Password;
+
                     cmd.Parameters.AddWithValue("@First_name", user.FirstName);
                     cmd.Parameters.AddWithValue("@Last_name", user.LastName);
                     cmd.Parameters.AddWithValue("@Email", user.Email);
@@ -123,8 +128,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                     cmd.Parameters.AddWithValue("@CNH", user.CNH);
                     cmd.Parameters.AddWithValue("@Balance", user.Balance);
                     cmd.Parameters.AddWithValue("@Date_of_birth", user.BirtyDay);
-                    cmd.Parameters.AddWithValue("@Username", user.Username);
-                    cmd.Parameters.AddWithValue("@Password", user.Password);
+                    cmd.Parameters.AddWithValue("@Role", user.Role);
+                    cmd.Parameters.AddWithValue("@Username", !string.IsNullOrEmpty(username) ? username : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Password", !string.IsNullOrEmpty(password) ? password : DBNull.Value);
                     try
                     {
                         conn.Open();
@@ -141,31 +147,31 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
 
         public int Update(User user)
         {
-            using (SqlConnection conn = new(_connectionString))
-            {
-                using (SqlCommand cmd = new(_update, conn))
-                {
-                    cmd.Parameters.AddWithValue("@id", user.Id);
-                    cmd.Parameters.AddWithValue("@First_name", user.FirstName);
-                    cmd.Parameters.AddWithValue("@Last_name", user.LastName);
-                    cmd.Parameters.AddWithValue("@Email", user.Email);
-                    cmd.Parameters.AddWithValue("@Balance", user.Balance);
-                    cmd.Parameters.AddWithValue("@Date_of_birth", user.BirtyDay);
-                    cmd.Parameters.AddWithValue("@Username", user.Username);
-                    cmd.Parameters.AddWithValue("@Password", user.Password);
+            using SqlConnection conn = new(_connectionString);
+            using SqlCommand cmd = new(_update, conn);
+            string username = user.Username;
+            string password = user.Password;
 
-                    conn.Open();
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                        return 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Erro: " + ex.Message, "MESSAGEM DE DEBUG");
-                        return -1;
-                    }
-                }
+            cmd.Parameters.AddWithValue("@id", user.Id);
+            cmd.Parameters.AddWithValue("@First_name", user.FirstName);
+            cmd.Parameters.AddWithValue("@Last_name", user.LastName);
+            cmd.Parameters.AddWithValue("@Email", user.Email);
+            cmd.Parameters.AddWithValue("@Balance", user.Balance);
+            cmd.Parameters.AddWithValue("@Date_of_birth", user.BirtyDay);
+            cmd.Parameters.AddWithValue("@Role", user.Role);
+            cmd.Parameters.AddWithValue("@Username", !string.IsNullOrEmpty(username) ? username : DBNull.Value);
+            cmd.Parameters.AddWithValue("@Password", !string.IsNullOrEmpty(password) ? password : DBNull.Value);
+
+            conn.Open();
+            try
+            {
+                cmd.ExecuteNonQuery();
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message, "MESSAGEM DE DEBUG");
+                return -1;
             }
         }
 
@@ -255,6 +261,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
+                    string? username = reader.IsDBNull("Username") ? null : reader.GetString("Username");
+                    string? password = reader.IsDBNull("Password") ? null : reader.GetString("Password");
                     return new User()
                     {
                         Id = reader.GetInt32("Id"),
@@ -266,14 +274,13 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         Balance = (float)reader.GetDecimal("Balance"),
                         BirtyDay = reader.GetDateTime("Date_of_birth"),
                         Role = reader.GetString("Role"),
-                        Username = reader.GetString("Username"),
-                        Password = reader.GetString("Password")
+                        Username = username,
+                        Password = password
                     };
                 }
                 return null;
-            } catch (Exception ex)
+            } catch
             {
-                MessageBox.Show("Erro: " + ex.Message, "MESSAGE DE DEBUG");
                 return null;
             }
         }
@@ -289,6 +296,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
+                    string? username = reader.IsDBNull("Username") ? null : reader.GetString("Username");
+                    string? password = reader.IsDBNull("Password") ? null : reader.GetString("Password");
                     return new User()
                     {
                         Id = id,
@@ -300,8 +309,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                         Balance = (float)reader.GetDecimal("Balance"),
                         BirtyDay = reader.GetDateTime("Date_of_birth"),
                         Role = reader.GetString("Role"),
-                        Username = reader.GetString("Username"),
-                        Password = reader.GetString("Password")
+                        Username = username,
+                        Password = password
                     };
                 }
                 throw new Exception("Usuário não encontrado");
@@ -340,7 +349,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
     public class User
     {
         private string _role = "Usuário";
-        private string _username = "";
 
         public int Id { get; set; }
         public string FirstName { get; set; } = "";
@@ -357,14 +365,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Dao
                 _role = value;
             }
         }
-        public string Username
-        {
-            get => _username; set
-            {
-                if (value.Length > 30) throw new Exception("Nome de usuário muito grande");
-                _username = value;
-            }
-        }
-        public string Password { get; set; } = "";
+        public string? Username { get; set; }
+        public string? Password { get; set; }
     }
 }

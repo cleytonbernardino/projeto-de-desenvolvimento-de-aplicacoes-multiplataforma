@@ -41,7 +41,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
 
                 transaction.Commit();
                 return true;
-            } catch (Exception e)
+            } catch
             {
                 transaction.Rollback();
                 return false;
@@ -65,7 +65,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Services
             {
                 _daoVehicle.CancelRent(transaction, conn, vehicleId);
                 _daoUser.UpdateBalance(transaction, conn, vehicle.RentedBy, (amountToBeRefunded * -1));
-
+                _daoRentalHistory.UpdateRentalExpiration(transaction, conn, userId, DateTime.Now.Date);
                 transaction.Commit();
                 return amountToBeRefunded;
             }

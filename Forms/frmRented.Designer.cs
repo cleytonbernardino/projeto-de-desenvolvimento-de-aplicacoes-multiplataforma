@@ -102,6 +102,7 @@
             mkbCPF.Texts = "   .   .   -";
             mkbCPF.UnderlineStyle = true;
             mkbCPF._TextChanged += mkbCPF__TextChanged;
+            mkbCPF._MouseClick += mkbCPF__MouseClick;
             mkbCPF.Enter += mkbCPF_Enter;
             mkbCPF.Leave += txtCPF_Leave;
             // 
@@ -259,7 +260,7 @@
             // txtName
             // 
             txtName.BackColor = Color.White;
-            txtName.BorderColor = Color.FromArgb(93, 181, 245);
+            txtName.BorderColor = Color.PaleGreen;
             txtName.BorderFocusColor = Color.PaleGreen;
             txtName.BorderSize = 2;
             txtName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);

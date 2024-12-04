@@ -95,5 +95,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
     }
 }

@@ -25,6 +25,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             chRented.Width =           (int) Math.Round(0.20 * maxWidth);
         }
 
+        public void UpdateList()
+        {
+            LoadLtvVehicles();
+        }
+
         private void LoadLtvVehicles(string search = "")
         {
             List<Vehicle> vehicles;
@@ -76,7 +81,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            frmVehicle frm = new();
+            frmVehicle frm = new(this);
             frm.Show();
         }
 
@@ -88,7 +93,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 return;
             }
             int id = int.Parse(ltvVehicle.SelectedItems[0].Text);
-            frmVehicle frm = new(id);
+            frmVehicle frm = new(this, id);
             frm.Show();
         }
 
@@ -103,7 +108,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             string licencePlate = ltvVehicle.SelectedItems[0].SubItems[2].Text;
             bool isRented = ltvVehicle.SelectedItems[0].SubItems[5].Text == "Alugado";
 
-            frmRented frm = new(id, licencePlate, isRented);
+            frmRented frm = new(this, id, licencePlate, isRented);
             frm.ShowDialog();
         }
 

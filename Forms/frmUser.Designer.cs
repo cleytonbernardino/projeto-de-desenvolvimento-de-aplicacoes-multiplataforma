@@ -47,7 +47,6 @@
             mkbCNH = new CustomControls.CustonMaskedBox();
             lblCNH = new Label();
             lblDateOfBirth = new Label();
-            dtpDateOfBirth = new DateTimePicker();
             lblViolation = new Label();
             ltvViolation = new ListView();
             columnHeader3 = new ColumnHeader();
@@ -76,6 +75,7 @@
             txtUsername = new CustomControls.CustomTextBox();
             lblPassword = new Label();
             txtPassword = new CustomControls.CustomTextBox();
+            mkbDateOfBirth = new CustomControls.CustonMaskedBox();
             panel1.SuspendLayout();
             pnlBalance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ptbAddBalance).BeginInit();
@@ -291,12 +291,15 @@
             mkbCPF.Margin = new Padding(4);
             mkbCPF.Name = "mkbCPF";
             mkbCPF.Padding = new Padding(7);
+            mkbCPF.ReadOnly = false;
             mkbCPF.Size = new Size(232, 36);
             mkbCPF.TabIndex = 3;
             mkbCPF.TextMask = "000.000.000-00";
             mkbCPF.Texts = "   .   .   -";
             mkbCPF.UnderlineStyle = true;
             mkbCPF._MouseClick += mkbCPF__MouseClick;
+            mkbCPF._FocusEnter += mkbCPF__FocusEnter;
+            mkbCPF._FocusLeave += mkbCPF__FocusLeave;
             // 
             // mkbCNH
             // 
@@ -309,6 +312,7 @@
             mkbCNH.Margin = new Padding(4);
             mkbCNH.Name = "mkbCNH";
             mkbCNH.Padding = new Padding(7);
+            mkbCNH.ReadOnly = false;
             mkbCNH.Size = new Size(232, 36);
             mkbCNH.TabIndex = 4;
             mkbCNH.TextMask = "000000000000";
@@ -334,15 +338,6 @@
             lblDateOfBirth.TabIndex = 9;
             lblDateOfBirth.Text = "Data de Nacimento";
             lblDateOfBirth.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // dtpDateOfBirth
-            // 
-            dtpDateOfBirth.Format = DateTimePickerFormat.Short;
-            dtpDateOfBirth.Location = new Point(183, 117);
-            dtpDateOfBirth.MinDate = new DateTime(1910, 1, 1, 0, 0, 0, 0);
-            dtpDateOfBirth.Name = "dtpDateOfBirth";
-            dtpDateOfBirth.Size = new Size(127, 25);
-            dtpDateOfBirth.TabIndex = 2;
             // 
             // lblViolation
             // 
@@ -589,6 +584,7 @@
             cbxRoles.Name = "cbxRoles";
             cbxRoles.Size = new Size(233, 25);
             cbxRoles.TabIndex = 6;
+            cbxRoles.SelectionChangeCommitted += cbxRoles_SelectionChangeCommitted;
             // 
             // lblUsername
             // 
@@ -598,6 +594,7 @@
             lblUsername.Size = new Size(72, 17);
             lblUsername.TabIndex = 28;
             lblUsername.Text = "Username";
+            lblUsername.Visible = false;
             // 
             // txtUsername
             // 
@@ -619,6 +616,7 @@
             txtUsername.TabIndex = 27;
             txtUsername.Texts = "";
             txtUsername.UnderlineStyle = true;
+            txtUsername.Visible = false;
             // 
             // lblPassword
             // 
@@ -628,6 +626,7 @@
             lblPassword.Size = new Size(48, 17);
             lblPassword.TabIndex = 30;
             lblPassword.Text = "Senha";
+            lblPassword.Visible = false;
             // 
             // txtPassword
             // 
@@ -649,11 +648,31 @@
             txtPassword.TabIndex = 29;
             txtPassword.Texts = "";
             txtPassword.UnderlineStyle = true;
+            txtPassword.Visible = false;
+            // 
+            // mkbDateOfBirth
+            // 
+            mkbDateOfBirth.BackColor = Color.White;
+            mkbDateOfBirth.BorderColor = Color.SeaGreen;
+            mkbDateOfBirth.BorderFocusColor = Color.PaleGreen;
+            mkbDateOfBirth.BorderSize = 2;
+            mkbDateOfBirth.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            mkbDateOfBirth.Location = new Point(184, 113);
+            mkbDateOfBirth.Margin = new Padding(4);
+            mkbDateOfBirth.Name = "mkbDateOfBirth";
+            mkbDateOfBirth.Padding = new Padding(7);
+            mkbDateOfBirth.ReadOnly = false;
+            mkbDateOfBirth.Size = new Size(127, 36);
+            mkbDateOfBirth.TabIndex = 2;
+            mkbDateOfBirth.TextMask = "00/00/0000";
+            mkbDateOfBirth.Texts = "  /  /";
+            mkbDateOfBirth.UnderlineStyle = true;
             // 
             // frmUser
             // 
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(1024, 604);
+            Controls.Add(mkbDateOfBirth);
             Controls.Add(lblPassword);
             Controls.Add(txtPassword);
             Controls.Add(lblUsername);
@@ -668,7 +687,6 @@
             Controls.Add(txtViolationType);
             Controls.Add(ltvViolation);
             Controls.Add(lblViolation);
-            Controls.Add(dtpDateOfBirth);
             Controls.Add(lblDateOfBirth);
             Controls.Add(mkbCNH);
             Controls.Add(lblCNH);
@@ -715,7 +733,6 @@
         private CustomControls.CustonMaskedBox mkbCNH;
         private Label lblCNH;
         private Label lblDateOfBirth;
-        private DateTimePicker dtpDateOfBirth;
         private Label lblBalanceText;
         private Label lblBalanceValue;
         private Label lblViolation;
@@ -750,5 +767,6 @@
         private ColumnHeader chRentalDate;
         private ColumnHeader chRentalExpired;
         private ColumnHeader chValue;
+        private CustomControls.CustonMaskedBox mkbDateOfBirth;
     }
 }

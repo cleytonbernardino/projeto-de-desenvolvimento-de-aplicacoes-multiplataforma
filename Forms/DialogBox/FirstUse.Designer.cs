@@ -36,12 +36,14 @@
             btnSave = new CustomControls.CustomButton();
             lblFirstName = new Label();
             txtFirstName = new CustomControls.CustomTextBox();
+            lblCpf = new Label();
+            mkbCPF = new CustomControls.CustonMaskedBox();
             SuspendLayout();
             // 
             // lblUsername
             // 
             lblUsername.AutoSize = true;
-            lblUsername.Location = new Point(13, 83);
+            lblUsername.Location = new Point(13, 150);
             lblUsername.Name = "lblUsername";
             lblUsername.Size = new Size(60, 15);
             lblUsername.TabIndex = 3;
@@ -54,9 +56,9 @@
             txtUsername.BorderFocusColor = Color.PaleGreen;
             txtUsername.BorderSize = 2;
             txtUsername.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtUsername.Location = new Point(13, 102);
+            txtUsername.Location = new Point(13, 169);
             txtUsername.Margin = new Padding(4);
-            txtUsername.MaxLenght = 32767;
+            txtUsername.MaxLenght = 30;
             txtUsername.MultLine = false;
             txtUsername.Name = "txtUsername";
             txtUsername.Padding = new Padding(7);
@@ -64,14 +66,14 @@
             txtUsername.PlaceHolder = "";
             txtUsername.ReadOnly = false;
             txtUsername.Size = new Size(261, 36);
-            txtUsername.TabIndex = 2;
+            txtUsername.TabIndex = 3;
             txtUsername.Texts = "";
             txtUsername.UnderlineStyle = true;
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Location = new Point(13, 156);
+            lblPassword.Location = new Point(13, 223);
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new Size(39, 15);
             lblPassword.TabIndex = 5;
@@ -84,9 +86,9 @@
             txtPassword.BorderFocusColor = Color.PaleGreen;
             txtPassword.BorderSize = 2;
             txtPassword.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPassword.Location = new Point(13, 175);
+            txtPassword.Location = new Point(13, 242);
             txtPassword.Margin = new Padding(4);
-            txtPassword.MaxLenght = 32767;
+            txtPassword.MaxLenght = 100;
             txtPassword.MultLine = false;
             txtPassword.Name = "txtPassword";
             txtPassword.Padding = new Padding(7);
@@ -109,10 +111,10 @@
             btnSave.FlatAppearance.BorderSize = 0;
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.ForeColor = Color.Black;
-            btnSave.Location = new Point(13, 227);
+            btnSave.Location = new Point(13, 294);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(261, 40);
-            btnSave.TabIndex = 6;
+            btnSave.TabIndex = 5;
             btnSave.Text = "Confirmar";
             btnSave.TextColor = Color.Black;
             btnSave.UseVisualStyleBackColor = false;
@@ -136,7 +138,7 @@
             txtFirstName.Font = new Font("JetBrains Mono", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtFirstName.Location = new Point(13, 30);
             txtFirstName.Margin = new Padding(4);
-            txtFirstName.MaxLenght = 32767;
+            txtFirstName.MaxLenght = 25;
             txtFirstName.MultLine = false;
             txtFirstName.Name = "txtFirstName";
             txtFirstName.Padding = new Padding(7);
@@ -148,11 +150,43 @@
             txtFirstName.Texts = "";
             txtFirstName.UnderlineStyle = true;
             // 
+            // lblCpf
+            // 
+            lblCpf.AutoSize = true;
+            lblCpf.Location = new Point(13, 78);
+            lblCpf.Name = "lblCpf";
+            lblCpf.Size = new Size(28, 15);
+            lblCpf.TabIndex = 8;
+            lblCpf.Text = "CPF";
+            // 
+            // mkbCPF
+            // 
+            mkbCPF.BackColor = Color.White;
+            mkbCPF.BorderColor = Color.SeaGreen;
+            mkbCPF.BorderFocusColor = Color.PaleGreen;
+            mkbCPF.BorderSize = 2;
+            mkbCPF.Font = new Font("JetBrains Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            mkbCPF.Location = new Point(13, 97);
+            mkbCPF.Margin = new Padding(4);
+            mkbCPF.Name = "mkbCPF";
+            mkbCPF.Padding = new Padding(7);
+            mkbCPF.ReadOnly = false;
+            mkbCPF.Size = new Size(261, 36);
+            mkbCPF.TabIndex = 2;
+            mkbCPF.TextMask = "000.000.000-00";
+            mkbCPF.Texts = "   .   .   -";
+            mkbCPF.UnderlineStyle = true;
+            mkbCPF._MouseClick += mkbCPF__MouseClick;
+            mkbCPF.Enter += mkbCPF_Enter;
+            mkbCPF.Leave += mkbCPF_Leave;
+            // 
             // FirstUse
             // 
             AutoScaleMode = AutoScaleMode.None;
-            ClientSize = new Size(298, 302);
+            ClientSize = new Size(298, 362);
             ControlBox = false;
+            Controls.Add(mkbCPF);
+            Controls.Add(lblCpf);
             Controls.Add(btnSave);
             Controls.Add(lblPassword);
             Controls.Add(txtPassword);
@@ -164,6 +198,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FirstUse";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Primeiro Cadastro";
             ResumeLayout(false);
             PerformLayout();
@@ -177,5 +212,7 @@
         private CustomControls.CustomButton btnSave;
         private Label lblFirstName;
         private CustomControls.CustomTextBox txtFirstName;
+        private Label lblCpf;
+        private CustomControls.CustonMaskedBox mkbCPF;
     }
 }

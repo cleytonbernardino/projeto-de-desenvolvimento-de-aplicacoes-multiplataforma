@@ -23,6 +23,10 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             chCPF.Width = (int)Math.Round(0.21 * ltvUsers.Width);
             chBalance.Width = (int)Math.Round(0.14 * ltvUsers.Width);
         }
+        public void UpdateList()
+        {
+            LoadLtvUsers();
+        }
 
         private int GetId()
         {
@@ -62,7 +66,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             int id = GetId();
             if (id == -1) return;
 
-            Form frm = new frmUser(id, _currentUserID);
+            Form frm = new frmUser(this, id, _currentUserID);
             frm.Show();
         }
 
@@ -97,7 +101,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Form frm = new frmUser(_currentUserID);
+            Form frm = new frmUser(this, _currentUserID);
             frm.Show();
         }
 

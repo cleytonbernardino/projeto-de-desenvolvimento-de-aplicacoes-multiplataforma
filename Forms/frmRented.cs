@@ -5,33 +5,35 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
 {
     public partial class frmRented : Form
     {
-        private VehicleService _servicesVehicle = new();
-        private UserService _serviceUser = new();
-        private TransactionService _serviceTransaction = new();
+        private readonly VehicleService _servicesVehicle = new();
+        private readonly UserService _serviceUser = new();
+        private readonly TransactionService _serviceTransaction = new();
+        private readonly frmVehicles _frmFather;
 
-        private int _vehicleId;
+        private readonly int _vehicleId;
 
-        public frmRented(int vehicleId, string licencePlate, bool isRented)
+        public frmRented(frmVehicles father, int vehicleId, string licencePlate, bool isRented)
         {
             InitializeComponent();
-            LoadConfig(vehicleId, licencePlate, isRented);
+            _frmFather = father;
+            _vehicleId = vehicleId;
+            LoadConfig(licencePlate, isRented);
         }
 
-        private void LoadConfig(int vehicleId, string licencePlate, bool isRented)
+        private void LoadConfig(string licencePlate, bool isRented)
         {
-            _vehicleId = vehicleId;
             txtLicensePlate.Texts = licencePlate;
             LoadLtvRecord();
             if (isRented)
             {
-                Vehicle vehicle = _servicesVehicle.GetVehicleById(vehicleId);
+                Vehicle vehicle = _servicesVehicle.GetVehicleById(_vehicleId);
                 User user = _serviceUser.GetUserById(vehicle.RentedBy);
                 dtpReturnDay.MinDate = GetVehicle().RentalExpiration;
                 btnRent.Enabled = false;
                 btnCancelRental.Visible = true;
                 txtName.Texts = user.FirstName + " " + user.LastName;
                 mkbCPF.Texts = user.CPF;
-                mkbCPF.Enabled = false;
+                mkbCPF.ReadOnly = true;
                 return;
             }
             dtpReturnDay.MinDate = DateTime.Now;
@@ -127,16 +129,34 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
         private void btnRent_Click(object sender, EventArgs e)
         {
             double rentalValue = _servicesVehicle.CalculateRent(GetTotalDays(), _vehicleId);
-            double userBalance = _serviceUser.GetUserBalance(mkbCPF.Texts);
+            double userBalance;
+            int id;
+            try
+            {
+                User user = GetUser();
+                id = user.Id;
+                userBalance = user.Balance;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             if (userBalance < rentalValue)
             {
                 MessageBox.Show("Saldo insuficiente", "Alerta");
                 return;
             }
+            if (GetTotalDays() < 1)
+            {
+                MessageBox.Show("O Tempo minimo de aluguel é de 1 dia", "Alerta");
+                return;
+            }
+
             bool result = _serviceTransaction.RentVehicle(
                 _vehicleId,
                 GetRentalValue(),
-                GetUser().Id,
+                id,
                 dtpStartingDay.Value.Date,
                 dtpReturnDay.Value.Date
             );
@@ -145,7 +165,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
                 MessageBox.Show("Erro ao realizar essa tarefa.", "Erro");
                 return;
             }
-            MessageBox.Show("Salvo com sucesso");
+            _frmFather.UpdateList();
+            MessageBox.Show("Veículo alugado com sucesso", "Sucesso");
         }
 
         private void btnCancelRental_Click(object sender, EventArgs e)
@@ -155,7 +176,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
                 "Alerta Operação IRREVERSÍVEL", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
             );
             if (resp != DialogResult.Yes) return;
-            
+
             double reversal = _serviceTransaction.CancelRent(_vehicleId, GetRentalValue());
             if (reversal == -1)
             {
@@ -172,6 +193,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma.Forms
         {
             if (e.Control && e.KeyCode == Keys.S) btnRent.PerformClick();
             if (e.KeyCode == Keys.Escape) this.Dispose();
+        }
+
+        private void mkbCPF__MouseClick(object sender, EventArgs e)
+        {
+            mkbCPF.Select(0, 0);
         }
     }
 }

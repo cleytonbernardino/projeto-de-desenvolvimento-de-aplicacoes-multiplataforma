@@ -19,7 +19,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private void btnSignIn_Click(object sender, EventArgs e)
         {
-            int status = _service.Login(txtUsername.Texts, txtPassword.Texts);
+            string username = txtUsername.Texts;
+            string password = txtPassword.Texts;
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Preencha todos os campos", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int status = _service.Login(username, password);
             if (status != -1)
             {
                 IsLogged = true;

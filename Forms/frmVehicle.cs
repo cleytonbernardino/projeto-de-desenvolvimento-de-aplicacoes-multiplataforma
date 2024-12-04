@@ -6,18 +6,20 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
     public partial class frmVehicle : Form
     {
         private readonly VehicleService service = new();
+        private readonly frmVehicles _frmFather;
         private int _id = 0;
-
         private string direction = "mechanic";
 
-        public frmVehicle()
+        public frmVehicle(frmVehicles father)
         {
             InitializeComponent();
+            _frmFather = father;
         }
 
-        public frmVehicle(int id)
+        public frmVehicle(frmVehicles father, int id)
         {
             InitializeComponent();
+            _frmFather = father;
             InitializeEditMode(id);
         }
 
@@ -47,10 +49,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             cbAr.Checked = vehicle.AirConditioning;
             cbEletricGlass.Checked = vehicle.EletricWindows;
             cbEletricLocks.Checked = vehicle.EletricLocks;
-            //cbKey.Checked = vehicle.ke
             cbLincense.Checked = vehicle.Licensed;
 
-            dtpModelYear.Value = vehicle.ModelYear;
+            txtModelYear.Texts = vehicle.ModelYear;
 
             switch (vehicle.Direction)
             {
@@ -70,7 +71,6 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         }
 
         // Seletor de direção
-        // REPENSAR ISSO ACHO QUE DA PARA FAZER UTILIANDO UM FOR ASSIM COMO NO COMBO BOX
         private void rbMechanic_CheckedChanged(object sender, EventArgs e)
         {
             direction = "mechanic";
@@ -163,7 +163,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 AirConditioning = cbAr.Checked,
                 EletricWindows = cbEletricGlass.Checked,
                 EletricLocks = cbEletricLocks.Checked,
-                ModelYear = dtpModelYear.Value.Date,
+                ModelYear = txtModelYear.Texts,
             };
 
             int id = service.Save(vehicle);
@@ -177,7 +177,8 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 this.Text = "Editar Veículo";
                 _id = id;
             }
-            MessageBox.Show("Ação realizada com sucesso.");
+            _frmFather.UpdateList();
+            MessageBox.Show("Veículo salvo com sucesso.", "Sucesso");
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -219,6 +220,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             {
                 e.Handled = true;
             }
+        }
+
+        private void mkbRenavam__MouseClick(object sender, EventArgs e)
+        {
+            mkbRenavam.Select(0, 0);
+        }
+
+        private void txtModelYear__KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar)) e.Handled = true;
         }
     }
 }

@@ -30,7 +30,7 @@ partial class frmMenu
     {
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu));
         pnlMenu = new Panel();
-        btnAccounts = new Button();
+        btnLogout = new Button();
         btnUser = new Button();
         btnVehicleList = new Button();
         pcbMain = new PictureBox();
@@ -54,7 +54,7 @@ partial class frmMenu
         // pnlMenu
         // 
         pnlMenu.BackColor = Color.FromArgb(1, 172, 75);
-        pnlMenu.Controls.Add(btnAccounts);
+        pnlMenu.Controls.Add(btnLogout);
         pnlMenu.Controls.Add(btnUser);
         pnlMenu.Controls.Add(btnVehicleList);
         pnlMenu.Controls.Add(pcbMain);
@@ -64,22 +64,21 @@ partial class frmMenu
         pnlMenu.Size = new Size(50, 681);
         pnlMenu.TabIndex = 0;
         // 
-        // btnAccounts
+        // btnLogout
         // 
-        btnAccounts.Enabled = false;
-        btnAccounts.FlatAppearance.BorderSize = 0;
-        btnAccounts.FlatAppearance.MouseOverBackColor = SystemColors.ButtonShadow;
-        btnAccounts.FlatStyle = FlatStyle.Flat;
-        btnAccounts.Image = (Image)resources.GetObject("btnAccounts.Image");
-        btnAccounts.ImageAlign = ContentAlignment.MiddleLeft;
-        btnAccounts.Location = new Point(3, 284);
-        btnAccounts.Name = "btnAccounts";
-        btnAccounts.RightToLeft = RightToLeft.No;
-        btnAccounts.Size = new Size(238, 57);
-        btnAccounts.TabIndex = 3;
-        btnAccounts.Text = "Gerenciar Contas";
-        btnAccounts.UseVisualStyleBackColor = true;
-        btnAccounts.Visible = false;
+        btnLogout.FlatAppearance.BorderSize = 0;
+        btnLogout.FlatAppearance.MouseOverBackColor = SystemColors.ButtonShadow;
+        btnLogout.FlatStyle = FlatStyle.Flat;
+        btnLogout.Image = (Image)resources.GetObject("btnLogout.Image");
+        btnLogout.ImageAlign = ContentAlignment.MiddleLeft;
+        btnLogout.Location = new Point(3, 284);
+        btnLogout.Name = "btnLogout";
+        btnLogout.RightToLeft = RightToLeft.No;
+        btnLogout.Size = new Size(238, 57);
+        btnLogout.TabIndex = 3;
+        btnLogout.Text = "Sair";
+        btnLogout.UseVisualStyleBackColor = true;
+        btnLogout.Click += btnLogout_Click;
         // 
         // btnUser
         // 
@@ -247,5 +246,5 @@ partial class frmMenu
     private PictureBox pcbMain;
     private Button btnVehicleList;
     private Button btnUser;
-    private Button btnAccounts;
+    private Button btnLogout;
 }

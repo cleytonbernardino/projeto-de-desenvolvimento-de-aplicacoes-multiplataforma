@@ -9,25 +9,29 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private int _id = 0;
         private readonly int _currentUserId;
+        private readonly frmUsers _frmFather;
         private string _cpf = "";
 
         private readonly UserService _service = new();
 
-        public frmUser(int currentUserID)
+        public frmUser(frmUsers father, int currentUserID)
         {
             InitializeComponent();
+            _frmFather = father;
             _currentUserId = currentUserID;
         }
 
-        public frmUser(int id, int currentUserId)
+        public frmUser(frmUsers father, int id, int currentUserId)
         {
             InitializeComponent();
             InitEditMode(id);
+            _frmFather = father;
             _currentUserId = currentUserId;
         }
 
         private void InitEditMode(int id)
         {
+            this.Text = "Editar Usuario";
             User user = _service.GetUserById(id);
             if (user is null)
             {
@@ -36,19 +40,27 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 return;
             }
 
+            string role = user.Role;
             _id = id;
             _cpf = user.CPF;
             txtFirstName.Texts = user.FirstName;
             txtLastName.Texts = user.LastName;
             txtEmail.Texts = user.Email;
-            txtUsername.Texts = user.Username;
-            txtPassword.Texts = user.Password;
             lblBalanceValue.Text = Math.Round(user.Balance, 2).ToString();
-            dtpDateOfBirth.Value = user.BirtyDay;
+            mkbDateOfBirth.Texts = user.BirtyDay.ToShortDateString();
             mkbCPF.Texts = user.CPF;
-            mkbCNH.Texts = "000" + user.CNH;
-            cbxRoles.Text = user.Role;
+            mkbCNH.Texts = user.CNH;
+            cbxRoles.Text = role;
 
+            if (role != "Usuário")
+            {
+                lblUsername.Visible = true;
+                lblPassword.Visible = true;
+                txtUsername.Visible = true;
+                txtPassword.Visible = true;
+                txtUsername.Texts = user.Username;
+                txtPassword.Texts = user.Password;
+            }
             mkbCPF.Enabled = false;
             mkbCNH.Enabled = false;
             ltvViolation.Enabled = true;
@@ -105,8 +117,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
 
         private bool CanDrive()
         {
-            DateTime birth = dtpDateOfBirth.Value.Date;
-            return birth.AddYears(18) <= DateTime.Now;
+            if (DateTime.TryParse(mkbDateOfBirth.Texts, out DateTime date))
+            {
+                return date.AddYears(18) <= DateTime.Now;
+            };
+            return false;
         }
 
         private void LoadViolationToEdit()
@@ -236,14 +251,16 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         {
             if (!CanDrive())
             {
-                MessageBox.Show("O locatario é menor de idade", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Data Invalida", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string role = role = _service.GetRole(_currentUserId, cbxRoles.Text);
+            string role = role = _service.GetRole(
+                _currentUserId, string.IsNullOrEmpty(cbxRoles.Text) ? "Usuário" : cbxRoles.Text
+            );
             if (role == "NA")
             {
-                MessageBox.Show("Cargo invalido, ou usuário sem permição", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Usuário sem permição", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -256,12 +273,12 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 txtLastName.Texts,
                 txtEmail.Texts,
                 mkbCPF.Texts,
-                mkbCNH.Texts.Substring(3, 9), // Ignora os zeros, talvez mudar no banco de dados para suportar
+                mkbCNH.Texts,
                 double.Parse(lblBalanceValue.Text),
                 role,
                 txtUsername.Texts,
                 txtPassword.Texts,
-                dtpDateOfBirth.Value.Date,
+                DateTime.Parse(mkbDateOfBirth.Texts).Date,
                 ViolationAdd,
                 ViolationEdit,
                 ViolationRem
@@ -277,6 +294,7 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 return;
             }
             MessageBox.Show("Salvo com sucesso", "Sucesso");
+            _frmFather.UpdateList();
 
             if (id > 0)
             {
@@ -287,15 +305,9 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             lblBalanceValue.Text = Math.Round(_service.GetUserBalance(_cpf), 2).ToString();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void btnClose_Click(object sender, EventArgs e) => this.Close();
 
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            Save();
-        }
+        private void btnSave_Click(object sender, EventArgs e) => Save();
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -306,20 +318,11 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
             this.Dispose();
         }
 
-        private void btnPenaltyAdd_Click(object sender, EventArgs e)
-        {
-            AddViolationToList();
-        }
+        private void btnPenaltyAdd_Click(object sender, EventArgs e) => AddViolationToList();
 
-        private void adicionarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddViolationToList();
-        }
+        private void adicionarToolStripMenuItem_Click(object sender, EventArgs e) => AddViolationToList();
 
-        private void apagarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RemoveViolation();
-        }
+        private void apagarToolStripMenuItem_Click(object sender, EventArgs e) => RemoveViolation();
 
         private void editarToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -354,17 +357,25 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
         private void frmUser_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.S) Save();
+            if (e.Control && e.KeyCode == Keys.Delete) btnDelete.PerformClick();
+            if (e.KeyCode == Keys.Escape) this.Close();
         }
 
-        private void mkbCPF__MouseClick(object sender, EventArgs e)
+        private void mkbCPF__MouseClick(object sender, EventArgs e) => mkbCPF.Select(0, 0);
+
+        private void mkbCPF__FocusEnter(object sender, EventArgs e) => mkbCPF.BorderColor = Color.PaleGreen;
+
+        private void mkbCPF__FocusLeave(object sender, EventArgs e)
         {
-            mkbCPF.Select(0, 0);
+            if (!Utils.cpfUtils.IsCpfValid(mkbCPF.Texts))
+            {
+                mkbCPF.BorderColor = Color.Red;
+                return;
+            }
+            mkbCPF.BorderColor = Color.SeaGreen;
         }
 
-        private void mkbCNH__MouseClick(object sender, EventArgs e)
-        {
-            mkbCNH.Select(0, 0);
-        }
+        private void mkbCNH__MouseClick(object sender, EventArgs e) => mkbCNH.Select(0, 0);
 
         private void frmUser_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -374,6 +385,24 @@ namespace ProjetoDesenvolvimentoAplicacoesMultplataforma
                 "Há alterações não salvas deseja salvar(Ctrl + s)?", "Alerta", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question
             );
             if (resp == DialogResult.Yes) Save();
+        }
+
+        private void cbxRoles_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cbxRoles.Text != "Usuário")
+            {
+                lblUsername.Visible = true;
+                lblPassword.Visible = true;
+                txtUsername.Visible = true;
+                txtPassword.Visible = true;
+            }
+            else
+            {
+                lblUsername.Visible = false;
+                lblPassword.Visible = false;
+                txtUsername.Visible = false;
+                txtPassword.Visible = false;
+            }
         }
     }
 }

@@ -61,7 +61,7 @@
             txtSearch.Name = "txtSearch";
             txtSearch.Padding = new Padding(7);
             txtSearch.PasswordChar = false;
-            txtSearch.PlaceHolder = "Digite a placa a ser pesquisada aqui.";
+            txtSearch.PlaceHolder = "Digite a placa a ser pesquisada aqui(# para pesquisar id)";
             txtSearch.ReadOnly = false;
             txtSearch.Size = new Size(547, 36);
             txtSearch.TabIndex = 2;
